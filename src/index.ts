@@ -1,25 +1,28 @@
-// Import the framework and instantiate it
-import Fastify from 'fastify'
-const fastify = Fastify({
-  logger: true
-})
+import Fastify, { type FastifyInstance } from 'fastify'
+import { checkEnvVariables } from './configs/configs'
+import dbConnect from './lib/mongoose'
+import routes from './routes'
 
+async function run (): Promise<any> {
+  // Check environment variables
+  await checkEnvVariables()
 
+  // Connect to database
+  await dbConnect()
 
-
-async function run(): Promise<any> {
-  // Declare a route
-  fastify.get('/', async function handler (request, reply) {
-    return { hello: 'world' }
+  const app: FastifyInstance = Fastify({
+    logger: true
   })
 
-  // Run the server!
-  try {
-    await fastify.listen({ port: 3000 })
-  } catch (err) {
-    fastify.log.error(err)
-    process.exit(1)
-  }
+  // Routes
+  void app.register(routes)
+
+  await app.listen({ port: 3000, host: '0.0.0.0' })
+    .then((address) => console.log(`server listening on ${address}`))
+    .catch(err => {
+      console.log('Error starting server:', err)
+      process.exit(1)
+    })
 }
 
 void run()
