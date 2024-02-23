@@ -4,29 +4,29 @@ import { type IModelMachineConfiguration } from './types'
 
 const Schema = mongoose.Schema
 
-const serializeRecipe = (recipe: IModelMachineConfiguration): IMachineConfiguration => ({
-  id: recipe._id as unknown as string,
-  ingredient: recipe.ingredient as unknown as string,
-  slot: recipe.slot,
-  measureVolume: recipe.measure_volume
+const serializeRecipe = (machineConfiguration: IModelMachineConfiguration): IMachineConfiguration => ({
+  id: machineConfiguration._id as unknown as string,
+  ingredient: machineConfiguration.ingredient as unknown as string,
+  slot: machineConfiguration.slot,
+  measureVolume: machineConfiguration.measure_volume
 })
 
-const serializeRecipes = (recipes: IModelMachineConfiguration[]): IMachineConfiguration[] => {
-  return recipes.map(recipe => serializeRecipe(recipe))
+const serializeRecipes = (machineConfigurations: IModelMachineConfiguration[]): IMachineConfiguration[] => {
+  return machineConfigurations.map(machineConfiguration => serializeRecipe(machineConfiguration))
 }
 
-const deSerializeRecipe = (recipe: IMachineConfiguration): IModelMachineConfiguration => ({
-  _id: recipe.id as unknown as ObjectId,
-  ingredient: recipe.ingredient as unknown as ObjectId,
-  slot: recipe.slot,
-  measure_volume: recipe.measureVolume
+const deSerializeRecipe = (machineConfiguration: IMachineConfiguration): IModelMachineConfiguration => ({
+  _id: machineConfiguration.id as unknown as ObjectId,
+  ingredient: machineConfiguration.ingredient as unknown as ObjectId,
+  slot: machineConfiguration.slot,
+  measure_volume: machineConfiguration.measureVolume
 })
 
-const deSerializeRecipes = (recipes: IMachineConfiguration[]): IModelMachineConfiguration[] => {
-  return recipes.map(recipe => deSerializeRecipe(recipe))
+const deSerializeRecipes = (machineConfigurations: IMachineConfiguration[]): IModelMachineConfiguration[] => {
+  return machineConfigurations.map(machineConfiguration => deSerializeRecipe(machineConfiguration))
 }
 
-const recipeSchema = new Schema<IModelMachineConfiguration>({
+const machineConfigurationSchema = new Schema<IModelMachineConfiguration>({
   ingredient: {
     type: Schema.Types.ObjectId,
     ref: 'Ingredient'
@@ -41,9 +41,9 @@ const recipeSchema = new Schema<IModelMachineConfiguration>({
   }
 })
 
-const Recipe = mongoose.model('MachineConfiguration', recipeSchema)
+const MachineConfiguration = mongoose.model('MachineConfiguration', machineConfigurationSchema)
 
-export default Recipe
+export default MachineConfiguration
 export {
   serializeRecipe,
   serializeRecipes,
