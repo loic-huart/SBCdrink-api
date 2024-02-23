@@ -1,6 +1,7 @@
 import Joi from 'joi'
+import { type IIngredient } from './types'
 
-const createPayloadValidation = (body: unknown): Joi.ValidationResult => {
+const createPayloadValidation = (body: IIngredient): Joi.ValidationResult => {
   const schema = Joi.object({
     name: Joi.string().required(),
     isAlcohol: Joi.boolean().required(),
