@@ -28,3 +28,11 @@ export interface IModelMachineConfiguration {
   slot: number
   measure_volume: number
 }
+
+export interface IModelRecipeIngredient {
+  _id: ObjectId
+  ingredient: ObjectId
+  recipe: ObjectId
+  proportion: number
+  order_index: number
+}
