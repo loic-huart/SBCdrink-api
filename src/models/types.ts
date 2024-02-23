@@ -1,5 +1,6 @@
 import { type ObjectId } from 'mongoose'
 import Ingredient from './Ingredient'
+import { OrderStatus } from '../services/order/types'
 
 // export interface IModelIngredient extends Document {
 export interface IModelIngredient {
@@ -35,4 +36,20 @@ export interface IModelRecipeIngredient {
   recipe: ObjectId
   proportion: number
   order_index: number
+}
+
+export interface IModelOrder {
+  _id: ObjectId
+  status: OrderStatus
+  progress: number
+  recipe: IModelRecipe
+  steps: Array<{
+    _id: ObjectId
+    status: OrderStatus
+    order: number
+    quantity: number
+    ingredient: IModelIngredient
+  }>
+  created_at: Date
+  updated_at: Date
 }
