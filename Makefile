@@ -33,7 +33,7 @@ init: ## Init the project
 
 .PHONY: shell
 shell: ## Open a shell in the container
-	$(EXEC) bash
+	$(EXEC) /bin/sh
 
 .PHONY: test
 test: ## Run tests

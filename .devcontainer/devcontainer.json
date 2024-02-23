@@ -1,0 +1,25 @@
+{
+  "name": "Node.js API Dev Container",
+  "dockerComposeFile": "../docker/docker-compose.local.yml",
+  "service": "api", 
+  "workspaceFolder": "/api",
+  // "forwardPorts": [3000],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "orta.vscode-jest",
+        "hbenl.vscode-test-explorer",
+        "kavod-io.vscode-jest-test-adapter",
+        "github.copilot",
+        "dbaeumer.vscode-eslint",
+        "eamodio.gitlens"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh"
+      }
+    }
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {}
+  }
+}
