@@ -1,4 +1,5 @@
 import { type ObjectId } from 'mongoose'
+import Ingredient from './Ingredient'
 
 // export interface IModelIngredient extends Document {
 export interface IModelIngredient {
@@ -19,4 +20,11 @@ export interface IModelRecipe {
   is_available: boolean
   created_at: Date
   updated_at: Date
+}
+
+export interface IModelMachineConfiguration {
+  _id: ObjectId
+  ingredient: ObjectId
+  slot: number
+  measure_volume: number
 }
