@@ -22,7 +22,13 @@ class RecipeController implements IRecipeController {
   public async get (req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
       const recipeService = RecipeService.getInstance()
-      const { recipes } = await recipeService.find()
+      const { isAvailable } = req.query as { isAvailable: string }
+      console.log(isAvailable)
+      const { recipes } = await recipeService.find({
+        isAvailable: isAvailable === 'true' || isAvailable === 'false'
+          ? Boolean(isAvailable)
+          : undefined
+      })
       await res.status(200).send(recipes)
     } catch (error: unknown) {
       await res.status(500).send(error)

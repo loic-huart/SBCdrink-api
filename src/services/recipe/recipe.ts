@@ -5,7 +5,7 @@ import { Slug, type Error } from '../errors/types'
 import { createPayloadValidation, findByIdPayloadValidation } from './validators'
 
 interface IRecipeService extends ErrorService {
-  find: () => Promise<{ recipes: IRecipe[] }>
+  find: ({ isAvailable }: { isAvailable?: boolean }) => Promise<{ recipes: IRecipe[] }>
   findById: (id: string) => Promise<{ recipe: IRecipe, error?: Error }>
   create: (recipe: IRecipe) => Promise<{ recipe: IRecipe, error?: Error }>
 }
@@ -21,8 +21,10 @@ class RecipeService extends ErrorService implements IRecipeService {
     return RecipeService.instance
   }
 
-  public async find (): Promise<{ recipes: IRecipe[] }> {
-    const recipe = await Recipe.find()
+  public async find ({ isAvailable }: { isAvailable?: boolean }): Promise<{ recipes: IRecipe[] }> {
+    const recipe = await Recipe.find({
+      ...(isAvailable != null ? { is_available: isAvailable } : {})
+    })
     return {
       recipes: serializeRecipes(recipe)
     }
