@@ -1,4 +1,6 @@
 enum Slug {
+  ErrRecipeNotFound = 'RECIPE_NOT_FOUND',
+
   ErrIncorrectInput = 'INVALID_INPUT',
 
   ErrInvalidEmail = 'INVALID_EMAIL',

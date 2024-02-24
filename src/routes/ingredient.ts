@@ -7,7 +7,7 @@ const router = async (app: FastifyInstance): Promise<void> => {
   app.get('/v1/ingredient', ingredient.get)
   app.post('/v1/ingredient', ingredient.post)
 
-  // app.get('/v1/ingredient/:id', ingredient.getOne)
+  // app.get('/v1/ingredient/:id', ingredient.getById)
   // app.put('/v1/ingredient/:id', ingredient.put)
   // app.delete('/v1/ingredient/:id', ingredient.delete)
 }
