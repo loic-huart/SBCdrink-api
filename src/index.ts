@@ -15,7 +15,7 @@ async function run (): Promise<any> {
   })
 
   // Routes
-  void app.register(routes)
+  void app.register(routes, { prefix: '/api' })
 
   await app.listen({ port: 8000, host: '0.0.0.0' })
     .then((address) => console.log(`server listening on ${address}`))
