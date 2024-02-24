@@ -3,7 +3,7 @@
   "dockerComposeFile": "../docker/docker-compose.local.yml",
   "service": "api", 
   "workspaceFolder": "/api",
-  // "forwardPorts": [3000],
+  // "forwardPorts": [8000],
   "customizations": {
     "vscode": {
       "extensions": [

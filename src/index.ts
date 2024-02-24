@@ -17,7 +17,7 @@ async function run (): Promise<any> {
   // Routes
   void app.register(routes)
 
-  await app.listen({ port: 3000, host: '0.0.0.0' })
+  await app.listen({ port: 8000, host: '0.0.0.0' })
     .then((address) => console.log(`server listening on ${address}`))
     .catch(err => {
       console.log('Error starting server:', err)
