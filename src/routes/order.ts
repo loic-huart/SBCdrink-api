@@ -4,7 +4,7 @@ import { OrderController } from '../controllers'
 const order = OrderController.getInstance()
 
 const router = async (app: FastifyInstance): Promise<void> => {
-  app.get('/v1/order', order.get)
+  app.get('/v1/orders', order.get)
   app.post('/v1/order', order.post)
 
   // app.get('/v1/order/:id', order.getById)
