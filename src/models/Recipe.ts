@@ -1,11 +1,12 @@
 import mongoose, { type ObjectId } from 'mongoose'
 import { type IRecipe } from '../services/recipe/types'
-import { type IModelRecipe } from './types'
+import { type IModelIngredient, type IModelRecipe } from './types'
 import { deSerializeIngredient, serializeIngredient } from './Ingredient'
+import { type IIngredient } from '../services/ingredient/types'
 
 const Schema = mongoose.Schema
 
-const serializeRecipe = (recipe: IModelRecipe): IRecipe => ({
+const serializeRecipe = (recipe: IModelRecipe, withIngredients = false): IRecipe => ({
   id: recipe._id as unknown as string,
   name: recipe.name,
   description: recipe.description,
@@ -16,7 +17,7 @@ const serializeRecipe = (recipe: IModelRecipe): IRecipe => ({
   isAvailable: recipe.is_available,
   steps: recipe.steps.map(step => ({
     id: step._id as unknown as string,
-    ingredient: serializeIngredient(step.ingredient),
+    ingredient: withIngredients ? serializeIngredient(step.ingredient as IModelIngredient) : step.ingredient as unknown as string,
     proportion: step.proportion,
     orderIndex: step.order_index
   })),
@@ -24,11 +25,11 @@ const serializeRecipe = (recipe: IModelRecipe): IRecipe => ({
   updatedAt: recipe.updated_at
 })
 
-const serializeRecipes = (recipes: IModelRecipe[]): IRecipe[] => {
-  return recipes.map(recipe => serializeRecipe(recipe))
+const serializeRecipes = (recipes: IModelRecipe[], withIngredients = false): IRecipe[] => {
+  return recipes.map(recipe => serializeRecipe(recipe, withIngredients))
 }
 
-const deSerializeRecipe = (recipe: IRecipe): IModelRecipe => ({
+const deSerializeRecipe = (recipe: IRecipe, withIngredients = false): IModelRecipe => ({
   _id: recipe.id as unknown as ObjectId,
   name: recipe.name,
   description: recipe.description,
@@ -39,7 +40,7 @@ const deSerializeRecipe = (recipe: IRecipe): IModelRecipe => ({
   is_available: recipe.isAvailable,
   steps: recipe.steps.map(step => ({
     _id: step.id as unknown as ObjectId,
-    ingredient: deSerializeIngredient(step.ingredient),
+    ingredient: withIngredients ? deSerializeIngredient(step.ingredient as IIngredient) : step.ingredient as unknown as ObjectId,
     proportion: step.proportion,
     order_index: step.orderIndex
   })),
@@ -47,8 +48,8 @@ const deSerializeRecipe = (recipe: IRecipe): IModelRecipe => ({
   updated_at: recipe.updatedAt
 })
 
-const deSerializeRecipes = (recipes: IRecipe[]): IModelRecipe[] => {
-  return recipes.map(recipe => deSerializeRecipe(recipe))
+const deSerializeRecipes = (recipes: IRecipe[], withIngredients = false): IModelRecipe[] => {
+  return recipes.map(recipe => deSerializeRecipe(recipe, withIngredients))
 }
 
 const recipeSchema = new Schema<IModelRecipe>({

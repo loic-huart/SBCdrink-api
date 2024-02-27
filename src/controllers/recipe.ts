@@ -23,10 +23,12 @@ class RecipeController implements IRecipeController {
     try {
       const recipeService = RecipeService.getInstance()
       const {
-        isAvailable
-      } = req.query as { isAvailable: boolean }
+        isAvailable,
+        withIngredients
+      } = req.query as { isAvailable: boolean, withIngredients: boolean }
       const { recipes } = await recipeService.find({
-        isAvailable
+        isAvailable,
+        withIngredients
       })
       await res.status(200).send(recipes)
     } catch (error: unknown) {
@@ -38,10 +40,11 @@ class RecipeController implements IRecipeController {
     try {
       const recipeService = RecipeService.getInstance()
       const { id } = req.params as { id: string }
+      const { withIngredients } = req.query as { withIngredients: boolean }
       const {
         recipe,
         error
-      } = await recipeService.findById(id)
+      } = await recipeService.findById({ id, withIngredients })
       if (error != null) {
         const httpCode = mapErrorTypeToHttpCode(error.errorType)
         await res.status(httpCode).send(error)

@@ -20,7 +20,7 @@ export interface IModelRecipe {
   is_available: boolean
   steps: Array<{
     _id: ObjectId
-    ingredient: IModelIngredient
+    ingredient: IModelIngredient | ObjectId
     proportion: number
     order_index: number
   }>

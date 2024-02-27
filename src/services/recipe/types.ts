@@ -11,7 +11,7 @@ export interface IRecipe {
   isAvailable: boolean
   steps: Array<{
     id: string
-    ingredient: IIngredient
+    ingredient: IIngredient | string
     proportion: number
     orderIndex: number
   }>
@@ -21,5 +21,10 @@ export interface IRecipe {
 
 export interface IPayloadFindRecipe {
   isAvailable?: boolean
+  withIngredients?: boolean
+}
+
+export interface IPayloadFindByIdRecipe {
+  id: string
   withIngredients?: boolean
 }
