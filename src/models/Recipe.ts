@@ -1,6 +1,7 @@
 import mongoose, { type ObjectId } from 'mongoose'
 import { type IRecipe } from '../services/recipe/types'
 import { type IModelRecipe } from './types'
+import { deSerializeIngredient, serializeIngredient } from './Ingredient'
 
 const Schema = mongoose.Schema
 
@@ -13,6 +14,12 @@ const serializeRecipe = (recipe: IModelRecipe): IRecipe => ({
   alcoholMinLevel: recipe.alcohol_min_level,
   alcoholMaxLevel: recipe.alcohol_max_level,
   isAvailable: recipe.is_available,
+  steps: recipe.steps.map(step => ({
+    id: step._id as unknown as string,
+    ingredient: serializeIngredient(step.ingredient),
+    proportion: step.proportion,
+    orderIndex: step.order_index
+  })),
   createdAt: recipe.created_at,
   updatedAt: recipe.updated_at
 })
@@ -30,6 +37,12 @@ const deSerializeRecipe = (recipe: IRecipe): IModelRecipe => ({
   alcohol_min_level: recipe.alcoholMinLevel,
   alcohol_max_level: recipe.alcoholMaxLevel,
   is_available: recipe.isAvailable,
+  steps: recipe.steps.map(step => ({
+    _id: step.id as unknown as ObjectId,
+    ingredient: deSerializeIngredient(step.ingredient),
+    proportion: step.proportion,
+    order_index: step.orderIndex
+  })),
   created_at: recipe.createdAt,
   updated_at: recipe.updatedAt
 })
@@ -68,6 +81,23 @@ const recipeSchema = new Schema<IModelRecipe>({
     required: true,
     default: false
   },
+  steps: [
+    {
+      ingredient: {
+        type: Schema.Types.ObjectId,
+        ref: 'Ingredient',
+        required: true
+      },
+      proportion: {
+        type: Number,
+        required: true
+      },
+      order_index: {
+        type: Number,
+        required: true
+      }
+    }
+  ],
   created_at: {
     type: Date,
     required: true,

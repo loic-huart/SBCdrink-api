@@ -1,3 +1,5 @@
+import { type IIngredient } from '../ingredient/types'
+
 export interface IRecipe {
   id: string
   name: string
@@ -7,6 +9,17 @@ export interface IRecipe {
   alcoholMinLevel: number
   alcoholMaxLevel: number
   isAvailable: boolean
+  steps: Array<{
+    id: string
+    ingredient: IIngredient
+    proportion: number
+    orderIndex: number
+  }>
   createdAt: Date
   updatedAt: Date
+}
+
+export interface IPayloadFindRecipe {
+  isAvailable?: boolean
+  withIngredients?: boolean
 }

@@ -9,6 +9,11 @@ const createPayloadValidation = (body: IRecipe): Joi.ValidationResult => {
     alcoholLevel: Joi.number().required(),
     alcoholMinLevel: Joi.number().required(),
     alcoholMaxLevel: Joi.number().required(),
+    steps: Joi.array().items(Joi.object({
+      ingredient: Joi.string().required(),
+      proportion: Joi.number().required(),
+      orderIndex: Joi.number().required()
+    })).required(),
     isAvailable: Joi.boolean().required()
   })
   return schema.validate(body)

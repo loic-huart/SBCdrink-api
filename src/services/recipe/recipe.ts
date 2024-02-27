@@ -1,11 +1,11 @@
-import { type IRecipe } from './types'
+import { IPayloadFindRecipe, type IRecipe } from './types'
 import ErrorService from '../errors/errors'
 import Recipe, { deSerializeRecipe, serializeRecipe, serializeRecipes } from '../../models/Recipe'
 import { Slug, type Error } from '../errors/types'
 import { createPayloadValidation, findByIdPayloadValidation } from './validators'
 
 interface IRecipeService extends ErrorService {
-  find: ({ isAvailable }: { isAvailable?: boolean }) => Promise<{ recipes: IRecipe[] }>
+  find: ({ isAvailable, withIngredients }: IPayloadFindRecipe) => Promise<{ recipes: IRecipe[] }>
   findById: (id: string) => Promise<{ recipe: IRecipe, error?: Error }>
   create: (recipe: IRecipe) => Promise<{ recipe: IRecipe, error?: Error }>
 }
@@ -21,10 +21,12 @@ class RecipeService extends ErrorService implements IRecipeService {
     return RecipeService.instance
   }
 
-  public async find ({ isAvailable }: { isAvailable?: boolean }): Promise<{ recipes: IRecipe[] }> {
+  public async find ({
+    isAvailable
+  }: IPayloadFindRecipe): Promise<{ recipes: IRecipe[] }> {
     const recipe = await Recipe.find({
       ...(isAvailable != null ? { is_available: isAvailable } : {})
-    })
+    }).populate('steps.ingredient')
     return {
       recipes: serializeRecipes(recipe)
     }

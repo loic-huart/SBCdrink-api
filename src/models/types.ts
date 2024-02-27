@@ -1,6 +1,5 @@
 import { type ObjectId } from 'mongoose'
-import Ingredient from './Ingredient'
-import { OrderStatus } from '../services/order/types'
+import { type OrderStatus } from '../services/order/types'
 
 // export interface IModelIngredient extends Document {
 export interface IModelIngredient {
@@ -19,6 +18,12 @@ export interface IModelRecipe {
   alcohol_min_level: number
   alcohol_max_level: number
   is_available: boolean
+  steps: Array<{
+    _id: ObjectId
+    ingredient: IModelIngredient
+    proportion: number
+    order_index: number
+  }>
   created_at: Date
   updated_at: Date
 }
