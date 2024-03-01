@@ -1,0 +1,16 @@
+meta {
+  name: get
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{api}}recipes
+  body: none
+  auth: none
+}
+
+query {
+  ~isAvailable: false
+  ~withIngredients: true
+}
