@@ -1,0 +1,27 @@
+meta {
+  name: post
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{api}}order
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "status": "CREATED",
+      "progress": 0,
+      "recipe": "65d914278da9f707e421878d",
+      "steps": [
+          {
+              "status": "CREATED",
+              "order": 0,
+              "quantity": 0,
+              "ingredient": "65d914278da9f707e421878c"
+          }
+      ]
+  }
+}

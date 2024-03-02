@@ -1,0 +1,30 @@
+meta {
+  name: post
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{api}}recipe
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+      "name": "test",
+      "description": "test",
+      "picture": "test",
+      "alcoholLevel": 0,
+      "alcoholMinLevel": 0,
+      "alcoholMaxLevel": 40,
+      "steps": [
+          {
+              "ingredient": "65d7cf2917b050819dae4c29",
+              "proportion": 30,
+              "orderIndex": 1
+          }
+      ],
+      "isAvailable": false
+  }
+}

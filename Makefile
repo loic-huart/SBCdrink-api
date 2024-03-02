@@ -28,7 +28,7 @@ clean: ## Remove all containers, images and volumes
 ## --- Projet 🐸 ---
 
 .PHONY: init
-init: ## Init the project
+init: ## Init the project (npm install)
 	$(EXEC) yarn install
 
 .PHONY: shell
