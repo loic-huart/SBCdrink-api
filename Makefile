@@ -1,5 +1,5 @@
-DC := docker-compose --env-file .env -f ./docker/docker-compose.local.yml
-EXEC := $(DC) exec api
+DC := docker compose --env-file .env -f ./docker/docker-compose.local.yml
+EXEC := $(DC) exec sbcdrink-api
 DR := $(DC) run --rm
 
 .DEFAULT_GOAL: help
