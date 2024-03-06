@@ -1,8 +1,12 @@
-import { type IOrder } from './types'
+import { OrderStatus, type IOrder } from './types'
 import ErrorService from '../errors/errors'
-import Order, { deSerializeOrder, serializeOrders } from '../../models/Order'
+import Order, { deSerializeOrder, serializeOrder, serializeOrders } from '../../models/Order'
 import { Slug, type Error } from '../errors/types'
 import { createPayloadValidation } from './validators'
+import Recipe, { serializeRecipe } from '../../models/Recipe'
+import { Ingredient } from '../../models'
+import { serializeIngredient } from '../../models/Ingredient'
+import { type IModelIngredient, type IModelRecipe } from '../../models/types'
 
 interface IOrderService extends ErrorService {
   find: () => Promise<{ orders: IOrder[] }>
@@ -28,6 +32,14 @@ class OrderService extends ErrorService implements IOrderService {
   }
 
   public async create (order: IOrder): Promise<{ order: IOrder, error?: Error }> {
+    const orderInStatusCreated = await Order.findOne({ status: OrderStatus.CREATED })
+    if (orderInStatusCreated != null) {
+      return {
+        order: {} as IOrder,
+        error: this.NewForbiddenError('There is already an order in status created', Slug.ErrOrderAlreadyInStatusCreated)
+      }
+    }
+
     const { error } = createPayloadValidation(order)
     if (error != null) {
       return {
@@ -36,15 +48,45 @@ class OrderService extends ErrorService implements IOrderService {
       }
     }
 
-    // TODO: Recipe.findOne({ _id: order.recipe._id })
+    const recipe = await Recipe.findById(order.recipe) as unknown as IModelRecipe
+    if (recipe == null) {
+      return {
+        order: {} as IOrder,
+        error: this.NewNotFoundError('Recipe not found', Slug.ErrRecipeNotFound)
+      }
+    }
 
-    // TOTO: Ingredient.find({ _id: { $in: order.steps.map(step => step.ingredient._id) } })
+    let ingredientError = null
+    const steps = []
+    for (const step of order.steps) {
+      const ingredient = await Ingredient.findById(step.ingredient) as unknown as IModelIngredient
+      if (ingredient == null) {
+        ingredientError = {
+          order: {} as IOrder,
+          error: this.NewNotFoundError('Ingredient not found', Slug.ErrIngredientNotFound)
+        }
+        break
+      }
+      steps.push({
+        ...step,
+        ingredient: serializeIngredient(ingredient)
+      })
+    }
+    if (ingredientError != null) {
+      return ingredientError
+    }
 
-    const newOrder = new Order(deSerializeOrder(order))
+    const populatedNewOrder = {
+      ...order,
+      recipe: serializeRecipe(recipe),
+      steps
+    }
+
+    const newOrder = new Order(deSerializeOrder(populatedNewOrder))
     await newOrder.save()
 
     return {
-      order
+      order: serializeOrder(newOrder)
     }
   }
 }

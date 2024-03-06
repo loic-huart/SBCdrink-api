@@ -11,7 +11,7 @@ export enum OrderStatus {
 export interface IOrderStep {
   id: string
   status: OrderStatus
-  order: number
+  orderIndex: number
   quantity: number
   ingredient: IIngredient
 }

@@ -51,7 +51,7 @@ export interface IModelOrder {
   steps: Array<{
     _id: ObjectId
     status: OrderStatus
-    order: number
+    order_index: number
     quantity: number
     ingredient: IModelIngredient
   }>

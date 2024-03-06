@@ -14,7 +14,7 @@ const serializeOrder = (order: IModelOrder): IOrder => ({
   steps: order.steps.map(step => ({
     id: step._id as unknown as string,
     status: step.status,
-    order: step.order,
+    orderIndex: step.order_index,
     quantity: step.quantity,
     ingredient: serializeIngredient(step.ingredient)
   })),
@@ -34,7 +34,7 @@ const deSerializeOrder = (order: IOrder): IModelOrder => ({
   steps: order.steps.map((step: IOrderStep) => ({
     _id: step.id as unknown as ObjectId,
     status: step.status,
-    order: step.order,
+    order_index: step.orderIndex,
     quantity: step.quantity,
     ingredient: deSerializeIngredient(step.ingredient)
   })),
@@ -50,11 +50,13 @@ const orderSchema = new Schema<IModelOrder>({
   status: {
     type: String,
     enum: OrderStatus,
-    required: true
+    required: true,
+    default: OrderStatus.CREATED
   },
   progress: {
     type: Number,
-    required: true
+    required: true,
+    default: 0
   },
   recipe: Recipe.schema,
   steps: [
@@ -62,9 +64,10 @@ const orderSchema = new Schema<IModelOrder>({
       status: {
         type: String,
         enum: OrderStatus,
-        required: true
+        required: true,
+        default: OrderStatus.CREATED
       },
-      order: {
+      order_index: {
         type: Number,
         required: true
       },

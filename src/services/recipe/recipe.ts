@@ -67,7 +67,7 @@ class RecipeService extends ErrorService implements IRecipeService {
     await newRecipe.save()
 
     return {
-      recipe
+      recipe: serializeRecipe(newRecipe)
     }
   }
 }

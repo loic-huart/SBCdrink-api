@@ -1,6 +1,6 @@
 import { type IIngredient } from './types'
 import ErrorService from '../errors/errors'
-import Ingredient, { deSerializeIngredient, serializeIngredients } from '../../models/Ingredient'
+import Ingredient, { deSerializeIngredient, serializeIngredient, serializeIngredients } from '../../models/Ingredient'
 import { Slug, type Error } from '../errors/types'
 import { createPayloadValidation } from './validators'
 
@@ -40,7 +40,7 @@ class IngredientService extends ErrorService implements IIngredientService {
     await newIngredient.save()
 
     return {
-      ingredient
+      ingredient: serializeIngredient(newIngredient)
     }
   }
 }
