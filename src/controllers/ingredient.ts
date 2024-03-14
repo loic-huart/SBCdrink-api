@@ -1,8 +1,7 @@
 import { type FastifyReply, type FastifyRequest } from 'fastify'
 import IngredientService from '../services/ingredient/ingredient'
 import mapErrorTypeToHttpCode from '../utils/mapErrorTypeToHttpCode'
-import { Error } from '../services/errors/types'
-import { IIngredient } from '../services/ingredient/types'
+import { type IIngredient } from '../services/ingredient/types'
 
 interface IIngredientController {
   get: (req: FastifyRequest, res: FastifyReply) => Promise<void>

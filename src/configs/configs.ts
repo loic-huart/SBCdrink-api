@@ -11,6 +11,8 @@ enum Environment {
   dbPass = 'DB_PASS',
   dbPort = 'DB_PORT',
   dbName = 'DB_NAME',
+  scriptHost = 'SCRIPT_HOST',
+  scriptPort = 'SCRIPT_PORT'
 }
 
 type EnvironmentKey = keyof typeof Environment
@@ -39,4 +41,9 @@ export const dbConfig = getEnvVariables([
   'dbPass',
   'dbPort',
   'dbName'
+])
+
+export const scriptConfig = getEnvVariables([
+  'scriptHost',
+  'scriptPort'
 ])
