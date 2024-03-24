@@ -20,11 +20,29 @@ services:
 
   sbcdrink-mongo:
     container_name: sbcdrink-mongo
-    image: mongo
+    image: mongo:5.0
+    volumes:
+      - ./mongo-config/data:/data/db
+      - ./mongo-config/key:/data/db/key
+    healthcheck:
+      test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo -u $${MONGO_INITDB_ROOT_USERNAME} -p $${MONGO_INITDB_ROOT_PASSWORD} --quiet) -eq 1
+      interval: 10s
+      start_period: 30s
+    entrypoint:
+      - bash
+      - -c
+      - |
+          echo MYZwB6D3sEG66W5DaYaS > /data/db/key/file.key
+          chmod 600 /data/db/key/file.key
+          chown 999:999 /data/db/key/file.key
+          exec docker-entrypoint.sh $$@
+    command: mongod --bind_ip_all --replSet dbrs --keyFile /data/db/key/file.key
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: $DB_USER
       MONGO_INITDB_ROOT_PASSWORD: $DB_PASS
+      MONGO_INITDB_DATABASE: $DB_NAME
+      MONGO_REPLICA_SET_NAME: rs0
     networks:
       - sbcdrink-network
 
