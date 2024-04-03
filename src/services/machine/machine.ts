@@ -6,11 +6,11 @@ import { Slug, type Error } from '../errors/types'
 import { type IMachineStep } from './types'
 import { scriptConfig } from '../../configs/configs'
 import { directMakeCocktailPayloadValidation } from './validators'
-import { type IOrder } from '../order/types'
+import { type IOrder, type IOrderMakeCocktail } from '../order/types'
 const PROTO_PATH = path.join(__dirname, '/protos/machine.proto')
 
 interface IMachineService extends ErrorService {
-  directMakeCocktail: (order: IOrder) => Promise<{ response: boolean, error?: Error }>
+  makeCocktail: (order: IOrderMakeCocktail) => Promise<{ response: boolean, error?: Error }>
   orderToMachineSteps: (order: IOrder) => IMachineStep[]
 }
 
@@ -47,7 +47,8 @@ class MachineService extends ErrorService implements IMachineService {
     return MachineService.instance
   }
 
-  public orderToMachineSteps (order: IOrder): IMachineStep[] {
+  public orderToMachineSteps (order: Partial<IOrder>): IMachineStep[] {
+    if (order.steps === null || order.steps === undefined) return []
     return order.steps.map((step) => {
       return {
         stepId: step.id,
@@ -58,8 +59,8 @@ class MachineService extends ErrorService implements IMachineService {
     })
   }
 
-  public async directMakeCocktail (order: IOrder): Promise<{ response: boolean, error?: Error }> {
-    const { error } = directMakeCocktailPayloadValidation(order)
+  public async makeCocktail (orderMakeCocktail: IOrderMakeCocktail): Promise<{ response: boolean, error?: Error }> {
+    const { error } = directMakeCocktailPayloadValidation(orderMakeCocktail)
     if (error != null) {
       return {
         response: false,
@@ -67,26 +68,27 @@ class MachineService extends ErrorService implements IMachineService {
       }
     }
 
-    const machineSteps = this.orderToMachineSteps(order)
+    const machineSteps = this.orderToMachineSteps(orderMakeCocktail)
 
-    const response = await new Promise((resolve, reject) => {
-      this.client.makeCocktail({
+    const response = await new Promise<{ response: boolean, error?: Error | undefined }>((resolve) => {
+      return this.client.makeCocktail({
         steps: JSON.stringify(machineSteps)
-      }, function (err: any, response: any) {
-        if (err) {
-          reject(err)
+      }, (err: any, response: any) => {
+        // eslint-disable-next-line no-extra-boolean-cast
+        if (Boolean(err)) {
+          resolve({
+            response: false,
+            error: this.NewUnknowError('Machine script error', Slug.ErrUnknow)
+          })
         } else {
-          resolve(response)
+          resolve({
+            response: true
+          })
         }
       })
     })
 
-    console.log('response', response)
-
-    return {
-      response: true
-      // error: this.NewUnknowError('Unknown error', Slug.ErrUnknow)
-    }
+    return response
   }
 }
 

@@ -24,7 +24,7 @@ class MachineController implements IMachineController {
       const {
         response,
         error
-      } = await machineService.directMakeCocktail(req.body as IOrder)
+      } = await machineService.makeCocktail(req.body as IOrder)
       if (error != null) {
         const httpCode = mapErrorTypeToHttpCode(error.errorType)
         await res.status(httpCode).send(error)

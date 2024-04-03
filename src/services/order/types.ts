@@ -5,7 +5,8 @@ export enum OrderStatus {
   CREATED = 'CREATED',
   IN_PROGRESS = 'IN_PROGRESS',
   DONE = 'DONE',
-  CANCELED = 'CANCELED'
+  CANCELED = 'CANCELED',
+  FAILED = 'FAILED'
 }
 
 export interface IOrderStep {
@@ -24,4 +25,8 @@ export interface IOrder {
   steps: IOrderStep[]
   createdAt: Date
   updatedAt: Date
+}
+
+export interface IOrderMakeCocktail {
+  steps: IOrderStep[]
 }

@@ -6,7 +6,8 @@ import { createPayloadValidation } from './validators'
 import Recipe, { serializeRecipe } from '../../models/Recipe'
 import { Ingredient } from '../../models'
 import { serializeIngredient } from '../../models/Ingredient'
-import { type IModelIngredient, type IModelRecipe } from '../../models/types'
+import { type IModelOrder, type IModelIngredient, type IModelRecipe } from '../../models/types'
+import MachineService from '../machine/machine'
 
 interface IOrderService extends ErrorService {
   find: () => Promise<{ orders: IOrder[] }>
@@ -16,12 +17,49 @@ interface IOrderService extends ErrorService {
 class OrderService extends ErrorService implements IOrderService {
   private static instance: OrderService
 
+  private constructor () {
+    super()
+    this.watch()
+  }
+
   public static getInstance (): OrderService {
     if (OrderService.instance === undefined) {
       OrderService.instance = new OrderService()
     }
 
     return OrderService.instance
+  }
+
+  public watch (): void {
+    const watchOrder = Order.watch()
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    watchOrder.on('change', async (change): Promise<void> => {
+      switch (change.operationType) {
+        case 'update':
+        case 'insert': {
+          if (change.fullDocument == null) break
+
+          const machineService = MachineService.getInstance()
+          const order = serializeOrder(change.fullDocument as IModelOrder)
+
+          if (order.status !== OrderStatus.CREATED) break
+
+          await Order.findByIdAndUpdate(order.id, { status: OrderStatus.IN_PROGRESS })
+          console.info('Watch order', order.id, 'status updated to', OrderStatus.IN_PROGRESS)
+          const res = await machineService.makeCocktail({ steps: order.steps })
+          if (res.error != null) {
+            await Order.findByIdAndUpdate(order.id, { status: OrderStatus.FAILED })
+            console.info('Watch order', order.id, 'status updated to', OrderStatus.FAILED)
+          } else {
+            await Order.findByIdAndUpdate(order.id, { status: OrderStatus.DONE })
+            console.info('Watch order', order.id, 'status updated to', OrderStatus.DONE)
+          }
+          break
+        }
+        default:
+          break
+      }
+    })
   }
 
   public async find (): Promise<{ orders: IOrder[] }> {
