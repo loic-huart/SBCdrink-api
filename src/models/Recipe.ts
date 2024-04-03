@@ -1,4 +1,5 @@
-import mongoose, { type ObjectId } from 'mongoose'
+import mongoose from 'mongoose'
+import { ObjectId } from 'mongodb'
 import { type IRecipe } from '../services/recipe/types'
 import { type IModelIngredient, type IModelRecipe } from './types'
 import { deSerializeIngredient, serializeIngredient } from './Ingredient'
@@ -7,7 +8,7 @@ import { type IIngredient } from '../services/ingredient/types'
 const Schema = mongoose.Schema
 
 const serializeRecipe = (recipe: IModelRecipe, withIngredients = false): IRecipe => ({
-  id: recipe._id as unknown as string,
+  id: recipe._id.toString(),
   name: recipe.name,
   description: recipe.description,
   picture: recipe.picture,
@@ -16,8 +17,8 @@ const serializeRecipe = (recipe: IModelRecipe, withIngredients = false): IRecipe
   alcoholMaxLevel: recipe.alcohol_max_level,
   isAvailable: recipe.is_available,
   steps: recipe.steps.map(step => ({
-    id: step._id as unknown as string,
-    ingredient: withIngredients ? serializeIngredient(step.ingredient as IModelIngredient) : step.ingredient as unknown as string,
+    id: step._id.toString(),
+    ingredient: withIngredients ? serializeIngredient(step.ingredient as IModelIngredient) : (step.ingredient as ObjectId).toString(),
     proportion: step.proportion,
     orderIndex: step.order_index
   })),
@@ -30,7 +31,7 @@ const serializeRecipes = (recipes: IModelRecipe[], withIngredients = false): IRe
 }
 
 const deSerializeRecipe = (recipe: IRecipe, withIngredients = false): IModelRecipe => ({
-  _id: recipe.id as unknown as ObjectId,
+  _id: new ObjectId(recipe.id),
   name: recipe.name,
   description: recipe.description,
   picture: recipe.picture,
@@ -39,8 +40,8 @@ const deSerializeRecipe = (recipe: IRecipe, withIngredients = false): IModelReci
   alcohol_max_level: recipe.alcoholMaxLevel,
   is_available: recipe.isAvailable,
   steps: recipe.steps.map(step => ({
-    _id: step.id as unknown as ObjectId,
-    ingredient: withIngredients ? deSerializeIngredient(step.ingredient as IIngredient) : step.ingredient as unknown as ObjectId,
+    _id: new ObjectId(step.id),
+    ingredient: withIngredients ? deSerializeIngredient(step.ingredient as IIngredient) : new ObjectId(step.ingredient as string),
     proportion: step.proportion,
     order_index: step.orderIndex
   })),

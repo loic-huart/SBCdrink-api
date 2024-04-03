@@ -3,6 +3,7 @@ import ErrorService from '../errors/errors'
 import Recipe, { deSerializeRecipe, serializeRecipe, serializeRecipes } from '../../models/Recipe'
 import { Slug, type Error } from '../errors/types'
 import { createPayloadValidation, findByIdPayloadValidation } from './validators'
+import { Ingredient } from '../../models'
 
 interface IRecipeService extends ErrorService {
   find: ({ isAvailable, withIngredients }: IPayloadFindRecipe) => Promise<{ recipes: IRecipe[] }>
@@ -13,7 +14,7 @@ interface IRecipeService extends ErrorService {
 class RecipeService extends ErrorService implements IRecipeService {
   private static instance: RecipeService
 
-  public static getInstance(): RecipeService {
+  public static getInstance (): RecipeService {
     if (RecipeService.instance === undefined) {
       RecipeService.instance = new RecipeService()
     }
@@ -21,7 +22,7 @@ class RecipeService extends ErrorService implements IRecipeService {
     return RecipeService.instance
   }
 
-  public async find({
+  public async find ({
     isAvailable,
     withIngredients = false
   }: IPayloadFindRecipe): Promise<{ recipes: IRecipe[] }> {
@@ -60,6 +61,21 @@ class RecipeService extends ErrorService implements IRecipeService {
       return {
         recipe: {} as IRecipe,
         error: this.NewIncorrectInputError(error.details[0].message, Slug.ErrIncorrectInput)
+      }
+    }
+
+    const ingredientNotExists = await Promise.all(recipe.steps.map(async (step) => {
+      const ingredient = await Ingredient.findById(step.ingredient)
+      if (ingredient == null) {
+        return step.ingredient
+      }
+      return null
+    }))
+    const filteredIngredientNotExists = ingredientNotExists.filter((ingredient) => ingredient != null)
+    if (filteredIngredientNotExists.length > 0) {
+      return {
+        recipe: {} as IRecipe,
+        error: this.NewNotFoundError(`Ingredient not found : ${filteredIngredientNotExists.join(', ')}`, Slug.ErrIngredientNotFound)
       }
     }
 

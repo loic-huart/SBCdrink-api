@@ -1,5 +1,5 @@
-import { type ObjectId } from 'mongoose'
 import { type OrderStatus } from '../services/order/types'
+import { type ObjectId } from 'mongodb'
 
 // export interface IModelIngredient extends Document {
 export interface IModelIngredient {

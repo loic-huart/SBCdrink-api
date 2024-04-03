@@ -1,4 +1,5 @@
-import mongoose, { type ObjectId } from 'mongoose'
+import mongoose from 'mongoose'
+import { ObjectId } from 'mongodb'
 import { type IMachineConfiguration } from '../services/machineConfiguration/types'
 import { type IModelMachineConfiguration } from './types'
 
@@ -16,7 +17,7 @@ const serializeRecipes = (machineConfigurations: IModelMachineConfiguration[]): 
 }
 
 const deSerializeRecipe = (machineConfiguration: IMachineConfiguration): IModelMachineConfiguration => ({
-  _id: machineConfiguration.id as unknown as ObjectId,
+  _id: new ObjectId(machineConfiguration.id),
   ingredient: machineConfiguration.ingredient as unknown as ObjectId,
   slot: machineConfiguration.slot,
   measure_volume: machineConfiguration.measureVolume
