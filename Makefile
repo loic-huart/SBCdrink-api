@@ -38,3 +38,7 @@ shell: ## Open a shell in the container
 .PHONY: test
 test: ## Run tests
 	$(EXEC) yarn test
+
+.PHONY: seed
+seed: ## Seed the database
+	$(EXEC) sh /sbcdrink-api/seeder/seed.sh

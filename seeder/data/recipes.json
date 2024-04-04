@@ -1,0 +1,298 @@
+[
+  {
+    "_id": {
+      "$oid": "660f1cd8f880d9c7b199ef5e"
+    },
+    "name": "Sex on the beach",
+    "description": "Découvrez la recette du délicieux cocktail sex on the beach. À base de vodka, liqueur de pêches, jus d’ananas et jus de cranberry, ce cocktail est frais et idéal pour vos soirées d’été.",
+    "picture": "recipe_picture/recipe_1.webp",
+    "alcohol_level": 27.27,
+    "alcohol_min_level": 15,
+    "alcohol_max_level": 40,
+    "is_available": true,
+    "steps": [
+      {
+        "ingredient": {
+          "$oid": "660f19dcf880d9c7b199ef39"
+        },
+        "proportion": 100,
+        "order_index": 1,
+        "_id": {
+          "$oid": "660f1cd8f880d9c7b199ef5f"
+        }
+      },
+      {
+        "ingredient": {
+          "$oid": "660f19c6f880d9c7b199ef33"
+        },
+        "proportion": 37.5,
+        "order_index": 2,
+        "_id": {
+          "$oid": "660f1cd8f880d9c7b199ef60"
+        }
+      },
+      {
+        "ingredient": {
+          "$oid": "660f19d1f880d9c7b199ef36"
+        },
+        "proportion": 62.5,
+        "order_index": 3,
+        "_id": {
+          "$oid": "660f1cd8f880d9c7b199ef61"
+        }
+      }
+    ],
+    "created_at": {
+      "$date": "2024-04-04T21:34:16.476Z"
+    },
+    "updated_at": {
+      "$date": "2024-04-04T21:34:16.476Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "660f1d7bf880d9c7b199ef6b"
+    },
+    "name": "Piña Colada",
+    "description": "Un mélange tropical de crème de noix de coco, de rhum blanc et d'ananas.",
+    "picture": "recipe_picture/recipe_2.webp",
+    "alcohol_level": 27.27,
+    "alcohol_min_level": 10,
+    "alcohol_max_level": 50,
+    "is_available": true,
+    "steps": [
+      {
+        "ingredient": {
+          "$oid": "660f19eaf880d9c7b199ef3c"
+        },
+        "proportion": 66.67,
+        "order_index": 1,
+        "_id": {
+          "$oid": "660f1d7bf880d9c7b199ef6c"
+        }
+      },
+      {
+        "ingredient": {
+          "$oid": "660f19f9f880d9c7b199ef3f"
+        },
+        "proportion": 33.33,
+        "order_index": 2,
+        "_id": {
+          "$oid": "660f1d7bf880d9c7b199ef6d"
+        }
+      },
+      {
+        "ingredient": {
+          "$oid": "660f19c6f880d9c7b199ef33"
+        },
+        "proportion": 75,
+        "order_index": 3,
+        "_id": {
+          "$oid": "660f1d7bf880d9c7b199ef6e"
+        }
+      },
+      {
+        "ingredient": {
+          "$oid": "660f1a03f880d9c7b199ef42"
+        },
+        "proportion": 25,
+        "order_index": 4,
+        "_id": {
+          "$oid": "660f1d7bf880d9c7b199ef6f"
+        }
+      }
+    ],
+    "created_at": {
+      "$date": "2024-04-04T21:36:59.387Z"
+    },
+    "updated_at": {
+      "$date": "2024-04-04T21:36:59.387Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "660f1e80f880d9c7b199ef78"
+    },
+    "name": "Gin tonic",
+    "description": "Gin... et Tonic",
+    "picture": "recipe_picture/recipe_3.webp",
+    "alcohol_level": 33.33,
+    "alcohol_min_level": 20,
+    "alcohol_max_level": 50,
+    "is_available": true,
+    "steps": [
+      {
+        "ingredient": {
+          "$oid": "660f1a3ff880d9c7b199ef4b"
+        },
+        "proportion": 100,
+        "order_index": 2,
+        "_id": {
+          "$oid": "660f1e80f880d9c7b199ef79"
+        }
+      },
+      {
+        "ingredient": {
+          "$oid": "660f1a4bf880d9c7b199ef4e"
+        },
+        "proportion": 100,
+        "order_index": 1,
+        "_id": {
+          "$oid": "660f1e80f880d9c7b199ef7a"
+        }
+      }
+    ],
+    "created_at": {
+      "$date": "2024-04-04T21:41:20.899Z"
+    },
+    "updated_at": {
+      "$date": "2024-04-04T21:41:20.900Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "660f1efff880d9c7b199ef82"
+    },
+    "name": "Amaretto sunrise",
+    "description": "Ce cocktail est une variation du cocktail Tequila Sunrise où l’Amaretto remplace la tequila. Vous apprécierez particulièrement cette boisson à la couleur évocatrice d’un lever de soleil.",
+    "picture": "recipe_picture/recipe_4.webp",
+    "alcohol_level": 12.5,
+    "alcohol_min_level": 8,
+    "alcohol_max_level": 20,
+    "is_available": true,
+    "steps": [
+      {
+        "ingredient": {
+          "$oid": "660f1a0df880d9c7b199ef45"
+        },
+        "proportion": 100,
+        "order_index": 3,
+        "_id": {
+          "$oid": "660f1efff880d9c7b199ef83"
+        }
+      },
+      {
+        "ingredient": {
+          "$oid": "660f1a24f880d9c7b199ef48"
+        },
+        "proportion": 85.71,
+        "order_index": 1,
+        "_id": {
+          "$oid": "660f1efff880d9c7b199ef84"
+        }
+      },
+      {
+        "ingredient": {
+          "$oid": "660f1a5ff880d9c7b199ef54"
+        },
+        "proportion": 14.29,
+        "order_index": 2,
+        "_id": {
+          "$oid": "660f1efff880d9c7b199ef85"
+        }
+      }
+    ],
+    "created_at": {
+      "$date": "2024-04-04T21:43:27.242Z"
+    },
+    "updated_at": {
+      "$date": "2024-04-04T21:43:27.242Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "660f20b4f880d9c7b199ef8e"
+    },
+    "name": "Tequila sunrise",
+    "description": "Le Tequila Sunrise sera encore meilleur dégusté au bord d'une piscine.",
+    "picture": "recipe_picture/recipe_5.webp",
+    "alcohol_level": 30,
+    "alcohol_min_level": 20,
+    "alcohol_max_level": 40,
+    "is_available": true,
+    "steps": [
+      {
+        "ingredient": {
+          "$oid": "660f1a4bf880d9c7b199ef4e"
+        },
+        "proportion": 100,
+        "order_index": 3,
+        "_id": {
+          "$oid": "660f20b4f880d9c7b199ef8f"
+        }
+      },
+      {
+        "ingredient": {
+          "$oid": "660f1a24f880d9c7b199ef48"
+        },
+        "proportion": 86.71,
+        "order_index": 1,
+        "_id": {
+          "$oid": "660f20b4f880d9c7b199ef90"
+        }
+      },
+      {
+        "ingredient": {
+          "$oid": "660f1a5ff880d9c7b199ef54"
+        },
+        "proportion": 13.29,
+        "order_index": 2,
+        "_id": {
+          "$oid": "660f20b4f880d9c7b199ef91"
+        }
+      }
+    ],
+    "created_at": {
+      "$date": "2024-04-04T21:50:44.560Z"
+    },
+    "updated_at": {
+      "$date": "2024-04-04T21:50:44.560Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "660f210cf880d9c7b199ef99"
+    },
+    "name": "Grandfather",
+    "description": "Digestif aux douces saveurs d''amandes.",
+    "picture": "recipe_picture/recipe_6.webp",
+    "alcohol_level": 100,
+    "alcohol_min_level": 100,
+    "alcohol_max_level": 100,
+    "is_available": true,
+    "steps": [
+      {
+        "ingredient": {
+          "$oid": "660f1a0df880d9c7b199ef45"
+        },
+        "proportion": 30,
+        "order_index": 2,
+        "_id": {
+          "$oid": "660f210cf880d9c7b199ef9a"
+        }
+      },
+      {
+        "ingredient": {
+          "$oid": "660f1a69f880d9c7b199ef57"
+        },
+        "proportion": 70,
+        "order_index": 1,
+        "_id": {
+          "$oid": "660f210cf880d9c7b199ef9b"
+        }
+      }
+    ],
+    "created_at": {
+      "$date": "2024-04-04T21:52:12.198Z"
+    },
+    "updated_at": {
+      "$date": "2024-04-04T21:52:12.198Z"
+    },
+    "__v": 0
+  }
+]

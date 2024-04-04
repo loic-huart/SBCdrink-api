@@ -1,0 +1,128 @@
+[
+  {
+    "_id": {
+      "$oid": "660f1993f880d9c7b199ef30"
+    },
+    "name": "Vodka",
+    "is_alcohol": true,
+    "alcohol_degree": 37.5,
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "660f19c6f880d9c7b199ef33"
+    },
+    "name": "Jus d''ananas",
+    "is_alcohol": false,
+    "alcohol_degree": 0,
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "660f19d1f880d9c7b199ef36"
+    },
+    "name": "Jus de cranberry",
+    "is_alcohol": false,
+    "alcohol_degree": 0,
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "660f19dcf880d9c7b199ef39"
+    },
+    "name": "Liqueur de pêche",
+    "is_alcohol": true,
+    "alcohol_degree": 15,
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "660f19eaf880d9c7b199ef3c"
+    },
+    "name": "Rhum blanc",
+    "is_alcohol": true,
+    "alcohol_degree": 45,
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "660f19f9f880d9c7b199ef3f"
+    },
+    "name": "Rhum ambré",
+    "is_alcohol": true,
+    "alcohol_degree": 40,
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "660f1a03f880d9c7b199ef42"
+    },
+    "name": "Lait de coco",
+    "is_alcohol": false,
+    "alcohol_degree": 0,
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "660f1a0df880d9c7b199ef45"
+    },
+    "name": "Amaretto",
+    "is_alcohol": true,
+    "alcohol_degree": 28,
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "660f1a24f880d9c7b199ef48"
+    },
+    "name": "Jus d''orange",
+    "is_alcohol": false,
+    "alcohol_degree": 0,
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "660f1a3ff880d9c7b199ef4b"
+    },
+    "name": "Gin",
+    "is_alcohol": true,
+    "alcohol_degree": 37.5,
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "660f1a4bf880d9c7b199ef4e"
+    },
+    "name": "Limonade",
+    "is_alcohol": false,
+    "alcohol_degree": 0,
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "660f1a56f880d9c7b199ef51"
+    },
+    "name": "Tequila",
+    "is_alcohol": true,
+    "alcohol_degree": 38,
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "660f1a5ff880d9c7b199ef54"
+    },
+    "name": "Grenadine",
+    "is_alcohol": false,
+    "alcohol_degree": 0,
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "660f1a69f880d9c7b199ef57"
+    },
+    "name": "Whisky",
+    "is_alcohol": true,
+    "alcohol_degree": 40,
+    "__v": 0
+  }
+]

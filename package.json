@@ -8,7 +8,8 @@
     "build": "tsc",
     "test": "jest",
     "test:watch": "jest --watchAll",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed": "sh ./seeder/seed.sh"
   },
   "repository": {
     "type": "git",
