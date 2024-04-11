@@ -51,3 +51,22 @@ test       Run tests
 This project is using usebruno to have a ui for the api documentation.
 
 To access the documentation, you can install the [Bruno client](`https://github.com/usebruno/bruno`) and open `sbcdrink-bruno` folder in the client.
+
+# Usage
+
+## seeder
+
+If you using Devcontainer, you can run the seeder by running the following command in the terminal: 
+```bash
+npm run seed
+```
+
+If you are using Docker Compose, you can run the seeder by running the following command in the terminal: 
+```bash
+make seed
+```
+
+you can update the seeder data in `src/seeder/data` folder
+these are json files resulting from an export of the database from mongo express
+
+
