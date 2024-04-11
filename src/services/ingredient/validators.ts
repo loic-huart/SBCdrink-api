@@ -10,6 +10,16 @@ const createPayloadValidation = (body: IIngredient): Joi.ValidationResult => {
   return schema.validate(body)
 }
 
+const updatePayloadValidation = (body: IIngredient): Joi.ValidationResult => {
+  const schema = Joi.object({
+    id: Joi.string().length(24).required(),
+    name: Joi.string().required(),
+    isAlcohol: Joi.boolean().required(),
+    alcoholDegree: Joi.number().required()
+  })
+  return schema.validate(body)
+}
+
 const findByIdPayloadValidation = (params: { id: IIngredient['id'] }): Joi.ValidationResult => {
   const schema = Joi.object({
     id: Joi.string().length(24).required()
@@ -19,5 +29,6 @@ const findByIdPayloadValidation = (params: { id: IIngredient['id'] }): Joi.Valid
 
 export {
   createPayloadValidation,
+  updatePayloadValidation,
   findByIdPayloadValidation
 }

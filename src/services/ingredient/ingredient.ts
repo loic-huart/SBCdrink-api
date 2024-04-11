@@ -2,7 +2,7 @@ import { type IIngredient, type IPayloadFindByIdIngredient } from './types'
 import ErrorService from '../errors/errors'
 import Ingredient, { deSerializeIngredient, serializeIngredient, serializeIngredients } from '../../models/Ingredient'
 import { Slug, type Error } from '../errors/types'
-import { createPayloadValidation, findByIdPayloadValidation } from './validators'
+import { createPayloadValidation, findByIdPayloadValidation, updatePayloadValidation } from './validators'
 import Recipe from '../../models/Recipe'
 import MachineConfiguration from '../../models/MachineConfiguration'
 
@@ -68,7 +68,7 @@ class IngredientService extends ErrorService implements IIngredientService {
   }
 
   public async update (id: string, ingredient: IIngredient): Promise<{ ingredient: IIngredient, error?: Error }> {
-    const { error } = createPayloadValidation(ingredient)
+    const { error } = updatePayloadValidation(ingredient)
     if (error != null) {
       return {
         ingredient: {} as IIngredient,
