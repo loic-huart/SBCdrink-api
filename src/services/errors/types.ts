@@ -1,7 +1,7 @@
 enum Slug {
   ErrRecipeNotFound = 'RECIPE_NOT_FOUND',
   ErrIngredientNotFound = 'INGREDIENT_NOT_FOUND',
-
+  ErrIngredientUsed = 'INGREDIENT_USED',
   ErrOrderAlreadyInStatusCreated = 'ORDER_ALREADY_IN_STATUS_CREATED',
 
   ErrIncorrectInput = 'INVALID_INPUT',

@@ -3,7 +3,8 @@ import ErrorService from '../errors/errors'
 import Ingredient, { deSerializeIngredient, serializeIngredient, serializeIngredients } from '../../models/Ingredient'
 import { Slug, type Error } from '../errors/types'
 import { createPayloadValidation, findByIdPayloadValidation } from './validators'
-import { IModelIngredient } from '../../models/types'
+import Recipe from '../../models/Recipe'
+import MachineConfiguration from '../../models/MachineConfiguration'
 
 interface IIngredientService extends ErrorService {
   find: () => Promise<{ ingredients: IIngredient[] }>
@@ -100,6 +101,20 @@ class IngredientService extends ErrorService implements IIngredientService {
     if (findIngredient == null) {
       return {
         error: this.NewNotFoundError('Ingredient not found', Slug.ErrIngredientNotFound)
+      }
+    }
+
+    const recipeUseIngredient = await Recipe.find({ 'steps.ingredient': findIngredient._id })
+    if (recipeUseIngredient.length > 0) {
+      return {
+        error: this.NewForbiddenError('Ingredient is used in a recipe', Slug.ErrIngredientUsed)
+      }
+    }
+
+    const machineConfigurationUseIngredient = await MachineConfiguration.find({ 'ingredients.ingredient': findIngredient._id })
+    if (machineConfigurationUseIngredient.length > 0) {
+      return {
+        error: this.NewForbiddenError('Ingredient is used in a machineConfiguration', Slug.ErrIngredientUsed)
       }
     }
 
