@@ -10,6 +10,14 @@ const createPayloadValidation = (body: IIngredient): Joi.ValidationResult => {
   return schema.validate(body)
 }
 
+const findByIdPayloadValidation = (params: { id: IIngredient['id'] }): Joi.ValidationResult => {
+  const schema = Joi.object({
+    id: Joi.string().length(24).required()
+  })
+  return schema.validate(params)
+}
+
 export {
-  createPayloadValidation
+  createPayloadValidation,
+  findByIdPayloadValidation
 }

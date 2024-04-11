@@ -5,12 +5,12 @@ meta {
 }
 
 get {
-  url: {{api}}recipes
+  url: {{api}}recipes?isAvailable=true&withIngredients=true
   body: none
   auth: none
 }
 
 query {
-  ~isAvailable: false
-  ~withIngredients: true
+  isAvailable: true
+  withIngredients: true
 }

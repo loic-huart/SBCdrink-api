@@ -28,6 +28,26 @@ class IngredientController implements IIngredientController {
     }
   }
 
+  public async getById (req: FastifyRequest, res: FastifyReply): Promise<void> {
+    try {
+      const ingredientService = IngredientService.getInstance()
+      const { id } = req.params as { id: string }
+      const {
+        ingredient,
+        error
+      } = await ingredientService.findById({ id })
+      if (error != null) {
+        const httpCode = mapErrorTypeToHttpCode(error.errorType)
+        await res.status(httpCode).send(error)
+        return
+      }
+
+      await res.status(200).send(ingredient)
+    } catch (error: unknown) {
+      await res.status(500).send(error)
+    }
+  }
+
   public async post (req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
       const ingredientService = IngredientService.getInstance()

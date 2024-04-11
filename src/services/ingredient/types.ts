@@ -4,3 +4,7 @@ export interface IIngredient {
   isAlcohol: boolean
   alcoholDegree: number
 }
+
+export interface IPayloadFindByIdIngredient {
+  id: string
+}

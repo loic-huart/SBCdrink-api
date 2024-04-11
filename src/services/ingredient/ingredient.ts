@@ -1,8 +1,8 @@
-import { type IIngredient } from './types'
+import { type IIngredient, type IPayloadFindByIdIngredient } from './types'
 import ErrorService from '../errors/errors'
 import Ingredient, { deSerializeIngredient, serializeIngredient, serializeIngredients } from '../../models/Ingredient'
 import { Slug, type Error } from '../errors/types'
-import { createPayloadValidation } from './validators'
+import { createPayloadValidation, findByIdPayloadValidation } from './validators'
 
 interface IIngredientService extends ErrorService {
   find: () => Promise<{ ingredients: IIngredient[] }>
@@ -24,6 +24,27 @@ class IngredientService extends ErrorService implements IIngredientService {
     const ingredients = await Ingredient.find()
     return {
       ingredients: serializeIngredients(ingredients)
+    }
+  }
+
+  public async findById ({ id }: IPayloadFindByIdIngredient): Promise<{ ingredient: IIngredient, error?: Error }> {
+    const { error } = findByIdPayloadValidation({ id })
+    if (error != null) {
+      return {
+        ingredient: {} as IIngredient,
+        error: this.NewIncorrectInputError(error.details[0].message, Slug.ErrIncorrectInput)
+      }
+    }
+    const ingredient = await Ingredient.findById(id)
+    if (ingredient == null) {
+      return {
+        ingredient: {} as IIngredient,
+        error: this.NewNotFoundError('Ingredient not found', Slug.ErrRecipeNotFound)
+      }
+    }
+
+    return {
+      ingredient: serializeIngredient(ingredient)
     }
   }
 

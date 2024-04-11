@@ -11,23 +11,18 @@ post {
 }
 
 body:json {
-  [
-    {
-      "id": "65ea2900fc3964ac1588820f",
-      "steps": [
-        {
-          "id": "65ea2900fc3964ac15888212",
-          "status": "CREATED",
-          "orderIndex": 1,
-          "quantity": 0.8,
-          "ingredient": {
-            "id": "65e8ef07f7055332ef16e9ff",
-            "name": "test 2",
-            "isAlcohol": true,
-            "alcoholDegree": 10
-          }
+  {
+    "steps": [
+      {
+        "status": "CREATED",
+        "orderIndex": 1,
+        "quantity": 0.8,
+        "ingredient": {
+          "name": "test 2",
+          "isAlcohol": true,
+          "alcoholDegree": 10
         }
-      ]
-    }
-  ]
+      }
+    ]
+  }
 }
