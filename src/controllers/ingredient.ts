@@ -79,7 +79,23 @@ class IngredientController implements IIngredientController {
         await res.status(httpCode).send(error)
         return
       }
-      await res.status(201).send(ingredient)
+      await res.status(200).send(ingredient)
+    } catch (error: unknown) {
+      await res.status(500).send(error)
+    }
+  }
+
+  public async delete (req: FastifyRequest, res: FastifyReply): Promise<void> {
+    try {
+      const ingredientService = IngredientService.getInstance()
+      const { id } = req.params as { id: string }
+      const { error } = await ingredientService.delete(id)
+      if (error != null) {
+        const httpCode = mapErrorTypeToHttpCode(error.errorType)
+        await res.status(httpCode).send(error)
+        return
+      }
+      await res.status(204).send()
     } catch (error: unknown) {
       await res.status(500).send(error)
     }

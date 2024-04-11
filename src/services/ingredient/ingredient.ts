@@ -94,6 +94,19 @@ class IngredientService extends ErrorService implements IIngredientService {
       ingredient: serializeIngredient(newIngredient)
     }
   }
+
+  public async delete (id: string): Promise<{ error?: Error }> {
+    const findIngredient = await Ingredient.findById(id)
+    if (findIngredient == null) {
+      return {
+        error: this.NewNotFoundError('Ingredient not found', Slug.ErrIngredientNotFound)
+      }
+    }
+
+    await findIngredient.deleteOne()
+
+    return {}
+  }
 }
 
 export default IngredientService
