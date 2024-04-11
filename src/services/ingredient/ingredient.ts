@@ -3,6 +3,7 @@ import ErrorService from '../errors/errors'
 import Ingredient, { deSerializeIngredient, serializeIngredient, serializeIngredients } from '../../models/Ingredient'
 import { Slug, type Error } from '../errors/types'
 import { createPayloadValidation, findByIdPayloadValidation } from './validators'
+import { IModelIngredient } from '../../models/types'
 
 interface IIngredientService extends ErrorService {
   find: () => Promise<{ ingredients: IIngredient[] }>
@@ -39,7 +40,7 @@ class IngredientService extends ErrorService implements IIngredientService {
     if (ingredient == null) {
       return {
         ingredient: {} as IIngredient,
-        error: this.NewNotFoundError('Ingredient not found', Slug.ErrRecipeNotFound)
+        error: this.NewNotFoundError('Ingredient not found', Slug.ErrIngredientNotFound)
       }
     }
 
@@ -59,6 +60,35 @@ class IngredientService extends ErrorService implements IIngredientService {
 
     const newIngredient = new Ingredient(deSerializeIngredient(ingredient))
     await newIngredient.save()
+
+    return {
+      ingredient: serializeIngredient(newIngredient)
+    }
+  }
+
+  public async update (id: string, ingredient: IIngredient): Promise<{ ingredient: IIngredient, error?: Error }> {
+    const { error } = createPayloadValidation(ingredient)
+    if (error != null) {
+      return {
+        ingredient: {} as IIngredient,
+        error: this.NewIncorrectInputError(error.details[0].message, Slug.ErrIncorrectInput)
+      }
+    }
+
+    const findIngredient = await Ingredient.findById(id)
+    if (findIngredient == null) {
+      return {
+        ingredient: {} as IIngredient,
+        error: this.NewNotFoundError('Ingredient not found', Slug.ErrIngredientNotFound)
+      }
+    }
+
+    const { alcohol_degree, is_alcohol, name } = deSerializeIngredient(ingredient)
+    findIngredient.name = name
+    findIngredient.is_alcohol = is_alcohol
+    findIngredient.alcohol_degree = alcohol_degree
+
+    const newIngredient = await findIngredient.save()
 
     return {
       ingredient: serializeIngredient(newIngredient)

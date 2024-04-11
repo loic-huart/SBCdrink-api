@@ -1,18 +1,18 @@
 meta {
-  name: post
+  name: put
   type: http
-  seq: 3
+  seq: 4
 }
 
-post {
-  url: {{api}}ingredient
+put {
+  url: {{api}}ingredient/660f19eaf880d9c7b199ef3c
   body: json
   auth: none
 }
 
 body:json {
   {
-    "name": "Whisky",
+    "name": "Whisky3",
     "isAlcohol": true,
     "alcoholDegree": 40
   }

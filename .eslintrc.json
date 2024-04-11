@@ -13,6 +13,7 @@
     },
     "rules": {
         "@typescript-eslint/unbound-method": "off",
-        "@typescript-eslint/consistent-type-assertions": "off"
+        "@typescript-eslint/consistent-type-assertions": "off",
+        "@typescript-eslint/naming-convention": "off"
     }
 }
