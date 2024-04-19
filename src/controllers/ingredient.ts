@@ -21,7 +21,12 @@ class IngredientController implements IIngredientController {
   public async get (req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
       const ingredientService = IngredientService.getInstance()
-      const { ingredients } = await ingredientService.find()
+      const {
+        sort
+      } = req.query as { sort: 'desc' | 'asc' }
+
+      console.log(sort)
+      const { ingredients } = await ingredientService.find({ sort })
       await res.status(200).send(ingredients)
     } catch (error: unknown) {
       await res.status(500).send(error)

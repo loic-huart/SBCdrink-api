@@ -6,6 +6,12 @@
     "name": "Vodka",
     "is_alcohol": true,
     "alcohol_degree": 37.5,
+    "created_at": {
+      "$date": "2024-04-04T21:52:12.198Z"
+    },
+    "updated_at": {
+      "$date": "2024-04-04T21:52:12.198Z"
+    },
     "__v": 0
   },
   {
@@ -15,6 +21,12 @@
     "name": "Jus d''ananas",
     "is_alcohol": false,
     "alcohol_degree": 0,
+    "created_at": {
+      "$date": "2024-04-05T21:52:12.198Z"
+    },
+    "updated_at": {
+      "$date": "2024-04-05T21:52:12.198Z"
+    },
     "__v": 0
   },
   {
@@ -24,6 +36,12 @@
     "name": "Jus de cranberry",
     "is_alcohol": false,
     "alcohol_degree": 0,
+    "created_at": {
+      "$date": "2024-04-06T21:52:12.198Z"
+    },
+    "updated_at": {
+      "$date": "2024-04-06T21:52:12.198Z"
+    },
     "__v": 0
   },
   {
@@ -33,6 +51,12 @@
     "name": "Liqueur de pêche",
     "is_alcohol": true,
     "alcohol_degree": 15,
+    "created_at": {
+      "$date": "2024-04-07T21:52:12.198Z"
+    },
+    "updated_at": {
+      "$date": "2024-04-07T21:52:12.198Z"
+    },
     "__v": 0
   },
   {
@@ -42,6 +66,12 @@
     "name": "Rhum blanc",
     "is_alcohol": true,
     "alcohol_degree": 45,
+    "created_at": {
+      "$date": "2024-04-08T21:52:12.198Z"
+    },
+    "updated_at": {
+      "$date": "2024-04-08T21:52:12.198Z"
+    },
     "__v": 0
   },
   {
@@ -51,6 +81,12 @@
     "name": "Rhum ambré",
     "is_alcohol": true,
     "alcohol_degree": 40,
+    "created_at": {
+      "$date": "2024-04-09T21:52:12.198Z"
+    },
+    "updated_at": {
+      "$date": "2024-04-09T21:52:12.198Z"
+    },
     "__v": 0
   },
   {
@@ -60,6 +96,12 @@
     "name": "Lait de coco",
     "is_alcohol": false,
     "alcohol_degree": 0,
+    "created_at": {
+      "$date": "2024-04-10T21:52:12.198Z"
+    },
+    "updated_at": {
+      "$date": "2024-04-10T21:52:12.198Z"
+    },
     "__v": 0
   },
   {
@@ -69,6 +111,12 @@
     "name": "Amaretto",
     "is_alcohol": true,
     "alcohol_degree": 28,
+    "created_at": {
+      "$date": "2024-04-11T21:52:12.198Z"
+    },
+    "updated_at": {
+      "$date": "2024-04-11T21:52:12.198Z"
+    },
     "__v": 0
   },
   {
@@ -78,6 +126,12 @@
     "name": "Jus d''orange",
     "is_alcohol": false,
     "alcohol_degree": 0,
+    "created_at": {
+      "$date": "2024-04-01T21:52:12.198Z"
+    },
+    "updated_at": {
+      "$date": "2024-04-01T21:52:12.198Z"
+    },
     "__v": 0
   },
   {
@@ -87,6 +141,12 @@
     "name": "Gin",
     "is_alcohol": true,
     "alcohol_degree": 37.5,
+    "created_at": {
+      "$date": "2024-04-02T21:52:12.198Z"
+    },
+    "updated_at": {
+      "$date": "2024-04-02T21:52:12.198Z"
+    },
     "__v": 0
   },
   {
@@ -96,6 +156,12 @@
     "name": "Limonade",
     "is_alcohol": false,
     "alcohol_degree": 0,
+    "created_at": {
+      "$date": "2024-03-04T21:52:12.198Z"
+    },
+    "updated_at": {
+      "$date": "2024-03-04T21:52:12.198Z"
+    },
     "__v": 0
   },
   {
@@ -105,6 +171,12 @@
     "name": "Tequila",
     "is_alcohol": true,
     "alcohol_degree": 38,
+    "created_at": {
+      "$date": "2024-04-04T21:52:12.198Z"
+    },
+    "updated_at": {
+      "$date": "2024-04-04T21:52:12.198Z"
+    },
     "__v": 0
   },
   {
@@ -114,6 +186,12 @@
     "name": "Grenadine",
     "is_alcohol": false,
     "alcohol_degree": 0,
+    "created_at": {
+      "$date": "2024-04-05T21:52:12.198Z"
+    },
+    "updated_at": {
+      "$date": "2024-04-05T21:52:12.198Z"
+    },
     "__v": 0
   },
   {
@@ -123,6 +201,12 @@
     "name": "Whisky",
     "is_alcohol": true,
     "alcohol_degree": 40,
+    "created_at": {
+      "$date": "2024-04-04T21:52:12.198Z"
+    },
+    "updated_at": {
+      "$date": "2024-04-04T21:52:12.198Z"
+    },
     "__v": 0
   }
 ]

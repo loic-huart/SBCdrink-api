@@ -9,7 +9,9 @@ const serializeIngredient = (ingredient: IModelIngredient): IIngredient => ({
   id: ingredient._id.toString(),
   name: ingredient.name,
   isAlcohol: ingredient.is_alcohol,
-  alcoholDegree: ingredient.alcohol_degree
+  alcoholDegree: ingredient.alcohol_degree,
+  createdAt: ingredient.created_at,
+  updatedAt: ingredient.updated_at
 })
 
 const serializeIngredients = (ingredients: IModelIngredient[]): IIngredient[] => {
@@ -20,7 +22,9 @@ const deSerializeIngredient = (ingredient: IIngredient): IModelIngredient => ({
   _id: new ObjectId(ingredient.id),
   name: ingredient.name,
   is_alcohol: ingredient.isAlcohol,
-  alcohol_degree: ingredient.alcoholDegree
+  alcohol_degree: ingredient.alcoholDegree,
+  created_at: ingredient.createdAt,
+  updated_at: ingredient.updatedAt
 })
 
 const deSerializeIngredients = (ingredients: IIngredient[]): IModelIngredient[] => {
@@ -39,6 +43,16 @@ const ingredientSchema = new Schema<IModelIngredient>({
   alcohol_degree: {
     type: Number,
     required: true
+  },
+  created_at: {
+    type: Date,
+    required: true,
+    default: Date.now
+  },
+  updated_at: {
+    type: Date,
+    required: true,
+    default: Date.now
   }
 })
 
