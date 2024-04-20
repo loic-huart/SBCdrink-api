@@ -26,7 +26,7 @@ class IngredientService extends ErrorService implements IIngredientService {
   }
 
   public async find ({ sort }: IPayloadFind): Promise<{ ingredients: IIngredient[] }> {
-    const ingredients = await Ingredient.find().sort({ created_at: sort === 'desc' ? -1 : 1 })
+    const ingredients = await Ingredient.find().sort({ updated_at: sort === 'desc' ? -1 : 1 })
     return {
       ingredients: serializeIngredients(ingredients)
     }

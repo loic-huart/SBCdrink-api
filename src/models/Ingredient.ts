@@ -43,16 +43,12 @@ const ingredientSchema = new Schema<IModelIngredient>({
   alcohol_degree: {
     type: Number,
     required: true
-  },
-  created_at: {
-    type: Date,
-    required: true,
-    default: Date.now
-  },
-  updated_at: {
-    type: Date,
-    required: true,
-    default: Date.now
+  }
+},
+{
+  timestamps: {
+    createdAt: 'created_at',
+    updatedAt: 'updated_at'
   }
 })
 

@@ -15,7 +15,9 @@ const updatePayloadValidation = (body: IIngredient): Joi.ValidationResult => {
     id: Joi.string().length(24).required(),
     name: Joi.string().required(),
     isAlcohol: Joi.boolean().required(),
-    alcoholDegree: Joi.number().required()
+    alcoholDegree: Joi.number().required(),
+    createdAt: Joi.date(),
+    updatedAt: Joi.date()
   })
   return schema.validate(body)
 }
