@@ -2,7 +2,7 @@ import { type IPayloadFindByIdRecipe, type IPayloadFindRecipe, type IRecipe } fr
 import ErrorService from '../errors/errors'
 import Recipe, { deSerializeRecipe, serializeRecipe, serializeRecipes } from '../../models/Recipe'
 import { Slug, type Error } from '../errors/types'
-import { createPayloadValidation, findByIdPayloadValidation } from './validators'
+import { createPayloadValidation, findByIdPayloadValidation, updatePayloadValidation } from './validators'
 import { Ingredient } from '../../models'
 
 interface IRecipeService extends ErrorService {
@@ -20,6 +20,23 @@ class RecipeService extends ErrorService implements IRecipeService {
     }
 
     return RecipeService.instance
+  }
+
+  private async checkIngredientsExist (steps: IRecipe['steps']): Promise<{ error: Error | null }> {
+    const ingredientNotExists = await Promise.all(steps.map(async (step) => {
+      const ingredient = await Ingredient.findById(step.ingredient)
+      if (ingredient == null) {
+        return step.ingredient
+      }
+      return null
+    }))
+    const filteredIngredientNotExists = ingredientNotExists.filter((ingredient) => ingredient != null)
+    if (filteredIngredientNotExists.length > 0) {
+      return {
+        error: this.NewNotFoundError(`Ingredient not found : ${filteredIngredientNotExists.join(', ')}`, Slug.ErrIngredientNotFound)
+      }
+    }
+    return { error: null }
   }
 
   public async find ({
@@ -64,23 +81,58 @@ class RecipeService extends ErrorService implements IRecipeService {
       }
     }
 
-    const ingredientNotExists = await Promise.all(recipe.steps.map(async (step) => {
-      const ingredient = await Ingredient.findById(step.ingredient)
-      if (ingredient == null) {
-        return step.ingredient
-      }
-      return null
-    }))
-    const filteredIngredientNotExists = ingredientNotExists.filter((ingredient) => ingredient != null)
-    if (filteredIngredientNotExists.length > 0) {
+    const { error: errorIngredientsNotExist } = await this.checkIngredientsExist(recipe.steps)
+    if (errorIngredientsNotExist != null) {
       return {
         recipe: {} as IRecipe,
-        error: this.NewNotFoundError(`Ingredient not found : ${filteredIngredientNotExists.join(', ')}`, Slug.ErrIngredientNotFound)
+        error: errorIngredientsNotExist
       }
     }
 
     const newRecipe = new Recipe(deSerializeRecipe(recipe))
     await newRecipe.save()
+
+    return {
+      recipe: serializeRecipe(newRecipe)
+    }
+  }
+
+  public async update (id: string, recipe: IRecipe): Promise<{ recipe: IRecipe, error?: Error }> {
+    const { error } = updatePayloadValidation(recipe)
+    if (error != null) {
+      return {
+        recipe: {} as IRecipe,
+        error: this.NewIncorrectInputError(error.details[0].message, Slug.ErrIncorrectInput)
+      }
+    }
+
+    const findRecipe = await Recipe.findById(id)
+    if (findRecipe == null) {
+      return {
+        recipe: {} as IRecipe,
+        error: this.NewNotFoundError('Recipe not found', Slug.ErrRecipeNotFound)
+      }
+    }
+
+    const { error: errorIngredientsNotExist } = await this.checkIngredientsExist(recipe.steps)
+    if (errorIngredientsNotExist != null) {
+      return {
+        recipe: {} as IRecipe,
+        error: errorIngredientsNotExist
+      }
+    }
+
+    const { name, is_available, steps } = deSerializeRecipe(recipe)
+    findRecipe.name = name
+    findRecipe.is_available = is_available
+    findRecipe.steps = steps.map(step => ({
+      _id: step._id,
+      ingredient: step.ingredient,
+      proportion: step.proportion,
+      order_index: step.order_index
+    }))
+
+    const newRecipe = await findRecipe.save()
 
     return {
       recipe: serializeRecipe(newRecipe)

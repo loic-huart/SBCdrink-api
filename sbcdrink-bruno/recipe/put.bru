@@ -1,0 +1,37 @@
+meta {
+  name: put
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{api}}recipe/660f1e80f880d9c7b199ef78
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id": "660f1e80f880d9c7b199ef78",
+    "name": "Kalimotxo",
+    "description": "Le kalimotxo est un cocktail avec mélange à parts égales de vin et de Coca-Cola.",
+    "picture": "recipe_picture/recipe_6.webp",
+    "alcoholLevel": 50,
+    "alcoholMinLevel": 0,
+    "alcoholMaxLevel": 100,
+    "steps": [
+      {
+        "id": "662ebf2207aa3c53791422f8",
+        "ingredient": "660f1a24f880d9c7b199ef48",
+        "proportion": 50,
+        "orderIndex": 2
+      },
+      {
+        "ingredient": "660f1a24f880d9c7b199ef48",
+        "proportion": 10,
+        "orderIndex": 3
+      }
+    ],
+    "isAvailable": true
+  }
+}

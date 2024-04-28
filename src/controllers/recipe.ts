@@ -74,6 +74,25 @@ class RecipeController implements IRecipeController {
       await res.status(500).send(error)
     }
   }
+
+  public async put (req: FastifyRequest, res: FastifyReply): Promise<void> {
+    try {
+      const recipeService = RecipeService.getInstance()
+      const { id } = req.params as { id: string }
+      const {
+        recipe,
+        error
+      } = await recipeService.update(id, req.body as IRecipe)
+      if (error != null) {
+        const httpCode = mapErrorTypeToHttpCode(error.errorType)
+        await res.status(httpCode).send(error)
+        return
+      }
+      await res.status(200).send(recipe)
+    } catch (error: unknown) {
+      await res.status(500).send(error)
+    }
+  }
 }
 
 export default RecipeController

@@ -26,7 +26,28 @@ const findByIdPayloadValidation = (params: { id: IRecipe['id'] }): Joi.Validatio
   return schema.validate(params)
 }
 
+const updatePayloadValidation = (body: IRecipe): Joi.ValidationResult => {
+  const schema = Joi.object({
+    id: Joi.string().length(24).required(),
+    name: Joi.string(),
+    description: Joi.string(),
+    picture: Joi.string(),
+    alcoholLevel: Joi.number(),
+    alcoholMinLevel: Joi.number(),
+    alcoholMaxLevel: Joi.number(),
+    steps: Joi.array().items(Joi.object({
+      id: Joi.string().length(24),
+      ingredient: Joi.string().required(),
+      proportion: Joi.number().required(),
+      orderIndex: Joi.number().required()
+    })),
+    isAvailable: Joi.boolean()
+  })
+  return schema.validate(body)
+}
+
 export {
   createPayloadValidation,
-  findByIdPayloadValidation
+  findByIdPayloadValidation,
+  updatePayloadValidation
 }
