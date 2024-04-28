@@ -9,6 +9,8 @@ interface IRecipeService extends ErrorService {
   find: ({ isAvailable, withIngredients }: IPayloadFindRecipe) => Promise<{ recipes: IRecipe[] }>
   findById: ({ id, withIngredients }: IPayloadFindByIdRecipe) => Promise<{ recipe: IRecipe, error?: Error }>
   create: (recipe: IRecipe) => Promise<{ recipe: IRecipe, error?: Error }>
+  update: (id: string, recipe: IRecipe) => Promise<{ recipe: IRecipe, error?: Error }>
+  delete: (id: string) => Promise<{ error?: Error }>
 }
 
 class RecipeService extends ErrorService implements IRecipeService {
@@ -137,6 +139,19 @@ class RecipeService extends ErrorService implements IRecipeService {
     return {
       recipe: serializeRecipe(newRecipe)
     }
+  }
+
+  public async delete (id: string): Promise<{ error?: Error }> {
+    const findRecipe = await Recipe.findById(id)
+    if (findRecipe == null) {
+      return {
+        error: this.NewNotFoundError('Recipe not found', Slug.ErrRecipeNotFound)
+      }
+    }
+
+    await findRecipe.deleteOne()
+
+    return {}
   }
 }
 

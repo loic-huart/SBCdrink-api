@@ -1,7 +1,6 @@
 import { type FastifyReply, type FastifyRequest } from 'fastify'
 import RecipeService from '../services/recipe/recipe'
 import mapErrorTypeToHttpCode from '../utils/mapErrorTypeToHttpCode'
-import { Error } from '../services/errors/types'
 import { type IRecipe } from '../services/recipe/types'
 
 interface IRecipeController {
@@ -89,6 +88,22 @@ class RecipeController implements IRecipeController {
         return
       }
       await res.status(200).send(recipe)
+    } catch (error: unknown) {
+      await res.status(500).send(error)
+    }
+  }
+
+  public async delete (req: FastifyRequest, res: FastifyReply): Promise<void> {
+    try {
+      const recipeService = RecipeService.getInstance()
+      const { id } = req.params as { id: string }
+      const { error } = await recipeService.delete(id)
+      if (error != null) {
+        const httpCode = mapErrorTypeToHttpCode(error.errorType)
+        await res.status(httpCode).send(error)
+        return
+      }
+      await res.status(204).send()
     } catch (error: unknown) {
       await res.status(500).send(error)
     }
