@@ -23,11 +23,13 @@ class RecipeController implements IRecipeController {
       const recipeService = RecipeService.getInstance()
       const {
         isAvailable,
-        withIngredients
-      } = req.query as { isAvailable: boolean, withIngredients: boolean }
+        withIngredients,
+        sort
+      } = req.query as { isAvailable: boolean, withIngredients: boolean, sort: 'desc' | 'asc' }
       const { recipes } = await recipeService.find({
         isAvailable,
-        withIngredients
+        withIngredients,
+        sort
       })
       await res.status(200).send(recipes)
     } catch (error: unknown) {

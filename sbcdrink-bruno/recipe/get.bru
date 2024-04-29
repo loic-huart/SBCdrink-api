@@ -5,7 +5,7 @@ meta {
 }
 
 get {
-  url: {{api}}recipes?isAvailable=true&withIngredients=true
+  url: {{api}}recipes?isAvailable=true&withIngredients=true&sort=desc
   body: none
   auth: none
 }
@@ -13,4 +13,5 @@ get {
 query {
   isAvailable: true
   withIngredients: true
+  sort: desc
 }

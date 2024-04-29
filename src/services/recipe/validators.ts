@@ -41,7 +41,9 @@ const updatePayloadValidation = (body: IRecipe): Joi.ValidationResult => {
       proportion: Joi.number().required(),
       orderIndex: Joi.number().required()
     })),
-    isAvailable: Joi.boolean()
+    isAvailable: Joi.boolean(),
+    createdAt: Joi.date(),
+    updatedAt: Joi.date()
   })
   return schema.validate(body)
 }

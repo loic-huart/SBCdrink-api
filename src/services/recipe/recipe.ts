@@ -43,11 +43,13 @@ class RecipeService extends ErrorService implements IRecipeService {
 
   public async find ({
     isAvailable,
-    withIngredients = false
+    withIngredients = false,
+    sort
   }: IPayloadFindRecipe): Promise<{ recipes: IRecipe[] }> {
     const recipe = await Recipe.find({
       ...(isAvailable != null ? { is_available: isAvailable } : {})
     }).populate(withIngredients ? 'steps.ingredient' : '')
+      .sort({ updated_at: sort === 'desc' ? -1 : 1 })
     return {
       recipes: serializeRecipes(recipe, withIngredients)
     }
@@ -124,9 +126,21 @@ class RecipeService extends ErrorService implements IRecipeService {
       }
     }
 
-    const { name, is_available, steps } = deSerializeRecipe(recipe)
+    const {
+      name,
+      steps,
+      description,
+      picture,
+      alcohol_level,
+      alcohol_min_level,
+      alcohol_max_level
+    } = deSerializeRecipe(recipe)
     findRecipe.name = name
-    findRecipe.is_available = is_available
+    findRecipe.description = description
+    findRecipe.picture = picture
+    findRecipe.alcohol_level = alcohol_level
+    findRecipe.alcohol_min_level = alcohol_min_level
+    findRecipe.alcohol_max_level = alcohol_max_level
     findRecipe.steps = steps.map(step => ({
       _id: step._id,
       ingredient: step.ingredient,

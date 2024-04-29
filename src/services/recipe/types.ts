@@ -22,6 +22,7 @@ export interface IRecipe {
 export interface IPayloadFindRecipe {
   isAvailable?: boolean
   withIngredients?: boolean
+  sort?: 'desc' | 'asc'
 }
 
 export interface IPayloadFindByIdRecipe {
