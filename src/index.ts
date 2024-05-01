@@ -3,6 +3,8 @@ import { checkEnvVariables } from './configs/configs'
 import dbConnect from './lib/mongoose'
 import routes from './routes'
 import cors from '@fastify/cors'
+import fastifyStatic from '@fastify/static'
+import path from 'path'
 
 async function run (): Promise<any> {
   // Check environment variables
@@ -27,6 +29,12 @@ async function run (): Promise<any> {
     //   // Generate an error on other origins, disabling access
     //   cb(new Error('Not allowed'), false)
     // }
+  })
+
+  await app.register(fastifyStatic, {
+    root: path.join(__dirname, '../public'),
+    prefix: '/public/' // optional: default '/'
+    // constraints: { host: 'example.com' } // optional: default {}
   })
 
   // Routes
