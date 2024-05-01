@@ -4,6 +4,8 @@ enum Slug {
   ErrIngredientUsed = 'INGREDIENT_USED',
   ErrOrderAlreadyInStatusCreated = 'ORDER_ALREADY_IN_STATUS_CREATED',
 
+  ErrMachineConfigurationNotFound = 'MACHINE_CONFIGURATION_NOT_FOUND',
+
   ErrIncorrectInput = 'INVALID_INPUT',
 
   ErrInvalidEmail = 'INVALID_EMAIL',

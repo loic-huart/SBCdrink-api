@@ -5,6 +5,10 @@ import { type IIngredient } from '../services/ingredient/types'
 
 interface IIngredientController {
   get: (req: FastifyRequest, res: FastifyReply) => Promise<void>
+  getById: (req: FastifyRequest, res: FastifyReply) => Promise<void>
+  post: (req: FastifyRequest, res: FastifyReply) => Promise<void>
+  put: (req: FastifyRequest, res: FastifyReply) => Promise<void>
+  delete: (req: FastifyRequest, res: FastifyReply) => Promise<void>
 }
 
 class IngredientController implements IIngredientController {
@@ -24,8 +28,6 @@ class IngredientController implements IIngredientController {
       const {
         sort
       } = req.query as { sort: 'desc' | 'asc' }
-
-      console.log(sort)
       const { ingredients } = await ingredientService.find({ sort })
       await res.status(200).send(ingredients)
     } catch (error: unknown) {

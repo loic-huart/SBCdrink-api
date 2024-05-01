@@ -13,8 +13,7 @@ const createPayloadValidation = (body: IRecipe): Joi.ValidationResult => {
       ingredient: Joi.string().required(),
       proportion: Joi.number().required(),
       orderIndex: Joi.number().required()
-    })).required(),
-    isAvailable: Joi.boolean().required()
+    })).required()
   })
   return schema.validate(body)
 }

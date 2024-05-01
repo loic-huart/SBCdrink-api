@@ -5,26 +5,26 @@ import { type IModelMachineConfiguration } from './types'
 
 const Schema = mongoose.Schema
 
-const serializeRecipe = (machineConfiguration: IModelMachineConfiguration): IMachineConfiguration => ({
+const serializeMachineConfiguration = (machineConfiguration: IModelMachineConfiguration): IMachineConfiguration => ({
   id: machineConfiguration._id as unknown as string,
   ingredient: machineConfiguration.ingredient as unknown as string,
   slot: machineConfiguration.slot,
   measureVolume: machineConfiguration.measure_volume
 })
 
-const serializeRecipes = (machineConfigurations: IModelMachineConfiguration[]): IMachineConfiguration[] => {
-  return machineConfigurations.map(machineConfiguration => serializeRecipe(machineConfiguration))
+const serializeMachineConfigurations = (machineConfigurations: IModelMachineConfiguration[]): IMachineConfiguration[] => {
+  return machineConfigurations.map(machineConfiguration => serializeMachineConfiguration(machineConfiguration))
 }
 
-const deSerializeRecipe = (machineConfiguration: IMachineConfiguration): IModelMachineConfiguration => ({
+const deSerializeMachineConfiguration = (machineConfiguration: IMachineConfiguration): IModelMachineConfiguration => ({
   _id: new ObjectId(machineConfiguration.id),
   ingredient: machineConfiguration.ingredient as unknown as ObjectId,
   slot: machineConfiguration.slot,
   measure_volume: machineConfiguration.measureVolume
 })
 
-const deSerializeRecipes = (machineConfigurations: IMachineConfiguration[]): IModelMachineConfiguration[] => {
-  return machineConfigurations.map(machineConfiguration => deSerializeRecipe(machineConfiguration))
+const deSerializeMachineConfigurations = (machineConfigurations: IMachineConfiguration[]): IModelMachineConfiguration[] => {
+  return machineConfigurations.map(machineConfiguration => deSerializeMachineConfiguration(machineConfiguration))
 }
 
 const machineConfigurationSchema = new Schema<IModelMachineConfiguration>({
@@ -46,8 +46,8 @@ const MachineConfiguration = mongoose.model('MachineConfiguration', machineConfi
 
 export default MachineConfiguration
 export {
-  serializeRecipe,
-  serializeRecipes,
-  deSerializeRecipe,
-  deSerializeRecipes
+  serializeMachineConfiguration,
+  serializeMachineConfigurations,
+  deSerializeMachineConfiguration,
+  deSerializeMachineConfigurations
 }
