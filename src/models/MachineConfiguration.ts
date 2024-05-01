@@ -64,7 +64,7 @@ const machineConfigurationSchema = new Schema<IModelMachineConfiguration>({
   },
   measure_volume: {
     type: Number,
-    required: true
+    nullable: true
   }
 })
 

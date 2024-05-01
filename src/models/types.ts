@@ -34,7 +34,7 @@ export interface IModelMachineConfiguration {
   _id: ObjectId
   ingredient: IModelIngredient | ObjectId | null
   slot: number
-  measure_volume: number
+  measure_volume: number | null
 }
 
 export interface IModelRecipeIngredient {

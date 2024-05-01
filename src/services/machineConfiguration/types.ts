@@ -4,7 +4,7 @@ export interface IMachineConfiguration {
   id: string
   ingredient: IIngredient | string | null
   slot: number
-  measureVolume: number
+  measureVolume: number | null
 }
 
 export interface IPayloadFindMachineConfigurations {
