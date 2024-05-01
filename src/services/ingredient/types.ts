@@ -11,6 +11,6 @@ export interface IPayloadFindByIdIngredient {
   id: string
 }
 
-export interface IPayloadFind {
+export interface IPayloadFindIngredients {
   sort: 'asc' | 'desc'
 }

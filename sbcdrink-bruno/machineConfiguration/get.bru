@@ -5,7 +5,11 @@ meta {
 }
 
 get {
-  url: {{api}}machine-configurations
+  url: {{api}}machine-configurations?withIngredients=true
   body: none
   auth: none
+}
+
+query {
+  withIngredients: true
 }

@@ -22,7 +22,8 @@ class MachineConfigurationController implements IMachineConfigurationController 
   public async get (req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
       const machineConfigurationService = MachineConfigurationService.getInstance()
-      const { machineConfigurations } = await machineConfigurationService.find()
+      const { withIngredients } = req.query as { withIngredients: boolean }
+      const { machineConfigurations } = await machineConfigurationService.find({ withIngredients })
       await res.status(200).send(machineConfigurations)
     } catch (error: unknown) {
       await res.status(500).send(error)

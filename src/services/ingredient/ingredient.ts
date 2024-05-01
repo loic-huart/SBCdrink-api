@@ -1,4 +1,4 @@
-import { type IPayloadFind, type IIngredient, type IPayloadFindByIdIngredient } from './types'
+import { type IPayloadFindIngredients, type IIngredient, type IPayloadFindByIdIngredient } from './types'
 import ErrorService from '../errors/errors'
 import Ingredient, { deSerializeIngredient, serializeIngredient, serializeIngredients } from '../../models/Ingredient'
 import { Slug, type Error } from '../errors/types'
@@ -7,7 +7,7 @@ import Recipe from '../../models/Recipe'
 import MachineConfiguration from '../../models/MachineConfiguration'
 
 interface IIngredientService extends ErrorService {
-  find: ({ sort }: IPayloadFind) => Promise<{ ingredients: IIngredient[] }>
+  find: ({ sort }: IPayloadFindIngredients) => Promise<{ ingredients: IIngredient[] }>
   findById: ({ id }: IPayloadFindByIdIngredient) => Promise<{ ingredient: IIngredient, error?: Error }>
   create: (ingredient: IIngredient) => Promise<{ ingredient: IIngredient, error?: Error }>
   update: (id: string, ingredient: IIngredient) => Promise<{ ingredient: IIngredient, error?: Error }>
@@ -25,7 +25,7 @@ class IngredientService extends ErrorService implements IIngredientService {
     return IngredientService.instance
   }
 
-  public async find ({ sort }: IPayloadFind): Promise<{ ingredients: IIngredient[] }> {
+  public async find ({ sort }: IPayloadFindIngredients): Promise<{ ingredients: IIngredient[] }> {
     const ingredients = await Ingredient.find().sort({ updated_at: sort === 'desc' ? -1 : 1 })
     return {
       ingredients: serializeIngredients(ingredients)

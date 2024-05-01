@@ -1,11 +1,11 @@
-import { type IMachineConfiguration } from './types'
+import { type IPayloadFindMachineConfigurations, type IMachineConfiguration } from './types'
 import ErrorService from '../errors/errors'
 import MachineConfiguration, { deSerializeMachineConfiguration, serializeMachineConfiguration, serializeMachineConfigurations } from '../../models/MachineConfiguration'
 import { Slug, type Error } from '../errors/types'
 import { updatePayloadValidation } from './validators'
 
 interface IMachineConfigurationService extends ErrorService {
-  find: () => Promise<{ machineConfigurations: IMachineConfiguration[] }>
+  find: ({ withIngredients }: IPayloadFindMachineConfigurations) => Promise<{ machineConfigurations: IMachineConfiguration[] }>
   update: (id: string, machineConfiguration: IMachineConfiguration) => Promise<{ machineConfiguration: IMachineConfiguration, error?: Error }>
 }
 
@@ -20,10 +20,13 @@ class MachineConfigurationService extends ErrorService implements IMachineConfig
     return MachineConfigurationService.instance
   }
 
-  public async find (): Promise<{ machineConfigurations: IMachineConfiguration[] }> {
-    const machineConfigurations = await MachineConfiguration.find().sort({ slot: 1 })
+  public async find ({ withIngredients }: IPayloadFindMachineConfigurations): Promise<{ machineConfigurations: IMachineConfiguration[] }> {
+    const machineConfigurations = await MachineConfiguration.find()
+      .populate(withIngredients ? 'ingredient' : '')
+      .sort({ slot: 1 })
+
     return {
-      machineConfigurations: serializeMachineConfigurations(machineConfigurations)
+      machineConfigurations: serializeMachineConfigurations(machineConfigurations, withIngredients)
     }
   }
 
