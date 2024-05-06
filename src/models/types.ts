@@ -60,3 +60,11 @@ export interface IModelOrder {
   created_at: Date
   updated_at: Date
 }
+
+export interface IModelFile {
+  _id: ObjectId
+  name: string
+  path: string
+  created_at: Date
+  updated_at: Date
+}

@@ -1,0 +1,15 @@
+meta {
+  name: post
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{api}}file
+  body: multipartForm
+  auth: none
+}
+
+body:multipart-form {
+  file: @file(/Users/loich/Desktop/Screenshot 2023-06-25 at 13.50.36.jpg)
+}

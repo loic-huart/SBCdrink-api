@@ -5,6 +5,7 @@ import routes from './routes'
 import cors from '@fastify/cors'
 import fastifyStatic from '@fastify/static'
 import path from 'path'
+import fastifyMultipart from '@fastify/multipart'
 
 async function run (): Promise<any> {
   // Check environment variables
@@ -36,6 +37,8 @@ async function run (): Promise<any> {
     prefix: '/public/' // optional: default '/'
     // constraints: { host: 'example.com' } // optional: default {}
   })
+
+  await app.register(fastifyMultipart)
 
   // Routes
   void app.register(routes, { prefix: '/api' })
