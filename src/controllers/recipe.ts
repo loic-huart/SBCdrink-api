@@ -24,11 +24,13 @@ class RecipeController implements IRecipeController {
       const {
         isAvailable,
         withIngredients,
+        withPictures,
         sort
-      } = req.query as { isAvailable: boolean, withIngredients: boolean, sort: 'desc' | 'asc' }
+      } = req.query as { isAvailable: boolean, withIngredients: boolean, sort: 'desc' | 'asc', withPictures: boolean }
       const { recipes } = await recipeService.find({
         isAvailable,
         withIngredients,
+        withPictures,
         sort
       })
       await res.status(200).send(recipes)
@@ -41,11 +43,11 @@ class RecipeController implements IRecipeController {
     try {
       const recipeService = RecipeService.getInstance()
       const { id } = req.params as { id: string }
-      const { withIngredients } = req.query as { withIngredients: boolean }
+      const { withIngredients, withPictures } = req.query as { withIngredients: boolean, withPictures: boolean }
       const {
         recipe,
         error
-      } = await recipeService.findById({ id, withIngredients })
+      } = await recipeService.findById({ id, withIngredients, withPictures })
       if (error != null) {
         const httpCode = mapErrorTypeToHttpCode(error.errorType)
         await res.status(httpCode).send(error)

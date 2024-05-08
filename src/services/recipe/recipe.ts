@@ -6,7 +6,7 @@ import { createPayloadValidation, findByIdPayloadValidation, updatePayloadValida
 import { Ingredient } from '../../models'
 
 interface IRecipeService extends ErrorService {
-  find: ({ isAvailable, withIngredients }: IPayloadFindRecipe) => Promise<{ recipes: IRecipe[] }>
+  find: ({ isAvailable, withIngredients, withPictures }: IPayloadFindRecipe) => Promise<{ recipes: IRecipe[] }>
   findById: ({ id, withIngredients }: IPayloadFindByIdRecipe) => Promise<{ recipe: IRecipe, error?: Error }>
   create: (recipe: IRecipe) => Promise<{ recipe: IRecipe, error?: Error }>
   update: (id: string, recipe: IRecipe) => Promise<{ recipe: IRecipe, error?: Error }>
@@ -44,18 +44,20 @@ class RecipeService extends ErrorService implements IRecipeService {
   public async find ({
     isAvailable,
     withIngredients = false,
+    withPictures = false,
     sort
   }: IPayloadFindRecipe): Promise<{ recipes: IRecipe[] }> {
     const recipe = await Recipe.find({
       ...(isAvailable != null ? { is_available: isAvailable } : {})
     }).populate(withIngredients ? 'steps.ingredient' : '')
+      .populate(withPictures ? 'picture' : '')
       .sort({ updated_at: sort === 'desc' ? -1 : 1 })
     return {
-      recipes: serializeRecipes(recipe, withIngredients)
+      recipes: serializeRecipes(recipe, withIngredients, withPictures)
     }
   }
 
-  public async findById ({ id, withIngredients = false }: IPayloadFindByIdRecipe): Promise<{ recipe: IRecipe, error?: Error }> {
+  public async findById ({ id, withIngredients = false, withPictures = false }: IPayloadFindByIdRecipe): Promise<{ recipe: IRecipe, error?: Error }> {
     const { error } = findByIdPayloadValidation({ id })
     if (error != null) {
       return {
@@ -63,7 +65,9 @@ class RecipeService extends ErrorService implements IRecipeService {
         error: this.NewIncorrectInputError(error.details[0].message, Slug.ErrIncorrectInput)
       }
     }
-    const recipe = await Recipe.findById(id).populate(withIngredients ? 'steps.ingredient' : '')
+    const recipe = await Recipe.findById(id)
+      .populate(withIngredients ? 'steps.ingredient' : '')
+      .populate(withPictures ? 'picture' : '')
     if (recipe == null) {
       return {
         recipe: {} as IRecipe,
@@ -72,7 +76,7 @@ class RecipeService extends ErrorService implements IRecipeService {
     }
 
     return {
-      recipe: serializeRecipe(recipe, withIngredients)
+      recipe: serializeRecipe(recipe, withIngredients, withPictures)
     }
   }
 

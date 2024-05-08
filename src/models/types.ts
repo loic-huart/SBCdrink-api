@@ -15,7 +15,7 @@ export interface IModelRecipe {
   _id: ObjectId
   name: string
   description: string
-  picture: string
+  picture: IModelFile | ObjectId | null
   alcohol_level: number
   alcohol_min_level: number
   alcohol_max_level: number

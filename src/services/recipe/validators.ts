@@ -5,7 +5,7 @@ const createPayloadValidation = (body: IRecipe): Joi.ValidationResult => {
   const schema = Joi.object({
     name: Joi.string().required(),
     description: Joi.string(),
-    picture: Joi.string(),
+    picture: Joi.string().allow(null).required(),
     alcoholLevel: Joi.number().required(),
     alcoholMinLevel: Joi.number().required(),
     alcoholMaxLevel: Joi.number().required(),
@@ -30,7 +30,7 @@ const updatePayloadValidation = (body: IRecipe): Joi.ValidationResult => {
     id: Joi.string().length(24).required(),
     name: Joi.string(),
     description: Joi.string(),
-    picture: Joi.string(),
+    picture: Joi.string().allow(null).required(),
     alcoholLevel: Joi.number(),
     alcoholMinLevel: Joi.number(),
     alcoholMaxLevel: Joi.number(),

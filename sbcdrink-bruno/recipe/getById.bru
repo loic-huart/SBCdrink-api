@@ -5,7 +5,12 @@ meta {
 }
 
 get {
-  url: {{api}}recipe/660f1e80f880d9c7b199ef78
+  url: {{api}}recipe/660f1e80f880d9c7b199ef78?withIngredients=true&withPictures=true
   body: none
   auth: none
+}
+
+query {
+  withIngredients: true
+  withPictures: true
 }

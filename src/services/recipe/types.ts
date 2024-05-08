@@ -1,10 +1,11 @@
+import { type IFile } from '../file/types'
 import { type IIngredient } from '../ingredient/types'
 
 export interface IRecipe {
   id: string
   name: string
   description: string
-  picture: string
+  picture: IFile | string | null
   alcoholLevel: number
   alcoholMinLevel: number
   alcoholMaxLevel: number
@@ -22,10 +23,12 @@ export interface IRecipe {
 export interface IPayloadFindRecipe {
   isAvailable?: boolean
   withIngredients?: boolean
+  withPictures?: boolean
   sort?: 'desc' | 'asc'
 }
 
 export interface IPayloadFindByIdRecipe {
   id: string
   withIngredients?: boolean
+  withPictures?: boolean
 }
