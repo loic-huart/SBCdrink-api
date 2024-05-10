@@ -84,15 +84,21 @@ class FileService extends ErrorService implements IFileService {
       }
     }
 
-    const filename = findFile._id.toString()
+    await findFile.deleteOne()
+
+    const newFile = new File()
+    const filename = newFile._id.toString()
+
     const outputPath: string = `./public/uploads/${filename}.webp`
 
     await this.convertAndSaveImage(imageObject, outputPath)
 
-    await findFile.save()
+    newFile.name = filename
+    newFile.path = `/uploads/${filename}.webp`
+    await newFile.save()
 
     return {
-      file: serializeFile(findFile)
+      file: serializeFile(newFile)
     }
   }
 }

@@ -4,6 +4,7 @@ import Recipe, { deSerializeRecipe, serializeRecipe, serializeRecipes } from '..
 import { Slug, type Error } from '../errors/types'
 import { createPayloadValidation, findByIdPayloadValidation, updatePayloadValidation } from './validators'
 import { Ingredient } from '../../models'
+import File from '../../models/File'
 
 interface IRecipeService extends ErrorService {
   find: ({ isAvailable, withIngredients, withPictures }: IPayloadFindRecipe) => Promise<{ recipes: IRecipe[] }>
@@ -165,6 +166,11 @@ class RecipeService extends ErrorService implements IRecipeService {
       return {
         error: this.NewNotFoundError('Recipe not found', Slug.ErrRecipeNotFound)
       }
+    }
+
+    const findFile = await File.findById(findRecipe.picture)
+    if (findFile !== null) {
+      await findFile.deleteOne()
     }
 
     await findRecipe.deleteOne()
