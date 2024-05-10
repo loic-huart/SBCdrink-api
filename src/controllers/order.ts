@@ -1,7 +1,6 @@
 import { type FastifyReply, type FastifyRequest } from 'fastify'
 import OrderService from '../services/order/order'
 import mapErrorTypeToHttpCode from '../utils/mapErrorTypeToHttpCode'
-import { Error } from '../services/errors/types'
 import { type IOrder } from '../services/order/types'
 
 interface IOrderController {
