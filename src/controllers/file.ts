@@ -5,6 +5,7 @@ import { type ImageObject } from '../services/file/types'
 
 interface IFileController {
   post: (req: FastifyRequest, res: FastifyReply) => Promise<void>
+  put: (req: FastifyRequest, res: FastifyReply) => Promise<void>
 }
 
 class FileController implements IFileController {
@@ -35,6 +36,29 @@ class FileController implements IFileController {
         return
       }
       await res.status(201).send(file)
+    } catch (error: unknown) {
+      await res.status(500).send(error)
+    }
+  }
+
+  public async put (req: FastifyRequest, res: FastifyReply): Promise<void> {
+    try {
+      const fileService = FileService.getInstance()
+      const { id } = req.params as { id: string }
+
+      // @ts-expect-error file is a ImageObject
+      const fileFromRequest = await req.file() as ImageObject
+
+      const {
+        file,
+        error
+      } = await fileService.update(id, fileFromRequest)
+      if (error != null) {
+        const httpCode = mapErrorTypeToHttpCode(error.errorType)
+        await res.status(httpCode).send(error)
+        return
+      }
+      await res.status(200).send(file)
     } catch (error: unknown) {
       await res.status(500).send(error)
     }

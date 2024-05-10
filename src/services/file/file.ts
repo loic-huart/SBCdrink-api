@@ -7,6 +7,7 @@ import sharp from 'sharp'
 
 interface IFileService extends ErrorService {
   create: (fileFromRequest: ImageObject) => Promise<{ file: IFile, error?: Error }>
+  update: (id: string, fileFromRequest: ImageObject) => Promise<{ file: IFile, error?: Error }>
 }
 
 class FileService extends ErrorService implements IFileService {
@@ -63,6 +64,35 @@ class FileService extends ErrorService implements IFileService {
 
     return {
       file: serializeFile(newFile)
+    }
+  }
+
+  public async update (id: string, imageObject: ImageObject): Promise<{ file: IFile, error?: Error }> {
+    const { error } = createPayloadValidation(imageObject)
+    if (error != null) {
+      return {
+        file: {} as IFile,
+        error: this.NewIncorrectInputError(error.details[0].message, Slug.ErrIncorrectInput)
+      }
+    }
+
+    const findFile = await File.findById(id)
+    if (findFile == null) {
+      return {
+        file: {} as IFile,
+        error: this.NewNotFoundError('File not found', Slug.ErrFileNotFound)
+      }
+    }
+
+    const filename = findFile._id.toString()
+    const outputPath: string = `./public/uploads/${filename}.webp`
+
+    await this.convertAndSaveImage(imageObject, outputPath)
+
+    await findFile.save()
+
+    return {
+      file: serializeFile(findFile)
     }
   }
 }

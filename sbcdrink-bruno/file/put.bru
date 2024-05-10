@@ -1,0 +1,15 @@
+meta {
+  name: put
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{api}}file/663e2dc0a7c4636654edeb14
+  body: multipartForm
+  auth: none
+}
+
+body:multipart-form {
+  file: @file(/Users/loich/Desktop/projet/SBCdrink-api/seeder/uploads/663be5c4e01fcfdce81b1abe.webp)
+}

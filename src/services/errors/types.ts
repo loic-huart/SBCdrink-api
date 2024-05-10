@@ -5,6 +5,7 @@ enum Slug {
   ErrOrderAlreadyInStatusCreated = 'ORDER_ALREADY_IN_STATUS_CREATED',
 
   ErrMachineConfigurationNotFound = 'MACHINE_CONFIGURATION_NOT_FOUND',
+  ErrFileNotFound = 'FILE_NOT_FOUND',
 
   ErrIncorrectInput = 'INVALID_INPUT',
 
