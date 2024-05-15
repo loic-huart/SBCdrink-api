@@ -1,4 +1,4 @@
-DC := docker compose --env-file .env -f ./docker/docker-compose.local.yml
+DC := docker compose --env-file .env -f ./docker/docker-compose.yml
 EXEC := $(DC) exec sbcdrink-api
 DR := $(DC) run --rm
 
@@ -29,7 +29,15 @@ clean: ## Remove all containers, images and volumes
 
 .PHONY: init
 init: ## Init the project (npm install)
-	$(EXEC) yarn install
+	$(EXEC) yarn install --ignore-engines
+
+.PHONY: start
+start: ## Start the project
+	$(EXEC) yarn start
+
+.PHONY: logs
+logs: ## Display logs
+	$(DC) logs -f sbcdrink-api
 
 .PHONY: shell
 shell: ## Open a shell in the container

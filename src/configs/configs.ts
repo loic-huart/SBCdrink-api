@@ -1,11 +1,13 @@
-import { config } from 'dotenv'
+import { config as dotenvConfig } from 'dotenv'
 import { resolve } from 'path'
 
-config({ path: resolve(__dirname, '../../.env') })
+dotenvConfig({ path: resolve(__dirname, '../../.env') })
 
 type Config = Record<string, string>
 
 enum Environment {
+  apiHost = 'API_HOST',
+  apiPort = 'API_PORT',
   dbHost = 'DB_HOST',
   dbUser = 'DB_USER',
   dbPass = 'DB_PASS',
@@ -34,6 +36,11 @@ export const getEnvVariables = (envList: EnvironmentKey[]): Config => {
   }, {})
   return envVariables
 }
+
+export const apiConfig = getEnvVariables([
+  'apiHost',
+  'apiPort'
+])
 
 export const dbConfig = getEnvVariables([
   'dbHost',

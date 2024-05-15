@@ -6,5 +6,5 @@ node_modules
 .vscode
 .env
 coverage
-docker/mongo-config
+docker/mongo
 public/uploads

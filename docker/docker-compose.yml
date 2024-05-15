@@ -4,7 +4,8 @@ services:
   sbcdrink-api:
     build: 
       context: ../
-      dockerfile: docker/Dockerfile.local
+      dockerfile: docker/Dockerfile
+      target: development
     container_name: sbcdrink-api
     restart: always
     ports:
@@ -23,8 +24,8 @@ services:
     container_name: sbcdrink-mongo
     image: mongo:5.0
     volumes:
-      - ./mongo-config/data:/data/db
-      - ./mongo-config/key:/data/db/key
+      - ./mongo/data:/data/db
+      - ./mongo/key:/data/db/key
     healthcheck:
       test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo -u $${MONGO_INITDB_ROOT_USERNAME} -p $${MONGO_INITDB_ROOT_PASSWORD} --quiet) -eq 1
       interval: 10s

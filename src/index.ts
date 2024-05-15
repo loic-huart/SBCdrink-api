@@ -1,11 +1,13 @@
 import Fastify, { type FastifyInstance } from 'fastify'
-import { checkEnvVariables } from './configs/configs'
+import { apiConfig, checkEnvVariables } from './configs/configs'
 import dbConnect from './lib/mongoose'
 import routes from './routes'
 import cors from '@fastify/cors'
 import fastifyStatic from '@fastify/static'
 import path from 'path'
 import fastifyMultipart from '@fastify/multipart'
+
+const { apiPort, apiHost } = apiConfig
 
 async function run (): Promise<any> {
   // Check environment variables
@@ -22,6 +24,7 @@ async function run (): Promise<any> {
     // origin: (origin, cb) => {
     //   // @ts-expect-error origin is a string
     //   const hostname = new URL(origin).hostname
+
     //   if (hostname === 'localhost') {
     //     //  Request from localhost will pass
     //     cb(null, true)
@@ -43,7 +46,8 @@ async function run (): Promise<any> {
   // Routes
   void app.register(routes, { prefix: '/api' })
 
-  await app.listen({ port: 8000, host: '0.0.0.0' })
+  // @ts-expect-error apiPort or apiHost can be undefiend
+  await app.listen({ port: apiPort, host: apiHost })
     .then((address) => { console.log(`server listening on ${address}`) })
     .catch(err => {
       console.log('Error starting server:', err)
