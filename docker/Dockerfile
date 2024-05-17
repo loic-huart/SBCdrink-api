@@ -1,33 +1,32 @@
 FROM node:18-alpine as build
 
 WORKDIR /api
-
-COPY ["package.json", "yarn.lock", "./"]
+COPY package.json yarn.lock ./
+RUN yarn install
+RUN yarn add sharp --ignore-engines
 COPY . .
+RUN yarn build
 
-EXPOSE 8000
+FROM node:18-alpine as dependencies
 
 RUN echo 'http://dl-cdn.alpinelinux.org/alpine/v3.6/community' >> /etc/apk/repositories
 RUN apk add mongodb-tools
-RUN yarn add global typescript
 
-FROM build AS development
+FROM dependencies AS development
 
+WORKDIR /api
 ENV NODE_ENV=development
-
-RUN yarn install
-RUN yarn add sharp --ignore-engines
 RUN yarn global add ts-node
-
+RUN yarn global add nodemon
+COPY . .
+COPY --from=build /api/node_modules ./node_modules
+EXPOSE 8000
 CMD ["sleep", "infinity"]
 
-FROM build AS production
+FROM dependencies AS production
 
-RUN yarn install
-RUN yarn add sharp --ignore-engines
-
+WORKDIR /api
 ENV NODE_ENV=production
-
-RUN yarn build
-
+COPY --from=build /api/build ./build
+EXPOSE 8000
 CMD ["node", "./build/src/index.js"]
