@@ -49,4 +49,4 @@ test: ## Run tests
 
 .PHONY: seed
 seed: ## Seed the database
-	$(EXEC) sh /sbcdrink-api/seeder/seed.sh
+	$(EXEC) sh /api/seeder/seed.sh
