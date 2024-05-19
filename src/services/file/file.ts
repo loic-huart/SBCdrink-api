@@ -4,6 +4,7 @@ import File, { serializeFile } from '../../models/File'
 import { Slug, type Error } from '../errors/types'
 import { createPayloadValidation } from './validators'
 import sharp from 'sharp'
+import path from 'path'
 
 interface IFileService extends ErrorService {
   create: (fileFromRequest: ImageObject) => Promise<{ file: IFile, error?: Error }>
@@ -54,8 +55,7 @@ class FileService extends ErrorService implements IFileService {
     const newFile = new File()
     const filename = newFile._id.toString()
 
-    const outputPath: string = `./public/uploads/${filename}.webp`
-
+    const outputPath: string = path.join(__dirname, `../public/uploads/${filename}.webp`)
     await this.convertAndSaveImage(imageObject, outputPath)
 
     newFile.name = filename
