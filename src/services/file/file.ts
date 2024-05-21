@@ -55,7 +55,7 @@ class FileService extends ErrorService implements IFileService {
     const newFile = new File()
     const filename = newFile._id.toString()
 
-    const outputPath: string = path.join(__dirname, `../public/uploads/${filename}.webp`)
+    const outputPath: string = path.join(__dirname, `../../../public/uploads/${filename}.webp`)
     await this.convertAndSaveImage(imageObject, outputPath)
 
     newFile.name = filename
@@ -89,7 +89,7 @@ class FileService extends ErrorService implements IFileService {
     const newFile = new File()
     const filename = newFile._id.toString()
 
-    const outputPath: string = `./public/uploads/${filename}.webp`
+    const outputPath: string = path.join(__dirname, `../../../public/uploads/${filename}.webp`)
 
     await this.convertAndSaveImage(imageObject, outputPath)
 
