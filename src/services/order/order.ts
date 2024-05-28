@@ -48,7 +48,7 @@ class OrderService extends ErrorService implements IOrderService {
           const res = await machineService.makeCocktail({ steps: order.steps })
           if (res.error != null) {
             await Order.findByIdAndUpdate(order.id, { status: OrderStatus.FAILED })
-            console.info('Watch order', order.id, 'status updated to', OrderStatus.FAILED)
+            console.info('Watch order', order.id, 'status updated to', OrderStatus.FAILED, 'error:', res.error)
           } else {
             await Order.findByIdAndUpdate(order.id, { status: OrderStatus.DONE })
             console.info('Watch order', order.id, 'status updated to', OrderStatus.DONE)
