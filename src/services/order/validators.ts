@@ -1,5 +1,5 @@
 import Joi from 'joi'
-import { OrderStatus, type IOrder } from './types'
+import { type IOrder } from './types'
 
 const createPayloadValidation = (body: IOrder): Joi.ValidationResult => {
   const schema = Joi.object({
