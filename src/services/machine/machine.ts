@@ -76,6 +76,7 @@ class MachineService extends ErrorService implements IMachineService {
       }, (err: any, response: any) => {
         // eslint-disable-next-line no-extra-boolean-cast
         if (Boolean(err)) {
+          console.error('Machine script error:', err)
           resolve({
             response: false,
             error: this.NewUnknowError('Machine script error', Slug.ErrUnknow)
