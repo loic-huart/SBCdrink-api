@@ -69,6 +69,7 @@ class MachineService extends ErrorService implements IMachineService {
     }
 
     const machineSteps = this.orderToMachineSteps(orderMakeCocktail)
+    console.info('Call machine script with steps:', machineSteps)
 
     const response = await new Promise<{ response: boolean, error?: Error | undefined }>((resolve) => {
       return this.client.makeCocktail({
