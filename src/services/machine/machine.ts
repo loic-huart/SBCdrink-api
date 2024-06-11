@@ -55,6 +55,7 @@ class MachineService extends ErrorService implements IMachineService {
 
     return await Promise.all(order.steps.map(async (step) => {
       const slot = allMachineConfigurations.find((machineConfiguration) => machineConfiguration?.ingredient?._id.toString() === step?.ingredient?.id)?.slot
+
       return {
         stepId: step.id,
         slot: slot ?? 0,
