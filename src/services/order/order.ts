@@ -4,7 +4,7 @@ import Order, { deSerializeOrder, serializeOrder, serializeOrders } from '../../
 import { Slug, type Error } from '../errors/types'
 import { createPayloadValidation } from './validators'
 import Recipe, { serializeRecipe } from '../../models/Recipe'
-import { Ingredient } from '../../models'
+import { Ingredient, MachineConfiguration } from '../../models'
 import { serializeIngredient } from '../../models/Ingredient'
 import { type IModelOrder, type IModelIngredient, type IModelRecipe } from '../../models/types'
 import MachineService from '../machine/machine'
@@ -104,6 +104,17 @@ class OrderService extends ErrorService implements IOrderService {
         }
         break
       }
+
+      const machineConfiguration = await MachineConfiguration.findOne({ ingredient: step.ingredient })
+      console.log('Machine configuration:', machineConfiguration)
+      if (machineConfiguration == null) {
+        ingredientError = {
+          order: {} as IOrder,
+          error: this.NewNotFoundError('Ingredient is not available', Slug.ErrIngredientIsNotAvailable)
+        }
+        break
+      }
+
       steps.push({
         ...step,
         ingredient: serializeIngredient(ingredient)

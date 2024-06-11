@@ -1,1 +1,5 @@
 export { default as Ingredient } from './Ingredient'
+export { default as MachineConfiguration } from './MachineConfiguration'
+export { default as Order } from './Order'
+export { default as Recipe } from './Recipe'
+export { default as File } from './File'
