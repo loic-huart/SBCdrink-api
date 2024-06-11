@@ -7,11 +7,12 @@ import { type IMachineStep } from './types'
 import { scriptConfig } from '../../configs/configs'
 import { directMakeCocktailPayloadValidation } from './validators'
 import { type IOrder, type IOrderMakeCocktail } from '../order/types'
+import { MachineConfiguration } from '../../models'
 const PROTO_PATH = path.join(__dirname, '/protos/machine.proto')
 
 interface IMachineService extends ErrorService {
   makeCocktail: (order: IOrderMakeCocktail) => Promise<{ response: boolean, error?: Error }>
-  orderToMachineSteps: (order: IOrder) => IMachineStep[]
+  orderToMachineSteps: (order: IOrder) => Promise<IMachineStep[]>
 }
 
 class MachineService extends ErrorService implements IMachineService {
@@ -47,16 +48,18 @@ class MachineService extends ErrorService implements IMachineService {
     return MachineService.instance
   }
 
-  public orderToMachineSteps (order: Partial<IOrder>): IMachineStep[] {
+  public async orderToMachineSteps (order: Partial<IOrder>): Promise<IMachineStep[]> {
     if (order.steps === null || order.steps === undefined) return []
-    return order.steps.map((step) => {
+
+    return await Promise.all(order.steps.map(async (step) => {
+      const machineConfiguration = await MachineConfiguration.findOne({ ingredient: step.ingredient })
       return {
         stepId: step.id,
-        slot: 1, // TODO: get slot from machineConfiguration
+        slot: machineConfiguration?.slot ?? 0,
         pressed: step.quantity * 0.5, // TODO: replace 0.5 with the real value
         delayAfter: 0.5 // TODO: determine the delay after, if needed
       } as unknown as IMachineStep
-    })
+    }))
   }
 
   public async makeCocktail (orderMakeCocktail: IOrderMakeCocktail): Promise<{ response: boolean, error?: Error }> {
