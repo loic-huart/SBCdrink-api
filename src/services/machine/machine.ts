@@ -51,11 +51,13 @@ class MachineService extends ErrorService implements IMachineService {
   public async orderToMachineSteps (order: Partial<IOrder>): Promise<IMachineStep[]> {
     if (order.steps === null || order.steps === undefined) return []
 
+    const allMachineConfigurations = await MachineConfiguration.find()
+
     return await Promise.all(order.steps.map(async (step) => {
-      const machineConfiguration = await MachineConfiguration.findOne({ ingredient: step.ingredient })
+      const slot = allMachineConfigurations.find((machineConfiguration) => machineConfiguration?.ingredient?._id.toString() === step?.ingredient?.id)?.slot
       return {
         stepId: step.id,
-        slot: machineConfiguration?.slot ?? 0,
+        slot: slot ?? 0,
         pressed: step.quantity * 0.5, // TODO: replace 0.5 with the real value
         delayAfter: 0.5 // TODO: determine the delay after, if needed
       } as unknown as IMachineStep
@@ -71,7 +73,7 @@ class MachineService extends ErrorService implements IMachineService {
       }
     }
 
-    const machineSteps = this.orderToMachineSteps(orderMakeCocktail)
+    const machineSteps = await this.orderToMachineSteps(orderMakeCocktail)
     console.info('Call machine script with steps:', machineSteps)
 
     const response = await new Promise<{ response: boolean, error?: Error | undefined }>((resolve) => {
