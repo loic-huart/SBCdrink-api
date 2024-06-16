@@ -20,6 +20,7 @@ export interface IModelRecipe {
   alcohol_min_level: number
   alcohol_max_level: number
   is_available: boolean
+  default_glass_volume: number
   steps: Array<{
     _id: ObjectId
     ingredient: IModelIngredient | ObjectId

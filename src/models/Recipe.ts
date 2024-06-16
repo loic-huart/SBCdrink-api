@@ -29,6 +29,7 @@ const serializeRecipe = (recipe: IModelRecipe, withIngredients = false, withPict
     alcoholMinLevel: recipe.alcohol_min_level,
     alcoholMaxLevel: recipe.alcohol_max_level,
     isAvailable: recipe.is_available,
+    defaultGlassVolume: recipe.default_glass_volume,
     steps: recipe.steps.map(step => ({
       id: step._id.toString(),
       ingredient: withIngredients ? serializeIngredient(step.ingredient as IModelIngredient) : (step.ingredient as ObjectId).toString(),
@@ -64,6 +65,7 @@ const deSerializeRecipe = (recipe: IRecipe, withIngredients = false, withPicture
     alcohol_min_level: recipe.alcoholMinLevel,
     alcohol_max_level: recipe.alcoholMaxLevel,
     is_available: recipe.isAvailable,
+    default_glass_volume: recipe.defaultGlassVolume,
     steps: recipe.steps.map(step => ({
       _id: new ObjectId(step.id),
       ingredient: withIngredients ? deSerializeIngredient(step.ingredient as IIngredient) : new ObjectId(step.ingredient as string),

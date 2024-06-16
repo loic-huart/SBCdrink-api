@@ -10,6 +10,7 @@ export interface IRecipe {
   alcoholMinLevel: number
   alcoholMaxLevel: number
   isAvailable: boolean
+  defaultGlassVolume: number
   steps: Array<{
     id: string
     ingredient: IIngredient | string
