@@ -1,5 +1,5 @@
 export interface IMachineStep {
-  stepId: number
+  stepId: string
   slot: number
   pressed: number
   delayAfter: number

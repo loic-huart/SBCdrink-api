@@ -53,16 +53,30 @@ class MachineService extends ErrorService implements IMachineService {
 
     const allMachineConfigurations = await MachineConfiguration.find()
 
-    return await Promise.all(order.steps.map(async (step) => {
-      const slot = allMachineConfigurations.find((machineConfiguration) => machineConfiguration?.ingredient?._id.toString() === step?.ingredient?.id)?.slot
+    const machineSteps: IMachineStep[] = []
 
-      return {
-        stepId: step.id,
-        slot: slot ?? 0,
-        pressed: step.quantity * 0.5, // TODO: replace 0.5 with the real value
-        delayAfter: 0.5 // TODO: determine the delay after, if needed
-      } as unknown as IMachineStep
-    }))
+    order.steps.forEach((step) => {
+      const targetMachineConfiguration = allMachineConfigurations.find((machineConfiguration) => machineConfiguration?.ingredient?._id.toString() === step?.ingredient?.id)
+      // const { slot, measure_volume } = targetMachineConfiguration
+      let remainingQuantity = step.quantity
+      const slot = targetMachineConfiguration?.slot
+      const measure_volume = targetMachineConfiguration?.measure_volume ?? 0
+
+      let index = 0
+      while (remainingQuantity > 0) {
+        index++
+        const pressed = Math.min(remainingQuantity, measure_volume)
+        machineSteps.push({
+          stepId: `${step.id}-${index}`,
+          slot: slot ?? 0,
+          pressed: pressed * 0.5, // TODO: replace 0.5 with the real value
+          delayAfter: (remainingQuantity - measure_volume > 0 ? 5 : 0.5)
+        })
+        remainingQuantity -= measure_volume
+      }
+    })
+
+    return machineSteps
   }
 
   public async makeCocktail (orderMakeCocktail: IOrderMakeCocktail): Promise<{ response: boolean, error?: Error }> {
