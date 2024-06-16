@@ -11,7 +11,7 @@
     "alcohol_level": 27.27,
     "alcohol_min_level": 15,
     "alcohol_max_level": 40,
-    "is_available": true,
+    "is_available": false,
     "steps": [
       {
         "ingredient": {
@@ -64,7 +64,7 @@
     "alcohol_level": 27.27,
     "alcohol_min_level": 10,
     "alcohol_max_level": 50,
-    "is_available": true,
+    "is_available": false,
     "steps": [
       {
         "ingredient": {
@@ -127,7 +127,7 @@
     "alcohol_level": 33.33,
     "alcohol_min_level": 20,
     "alcohol_max_level": 50,
-    "is_available": true,
+    "is_available": false,
     "steps": [
       {
         "ingredient": {
@@ -170,7 +170,7 @@
     "alcohol_level": 12.5,
     "alcohol_min_level": 8,
     "alcohol_max_level": 20,
-    "is_available": true,
+    "is_available": false,
     "steps": [
       {
         "ingredient": {
@@ -223,7 +223,7 @@
     "alcohol_level": 30,
     "alcohol_min_level": 20,
     "alcohol_max_level": 40,
-    "is_available": true,
+    "is_available": false,
     "steps": [
       {
         "ingredient": {
@@ -276,7 +276,7 @@
     "alcohol_level": 100,
     "alcohol_min_level": 100,
     "alcohol_max_level": 100,
-    "is_available": true,
+    "is_available": false,
     "steps": [
       {
         "ingredient": {
