@@ -114,6 +114,10 @@ const recipeSchema = new Schema<IModelRecipe>({
     required: true,
     default: false
   },
+  default_glass_volume: {
+    type: Number,
+    required: true
+  },
   steps: [
     {
       ingredient: {

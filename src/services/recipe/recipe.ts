@@ -146,6 +146,7 @@ class RecipeService extends ErrorService implements IRecipeService {
     findRecipe.alcohol_level = alcohol_level
     findRecipe.alcohol_min_level = alcohol_min_level
     findRecipe.alcohol_max_level = alcohol_max_level
+    findRecipe.default_glass_volume = recipe.defaultGlassVolume
     findRecipe.steps = steps.map(step => ({
       _id: step._id,
       ingredient: step.ingredient,
