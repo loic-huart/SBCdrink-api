@@ -69,7 +69,7 @@ class MachineService extends ErrorService implements IMachineService {
         machineSteps.push({
           stepId: `${step.id}-${index}`,
           slot: slot ?? 0,
-          pressed: pressed * 0.5, // TODO: replace 0.5 with the real value
+          pressed: pressed * step.ingredient.viscosity,
           delayAfter: (remainingQuantity - measure_volume > 0 ? 5 : 0.5)
         })
         remainingQuantity -= measure_volume

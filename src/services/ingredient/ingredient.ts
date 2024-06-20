@@ -87,10 +87,11 @@ class IngredientService extends ErrorService implements IIngredientService {
       }
     }
 
-    const { alcohol_degree, is_alcohol, name } = deSerializeIngredient(ingredient)
+    const { alcohol_degree, is_alcohol, name, viscosity } = deSerializeIngredient(ingredient)
     findIngredient.name = name
     findIngredient.is_alcohol = is_alcohol
     findIngredient.alcohol_degree = alcohol_degree
+    findIngredient.viscosity = viscosity
 
     const newIngredient = await findIngredient.save()
 

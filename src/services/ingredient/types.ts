@@ -5,6 +5,7 @@ export interface IIngredient {
   alcoholDegree: number
   createdAt: Date
   updatedAt: Date
+  viscosity: number
 }
 
 export interface IPayloadFindByIdIngredient {

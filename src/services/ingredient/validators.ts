@@ -5,7 +5,8 @@ const createPayloadValidation = (body: IIngredient): Joi.ValidationResult => {
   const schema = Joi.object({
     name: Joi.string().required(),
     isAlcohol: Joi.boolean().required(),
-    alcoholDegree: Joi.number().required()
+    alcoholDegree: Joi.number().required(),
+    viscosity: Joi.number().required()
   })
   return schema.validate(body)
 }
@@ -16,6 +17,7 @@ const updatePayloadValidation = (body: IIngredient): Joi.ValidationResult => {
     name: Joi.string().required(),
     isAlcohol: Joi.boolean().required(),
     alcoholDegree: Joi.number().required(),
+    viscosity: Joi.number().required(),
     createdAt: Joi.date(),
     updatedAt: Joi.date()
   })

@@ -9,6 +9,7 @@ export interface IModelIngredient {
   alcohol_degree: number
   created_at: Date
   updated_at: Date
+  viscosity: number
 }
 
 export interface IModelRecipe {

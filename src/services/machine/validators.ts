@@ -13,6 +13,7 @@ const directMakeCocktailPayloadValidation = (body: IOrderMakeCocktail): Joi.Vali
         name: Joi.string().required(),
         isAlcohol: Joi.boolean().required(),
         alcoholDegree: Joi.number().required(),
+        viscosity: Joi.number().required(),
         updatedAt: Joi.date().required(),
         createdAt: Joi.date().required()
       }).required()
