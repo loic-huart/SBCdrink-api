@@ -17,6 +17,7 @@ enum Slug {
   ErrInvalidRefleshToken = 'INVALID_REFRESH_TOKEN',
   ErrUserAlreadyExist = 'USER_ALREADY_EXIST',
   ErrUnknow = 'UNKNOW',
+  ErrDataNotFound = 'NOT_FOUND',
 }
 
 enum ErrorType {

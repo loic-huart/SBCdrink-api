@@ -2,7 +2,7 @@
   "name": "Node.js API Dev Container",
   "dockerComposeFile": "../docker/docker-compose.yml",
   "service": "sbcdrink-api", 
-  "workspaceFolder": "/sbcdrink-api",
+  "workspaceFolder": "/api",
   // "forwardPorts": [8000],
   "customizations": {
     "vscode": {
