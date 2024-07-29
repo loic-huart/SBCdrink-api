@@ -1,13 +1,12 @@
 import Joi from 'joi'
-import { type IIngredient } from './types'
 import { type IPayloadFindById } from './service'
 
-const createPayloadValidation = (body: IIngredient): Joi.ValidationResult => {
+const createPayloadValidation = <T>(body: T): Joi.ValidationResult => {
   const schema = Joi.object({})
   return schema.validate(body)
 }
 
-const updatePayloadValidation = (body: IIngredient): Joi.ValidationResult => {
+const updatePayloadValidation = <T>(body: T): Joi.ValidationResult => {
   const schema = Joi.object({
     id: Joi.string().length(24).required()
   })

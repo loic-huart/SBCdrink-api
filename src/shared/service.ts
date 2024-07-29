@@ -1,5 +1,5 @@
 import { type ObjectId } from 'mongoose'
-import { deSerialize, serialize } from './serialize'
+import { deSerialize, serialize, serializes } from './serialize'
 import ErrorService from '../services/errors/errors'
 import { type Error, Slug } from '../services/errors/types'
 import { createPayloadValidation, findByIdPayloadValidation, updatePayloadValidation } from './validators'
@@ -42,9 +42,9 @@ class Service<T> extends ErrorService implements IService<T> {
   }
 
   public async find ({ sort }: IPayloadFind): Promise<{ datas: T[] }> {
-    const ingredients = await Service.model.find().sort({ updated_at: sort === 'desc' ? -1 : 1 })
+    const datas = await Service.model.find().sort({ updated_at: sort === 'desc' ? -1 : 1 })
     return {
-      datas: serialize(ingredients)
+      datas: serializes<T, typeof Service.model>(datas as T[])
     }
   }
 
@@ -65,12 +65,12 @@ class Service<T> extends ErrorService implements IService<T> {
     }
 
     return {
-      data: serialize(data)
+      data: serialize<T, typeof Service.model>(data as T)
     }
   }
 
   public async create (data: T): Promise<{ data: T, error?: Error }> {
-    const { error } = createPayloadValidation(data)
+    const { error } = createPayloadValidation<T>(data)
     if (error != null) {
       return {
         data: {} as T,
@@ -78,16 +78,16 @@ class Service<T> extends ErrorService implements IService<T> {
       }
     }
 
-    const newData = new Service.model(deSerialize(data))
+    const newData = new Service.model(deSerialize<typeof Service.model, T>(data))
     await newData.save()
 
     return {
-      data: serialize(newData)
+      data: serialize<T, typeof Service.model>(newData as T)
     }
   }
 
   public async update (id: string, data: T): Promise<{ data: T, error?: Error }> {
-    const { error } = updatePayloadValidation(data)
+    const { error } = updatePayloadValidation<T>(data)
     if (error != null) {
       return {
         data: {} as T,
@@ -95,7 +95,7 @@ class Service<T> extends ErrorService implements IService<T> {
       }
     }
 
-    const findData = await Service.model.findById(id)
+    let findData = await Service.model.findById(id)
     if (findData == null) {
       return {
         data: {} as T,
@@ -103,16 +103,18 @@ class Service<T> extends ErrorService implements IService<T> {
       }
     }
 
-    const { alcohol_degree, is_alcohol, name, viscosity } = deSerialize(data)
-    findData.name = name
-    findData.is_alcohol = is_alcohol
-    findData.alcohol_degree = alcohol_degree
-    findData.viscosity = viscosity
+    // const { alcohol_degree, is_alcohol, name, viscosity } = deSerialize<typeof Service.model, T>(data)
+    // findData.name = name
+    // findData.is_alcohol = is_alcohol
+    // findData.alcohol_degree = alcohol_degree
+    // findData.viscosity = viscosity
+
+    findData = deSerialize<typeof Service.model, T>(data)
 
     const newData = await findData.save()
 
     return {
-      data: serialize(newData)
+      data: serialize<T, typeof Service.model>(newData as T)
     }
   }
 

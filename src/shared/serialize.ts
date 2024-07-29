@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb'
 
-const serialize = <T extends object, U>(data: T): U => {
+const serialize = <T, U>(data: T): U => {
   const camelCase = (str: string): string => str.replace(/([-_][a-z])/ig, ($1) => {
     return $1.toUpperCase()
       .replace('-', '')
@@ -15,11 +15,11 @@ const serialize = <T extends object, U>(data: T): U => {
   }, {} as U)
 }
 
-const serializes = <T extends object, U>(datas: T[]): U[] => {
+const serializes = <T, U>(datas: T[]): U[] => {
   return datas.map(data => serialize(data))
 }
 
-const deSerialize =  <T extends object, U>(data: T): U => {
+const deSerialize = <T, U>(data: T): U => {
   const snakeCase = (str: string): string => str.replace(/([A-Z])/g, ($1) => {
     return `_${$1.toLowerCase()}`
   })
@@ -32,7 +32,7 @@ const deSerialize =  <T extends object, U>(data: T): U => {
   }, {} as U)
 }
 
-const deSerializes = <T extends object, U>(datas: T[]): U[] => {
+const deSerializes = <T, U>(datas: T[]): U[] => {
   return datas.map(data => deSerialize(data))
 }
 
