@@ -26,7 +26,7 @@ export interface IService<T> extends ErrorService {
 }
 
 class Service<T> extends ErrorService implements IService<T> {
-  private static instance: Service<any>
+  public static instance: Service<any>
   private static model: any
 
   public static getInstance<T>(): IService<T> {
