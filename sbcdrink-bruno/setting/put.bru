@@ -1,0 +1,17 @@
+meta {
+  name: put
+  type: http
+  seq: 2
+}
+
+put {
+  url: {{api}}setting
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "timeForOneQuantity": 2
+  }
+}

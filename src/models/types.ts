@@ -70,3 +70,7 @@ export interface IModelFile {
   created_at: Date
   updated_at: Date
 }
+
+export interface IModelSetting {
+  time_for_one_quantity: number
+}
