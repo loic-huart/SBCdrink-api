@@ -8,6 +8,7 @@ import { scriptConfig } from '../../configs/configs'
 import { directMakeCocktailPayloadValidation } from './validators'
 import { type IOrder, type IOrderMakeCocktail } from '../order/types'
 import { MachineConfiguration } from '../../models'
+import Setting from '../../models/Setting'
 const PROTO_PATH = path.join(__dirname, '/protos/machine.proto')
 
 interface IMachineService extends ErrorService {
@@ -53,11 +54,14 @@ class MachineService extends ErrorService implements IMachineService {
 
     const allMachineConfigurations = await MachineConfiguration.find()
 
+    const setting = await Setting.findOne()
+    const timeForOneQuantity = setting?.time_for_one_quantity ?? 1
+
     const machineSteps: IMachineStep[] = []
 
     order.steps.forEach((step) => {
       const targetMachineConfiguration = allMachineConfigurations.find((machineConfiguration) => machineConfiguration?.ingredient?._id.toString() === step?.ingredient?.id)
-      // const { slot, measure_volume } = targetMachineConfiguration
+
       let remainingQuantity = step.quantity
       const slot = targetMachineConfiguration?.slot
       const measure_volume = targetMachineConfiguration?.measure_volume ?? 0
@@ -69,7 +73,7 @@ class MachineService extends ErrorService implements IMachineService {
         machineSteps.push({
           stepId: `${step.id}-${index}`,
           slot: slot ?? 0,
-          pressed: pressed * step.ingredient.viscosity,
+          pressed: pressed * timeForOneQuantity * step.ingredient.viscosity,
           delayAfter: (remainingQuantity - measure_volume > 0 ? 5 : 0.5)
         })
         remainingQuantity -= measure_volume

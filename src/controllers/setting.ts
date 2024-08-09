@@ -32,7 +32,6 @@ class SettingController implements ISettingController {
   public async put (req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
       const settingService = SettingService.getInstance()
-      const { id } = req.params as { id: string }
       const {
         setting,
         error
