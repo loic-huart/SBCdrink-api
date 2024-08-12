@@ -45,8 +45,6 @@ class SettingService extends ErrorService implements ISettingService {
   public async findSettingOrCreate (): Promise<ISetting> {
     const findSetting = await Setting.findOne()
 
-    console.log('ici', findSetting)
-
     if (findSetting == null) {
       const { setting: newSetting } = await this.create(this.defaultSetting)
 

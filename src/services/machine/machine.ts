@@ -71,7 +71,6 @@ class MachineService extends ErrorService implements IMachineService {
       while (remainingQuantity > 0) {
         index++
         const pressed = Math.min(remainingQuantity, measure_volume)
-        console.log('PRESSED', pressed)
         machineSteps.push({
           stepId: `${step.id}-${index}`,
           slot: slot ?? 0,
