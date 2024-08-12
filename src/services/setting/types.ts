@@ -1,3 +1,4 @@
 export interface ISetting {
-  timeForOneQuantity: number
+  dispenserEmptyingTime: number
+  dispenserFillingTime: number
 }

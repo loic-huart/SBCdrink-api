@@ -72,5 +72,6 @@ export interface IModelFile {
 }
 
 export interface IModelSetting {
-  time_for_one_quantity: number
+  dispenser_emptying_time: number
+  dispenser_filling_time: number
 }

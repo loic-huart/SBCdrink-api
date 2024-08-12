@@ -13,7 +13,8 @@ class SettingService extends ErrorService implements ISettingService {
   private static instance: SettingService
 
   public readonly defaultSetting: ISetting = {
-    timeForOneQuantity: 1
+    dispenserEmptyingTime: 1,
+    dispenserFillingTime: 1
   }
 
   public static getInstance (): SettingService {
@@ -43,6 +44,9 @@ class SettingService extends ErrorService implements ISettingService {
 
   public async findSettingOrCreate (): Promise<ISetting> {
     const findSetting = await Setting.findOne()
+
+    console.log('ici', findSetting)
+
     if (findSetting == null) {
       const { setting: newSetting } = await this.create(this.defaultSetting)
 
@@ -78,8 +82,9 @@ class SettingService extends ErrorService implements ISettingService {
       }
     }
 
-    const { time_for_one_quantity } = deSerializeSetting(setting)
-    findSetting.time_for_one_quantity = time_for_one_quantity
+    const { dispenser_emptying_time, dispenser_filling_time } = deSerializeSetting(setting)
+    findSetting.dispenser_emptying_time = dispenser_emptying_time
+    findSetting.dispenser_filling_time = dispenser_filling_time
 
     const newSetting = await findSetting.save()
 

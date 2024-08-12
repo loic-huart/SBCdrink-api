@@ -5,7 +5,8 @@ import { type IModelSetting } from './types'
 const Schema = mongoose.Schema
 
 const serializeSetting = (setting: IModelSetting): ISetting => ({
-  timeForOneQuantity: setting.time_for_one_quantity
+  dispenserEmptyingTime: setting.dispenser_emptying_time,
+  dispenserFillingTime: setting.dispenser_filling_time
 })
 
 const serializeSettings = (settings: IModelSetting[]): ISetting[] => {
@@ -13,7 +14,8 @@ const serializeSettings = (settings: IModelSetting[]): ISetting[] => {
 }
 
 const deSerializeSetting = (setting: ISetting): IModelSetting => ({
-  time_for_one_quantity: setting.timeForOneQuantity
+  dispenser_emptying_time: setting.dispenserEmptyingTime,
+  dispenser_filling_time: setting.dispenserFillingTime
 })
 
 const deSerializeSettings = (settings: ISetting[]): IModelSetting[] => {
@@ -21,7 +23,11 @@ const deSerializeSettings = (settings: ISetting[]): IModelSetting[] => {
 }
 
 const settingSchema = new Schema<IModelSetting>({
-  time_for_one_quantity: {
+  dispenser_emptying_time: {
+    type: Number,
+    required: true
+  },
+  dispenser_filling_time: {
     type: Number,
     required: true
   }

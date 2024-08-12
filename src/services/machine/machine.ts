@@ -55,7 +55,7 @@ class MachineService extends ErrorService implements IMachineService {
     const allMachineConfigurations = await MachineConfiguration.find()
 
     const setting = await Setting.findOne()
-    const timeForOneQuantity = setting?.time_for_one_quantity ?? 1
+    const dispenserEmptyingTime = setting?.dispenser_emptying_time ?? 1
 
     const machineSteps: IMachineStep[] = []
 
@@ -73,8 +73,11 @@ class MachineService extends ErrorService implements IMachineService {
         machineSteps.push({
           stepId: `${step.id}-${index}`,
           slot: slot ?? 0,
-          pressed: pressed * timeForOneQuantity * step.ingredient.viscosity,
+          pressed: pressed * dispenserEmptyingTime * step.ingredient.viscosity,
           delayAfter: (remainingQuantity - measure_volume > 0 ? 5 : 0.5)
+          // TODO: passer les position des step dans la collection setting ou machineconfiguration, et envoyer la position du slot dans le machineStep
+          // TODO: add dans le front, dans settings, la possibilité des deffinir la position des slots,
+          // et de faire bouger la chariot a un slot defini, pour reglé plus facilement la machine
         })
         remainingQuantity -= measure_volume
       }
