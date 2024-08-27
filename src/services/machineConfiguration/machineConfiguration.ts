@@ -4,6 +4,7 @@ import MachineConfiguration, { deSerializeMachineConfiguration, serializeMachine
 import { Slug, type Error } from '../errors/types'
 import { updatePayloadValidation } from './validators'
 import { mongoClient } from '../..'
+import { Recipe } from '../../models'
 
 interface IMachineConfigurationService extends ErrorService {
   find: ({ withIngredients }: IPayloadFindMachineConfigurations) => Promise<{ machineConfigurations: IMachineConfiguration[] }>
@@ -43,48 +44,66 @@ class MachineConfigurationService extends ErrorService implements IMachineConfig
 
       switch (change.operationType) {
         case 'update': {
-          // TODO: convertir les call en prima
-          // if (change?.documentKey?._id == null) break
-          // const machineChangeId = change?.documentKey?._id
+          if (change?.documentKey?._id == null) break
+          const machineChangeId = change?.documentKey?._id
 
-          // // console.info('Watch machineConfiguration', machineChangeId, 'updated')
+          // console.info('Watch machineConfiguration', machineChangeId, 'updated')
 
-          // const machineConfiguration = await MachineConfiguration.findMany()
+          const machineConfiguration = await MachineConfiguration.findMany()
 
-          // const ingredientsAllowed = machineConfiguration
-          //   .filter(mc => (mc.measure_volume != null) && (mc.ingredient != null))
-          //   .map(mc => mc.ingredient)
+          const ingredientsAllowed = machineConfiguration
+            .filter(mc => (mc.measure_volume != null) && (mc.ingredient_id != null))
+            .map(mc => (mc.ingredient_id) as string)
 
-          // // toute les recipes qui contiennent les ingredients
-          // const recipesToUpdate = await Recipe.find({
-          //   steps: {
-          //     $not: {
-          //       $elemMatch: {
-          //         ingredient: { $nin: ingredientsAllowed }
-          //       }
-          //     }
-          //   }
-          // })
+          const recipesToUpdate = await Recipe.findMany({
+            where: {
+              steps: {
+                every: {
+                  ingredient: {
+                    id: { in: ingredientsAllowed }
+                  }
+                }
+              }
+            },
+            include: {
+              steps: {
+                include: {
+                  ingredient: true
+                }
+              }
+            }
+          })
 
-          // // set toutes les recipes qui contiennent les ingredients a available
-          // const recipeAvailable = await Recipe.updateMany(
-          //   {
-          //     _id: { $in: recipesToUpdate.map(recipe => recipe._id) }
-          //   },
-          //   { $set: { is_available: true } }
-          // ).find()
+          // set toutes les recipes qui contiennent les ingredients a available
+          const recipeIdsToUpdate = recipesToUpdate.map(recipe => recipe.id)
+          const recipeAvailable = await Recipe.updateMany({
+            where: {
+              id: {
+                in: recipeIdsToUpdate
+              }
+            },
+            data: {
+              is_available: true
+            }
+          })
 
-          // // set toutes les recipes qui ne contiennent pas les ingredients a not available
-          // const recipeNotAvailable = await Recipe.updateMany(
-          //   {
-          //     _id: { $nin: recipesToUpdate.map(recipe => recipe._id) }
-          //   },
-          //   { $set: { is_available: false } }
-          // ).find()
+          // set toutes les recipes qui ne contiennent pas les ingredients a not available
+          const recipeIdsToExclude = recipesToUpdate.map(recipe => recipe.id)
+          const recipeNotAvailable = await Recipe.updateMany({
+            where: {
+              id: {
+                notIn: recipeIdsToExclude
+              }
+            },
+            data: {
+              is_available: false
+            }
+          })
 
-          // const recipeUpdated = [...recipeAvailable, ...recipeNotAvailable].map(recipeUp => recipeUp._id).join(',')
+          // @ts-ignore
+          const recipeUpdated = [...recipeAvailable, ...recipeNotAvailable].map(recipeUp => recipeUp.id).join(',')
 
-          // console.info('Watch machineConfiguration', machineChangeId, 'updated recipe', recipeUpdated)
+          console.info('Watch machineConfiguration', machineChangeId, 'updated recipe', recipeUpdated)
 
           break
         }
