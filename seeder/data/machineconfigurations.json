@@ -3,7 +3,7 @@
     "_id": {
       "$oid": "663201f0f1745a1a5e20da6e"
     },
-    "ingredient": null,
+    "ingredient_id": null,
     "slot": 1,
     "measure_volume": 35
   },
@@ -11,7 +11,7 @@
     "_id": {
       "$oid": "66320208f1745a1a5e20da70"
     },
-    "ingredient": null,
+    "ingredient_id": null,
     "slot": 2,
     "measure_volume": 35
   },
@@ -19,7 +19,7 @@
     "_id": {
       "$oid": "6632020ff1745a1a5e20da72"
     },
-    "ingredient": null,
+    "ingredient_id": null,
     "slot": 3,
     "measure_volume": 35
   },
@@ -27,7 +27,7 @@
     "_id": {
       "$oid": "66320215f1745a1a5e20da74"
     },
-    "ingredient": null,
+    "ingredient_id": null,
     "slot": 4,
     "measure_volume": 35
   },
@@ -35,7 +35,7 @@
     "_id": {
       "$oid": "6632021cf1745a1a5e20da76"
     },
-    "ingredient": null,
+    "ingredient_id": null,
     "slot": 5,
     "measure_volume": 35
   },
@@ -43,7 +43,7 @@
     "_id": {
       "$oid": "66320222f1745a1a5e20da78"
     },
-    "ingredient": null,
+    "ingredient_id": null,
     "slot": 6,
     "measure_volume": 35
   },
@@ -51,7 +51,7 @@
     "_id": {
       "$oid": "66320228f1745a1a5e20da7a"
     },
-    "ingredient": null,
+    "ingredient_id": null,
     "slot": 7,
     "measure_volume": 35
   },
@@ -59,7 +59,7 @@
     "_id": {
       "$oid": "6632022ef1745a1a5e20da7c"
     },
-    "ingredient": null,
+    "ingredient_id": null,
     "slot": 8,
     "measure_volume": 35
   },
@@ -67,7 +67,7 @@
     "_id": {
       "$oid": "66320234f1745a1a5e20da7e"
     },
-    "ingredient": null,
+    "ingredient_id": null,
     "slot": 9,
     "measure_volume": 35
   },
@@ -75,7 +75,7 @@
     "_id": {
       "$oid": "6632023af1745a1a5e20da80"
     },
-    "ingredient": null,
+    "ingredient_id": null,
     "slot": 10,
     "measure_volume": 35
   },
@@ -83,7 +83,7 @@
     "_id": {
       "$oid": "66320240f1745a1a5e20da82"
     },
-    "ingredient": null,
+    "ingredient_id": null,
     "slot": 11,
     "measure_volume": 35
   },
@@ -91,7 +91,7 @@
     "_id": {
       "$oid": "66320249f1745a1a5e20da84"
     },
-    "ingredient": null,
+    "ingredient_id": null,
     "slot": 12,
     "measure_volume": 35
   }

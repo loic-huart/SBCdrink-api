@@ -1,6 +1,6 @@
 import { type ImageObject, type IFile } from './types'
 import ErrorService from '../errors/errors'
-import File, { serializeFile } from '../../models/File'
+import File, { deSerializeFile, serializeFile } from '../../models/File'
 import { Slug, type Error } from '../errors/types'
 import { createPayloadValidation } from './validators'
 import sharp from 'sharp'
@@ -52,18 +52,18 @@ class FileService extends ErrorService implements IFileService {
       }
     }
 
-    const newFile = new File()
-    const filename = newFile._id.toString()
+    const newFile = {} as IFile
+    const filename = newFile.id.toString()
 
     const outputPath: string = path.join(__dirname, `../../../public/uploads/${filename}.webp`)
     await this.convertAndSaveImage(imageObject, outputPath)
 
     newFile.name = filename
     newFile.path = `/uploads/${filename}.webp`
-    await newFile.save()
+    const createdFile = await File.create({ data: deSerializeFile(newFile) as unknown as IFile })
 
     return {
-      file: serializeFile(newFile)
+      file: serializeFile(createdFile) as unknown as IFile
     }
   }
 
@@ -76,7 +76,7 @@ class FileService extends ErrorService implements IFileService {
       }
     }
 
-    const findFile = await File.findById(id)
+    const findFile = await File.findUnique({ where: { id } })
     if (findFile == null) {
       return {
         file: {} as IFile,
@@ -84,21 +84,27 @@ class FileService extends ErrorService implements IFileService {
       }
     }
 
-    await findFile.deleteOne()
+    await File.delete({ where: { id: findFile.id } })
 
-    const newFile = new File()
-    const filename = newFile._id.toString()
+    const newFile = {} as IFile
+    const filename = newFile.id.toString()
 
     const outputPath: string = path.join(__dirname, `../../../public/uploads/${filename}.webp`)
 
     await this.convertAndSaveImage(imageObject, outputPath)
 
-    newFile.name = filename
-    newFile.path = `/uploads/${filename}.webp`
-    await newFile.save()
+    const updatedFile = await File.update({
+      where: {
+        id: newFile.id
+      },
+      data: {
+        name: filename,
+        path: `/uploads/${filename}.webp`
+      }
+    })
 
     return {
-      file: serializeFile(newFile)
+      file: serializeFile(updatedFile) as unknown as IFile
     }
   }
 }

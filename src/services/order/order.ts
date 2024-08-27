@@ -6,8 +6,9 @@ import { createPayloadValidation } from './validators'
 import Recipe, { serializeRecipe } from '../../models/Recipe'
 import { Ingredient, MachineConfiguration } from '../../models'
 import { serializeIngredient } from '../../models/Ingredient'
-import { type IModelOrder, type IModelIngredient, type IModelRecipe } from '../../models/types'
+import { type IModelOrder, type IModelIngredient, type IModelRecipe, IModelRecipeFull } from '../../models/types'
 import MachineService from '../machine/machine'
+import { mongoClient } from '../..'
 
 interface IOrderService extends ErrorService {
   find: () => Promise<{ orders: IOrder[] }>
@@ -31,7 +32,8 @@ class OrderService extends ErrorService implements IOrderService {
   }
 
   public watch (): void {
-    const watchOrder = Order.watch()
+    const collectionOrder = mongoClient.db().collection('order')
+    const watchOrder = collectionOrder.watch()
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     watchOrder.on('change', async (change): Promise<void> => {
       switch (change.operationType) {
@@ -43,14 +45,14 @@ class OrderService extends ErrorService implements IOrderService {
 
           if (order.status !== OrderStatus.CREATED) break
 
-          await Order.findByIdAndUpdate(order.id, { status: OrderStatus.IN_PROGRESS })
+          await Order.update({ where: { id: order.id }, data: { status: OrderStatus.IN_PROGRESS } })
           console.info('Watch order', order.id, 'status updated to', OrderStatus.IN_PROGRESS)
           const res = await machineService.makeCocktail({ steps: order.steps })
           if (res.error != null) {
-            await Order.findByIdAndUpdate(order.id, { status: OrderStatus.FAILED })
+            await Order.update({ where: { id: order.id }, data: { status: OrderStatus.FAILED } })
             console.info('Watch order', order.id, 'status updated to', OrderStatus.FAILED, 'error:', res.error)
           } else {
-            await Order.findByIdAndUpdate(order.id, { status: OrderStatus.DONE })
+            await Order.update({ where: { id: order.id }, data: { status: OrderStatus.DONE } })
             console.info('Watch order', order.id, 'status updated to', OrderStatus.DONE)
           }
           break
@@ -62,14 +64,14 @@ class OrderService extends ErrorService implements IOrderService {
   }
 
   public async find (): Promise<{ orders: IOrder[] }> {
-    const orders = await Order.find()
+    const orders = await Order.findMany()
     return {
       orders: serializeOrders(orders)
     }
   }
 
   public async create (order: IOrder): Promise<{ order: IOrder, error?: Error }> {
-    const orderInStatusCreated = await Order.findOne({ status: OrderStatus.CREATED })
+    const orderInStatusCreated = await Order.findFirst({ where: { status: OrderStatus.CREATED } })
     if (orderInStatusCreated != null) {
       return {
         order: {} as IOrder,
@@ -85,7 +87,18 @@ class OrderService extends ErrorService implements IOrderService {
       }
     }
 
-    const recipe = await Recipe.findById(order.recipe) as unknown as IModelRecipe
+    const recipe = await Recipe.findUnique({
+      where: { id: order.recipe.id },
+      include: {
+        picture: true,
+        steps: {
+          include: {
+            ingredient: true
+          }
+        }
+      }
+    })
+    // }) as unknown as IModelRecipeFull
     if (recipe == null) {
       return {
         order: {} as IOrder,
@@ -96,7 +109,7 @@ class OrderService extends ErrorService implements IOrderService {
     let ingredientError = null
     const steps = []
     for (const step of order.steps) {
-      const ingredient = await Ingredient.findById(step.ingredient) as unknown as IModelIngredient
+      const ingredient = await Ingredient.findFirst({ where: { id: step.ingredient.id } })
       if (ingredient == null) {
         ingredientError = {
           order: {} as IOrder,
@@ -105,7 +118,7 @@ class OrderService extends ErrorService implements IOrderService {
         break
       }
 
-      const machineConfiguration = await MachineConfiguration.findOne({ ingredient: step.ingredient })
+      const machineConfiguration = await MachineConfiguration.findFirst({ where: { ingredient_id: step.ingredient.id } })
       console.log('Machine configuration:', machineConfiguration)
       if (machineConfiguration == null) {
         ingredientError = {
@@ -126,12 +139,11 @@ class OrderService extends ErrorService implements IOrderService {
 
     const populatedNewOrder = {
       ...order,
-      recipe: serializeRecipe(recipe),
+      recipe: serializeRecipe(recipe, true, true),
       steps
     }
 
-    const newOrder = new Order(deSerializeOrder(populatedNewOrder))
-    await newOrder.save()
+    const newOrder = await Order.create({ data: deSerializeOrder(populatedNewOrder) })
 
     return {
       order: serializeOrder(newOrder)

@@ -5,7 +5,7 @@
     },
     "name": "Sex on the beach",
     "description": "Découvrez la recette du délicieux cocktail sex on the beach. À base de vodka, liqueur de pêches, jus d’ananas et jus de cranberry, ce cocktail est frais et idéal pour vos soirées d’été.",
-    "picture": {
+    "picture_id": {
       "$oid": "663be494e01fcfdce81b1ab4"
     },
     "alcohol_level": 27.27,
@@ -59,7 +59,7 @@
     },
     "name": "Piña Colada",
     "description": "Un mélange tropical de crème de noix de coco, de rhum blanc et d'ananas.",
-    "picture": {
+    "picture_id": {
       "$oid": "663be572e01fcfdce81b1ab8"
     },
     "alcohol_level": 27.27,
@@ -123,7 +123,7 @@
     },
     "name": "Gin tonic",
     "description": "Gin... et Tonic",
-    "picture": {
+    "picture_id": {
       "$oid": "663be53ee01fcfdce81b1ab6"
     },
     "alcohol_level": 33.33,
@@ -167,7 +167,7 @@
     },
     "name": "Amaretto sunrise",
     "description": "Ce cocktail est une variation du cocktail Tequila Sunrise où l’Amaretto remplace la tequila. Vous apprécierez particulièrement cette boisson à la couleur évocatrice d’un lever de soleil.",
-    "picture": {
+    "picture_id": {
       "$oid": "663be588e01fcfdce81b1aba"
     },
     "alcohol_level": 12.5,
@@ -221,7 +221,7 @@
     },
     "name": "Tequila sunrise",
     "description": "Le Tequila Sunrise sera encore meilleur dégusté au bord d'une piscine.",
-    "picture": {
+    "picture_id": {
       "$oid": "663be5a9e01fcfdce81b1abc"
     },
     "alcohol_level": 30,
@@ -275,7 +275,7 @@
     },
     "name": "Grandfather",
     "description": "Digestif aux douces saveurs d''amandes.",
-    "picture": {
+    "picture_id": {
       "$oid": "663be5c4e01fcfdce81b1abe"
     },
     "alcohol_level": 100,

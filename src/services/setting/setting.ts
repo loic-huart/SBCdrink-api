@@ -34,16 +34,19 @@ class SettingService extends ErrorService implements ISettingService {
       }
     }
 
-    const newSetting = new Setting(deSerializeSetting(setting))
-    await newSetting.save()
+    const newSetting = setting
+
+    const createdSetting = await Setting.create({
+      data: deSerializeSetting(newSetting)
+    })
 
     return {
-      setting: serializeSetting(newSetting)
+      setting: serializeSetting(createdSetting)
     }
   }
 
   public async findSettingOrCreate (): Promise<ISetting> {
-    const findSetting = await Setting.findOne()
+    const findSetting = await Setting.findFirst()
 
     if (findSetting == null) {
       const { setting: newSetting } = await this.create(this.defaultSetting)
@@ -71,7 +74,7 @@ class SettingService extends ErrorService implements ISettingService {
       }
     }
 
-    const findSetting = await Setting.findOne()
+    const findSetting = await Setting.findFirst()
     if (findSetting == null) {
       const findSetting = await this.findSettingOrCreate()
 
@@ -81,13 +84,19 @@ class SettingService extends ErrorService implements ISettingService {
     }
 
     const { dispenser_emptying_time, dispenser_filling_time } = deSerializeSetting(setting)
-    findSetting.dispenser_emptying_time = dispenser_emptying_time
-    findSetting.dispenser_filling_time = dispenser_filling_time
 
-    const newSetting = await findSetting.save()
+    const updatedSetting = await Setting.update({
+      where: {
+        id: findSetting.id
+      },
+      data: {
+        dispenser_emptying_time,
+        dispenser_filling_time
+      }
+    })
 
     return {
-      setting: serializeSetting(newSetting)
+      setting: serializeSetting(updatedSetting)
     }
   }
 }

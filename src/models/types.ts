@@ -1,9 +1,7 @@
-import { type OrderStatus } from '../services/order/types'
-import { type ObjectId } from 'mongodb'
+// ---------------------------------- Ingredient --------------------------------------------------
 
-// export interface IModelIngredient extends Document {
 export interface IModelIngredient {
-  _id: ObjectId
+  id: string
   name: string
   is_alcohol: boolean
   alcohol_degree: number
@@ -12,64 +10,109 @@ export interface IModelIngredient {
   viscosity: number
 }
 
-export interface IModelRecipe {
-  _id: ObjectId
-  name: string
-  description: string
-  picture: IModelFile | ObjectId | null
-  alcohol_level: number
-  alcohol_min_level: number
-  alcohol_max_level: number
-  is_available: boolean
-  default_glass_volume: number
-  steps: Array<{
-    _id: ObjectId
-    ingredient: IModelIngredient | ObjectId
-    proportion: number
-    order_index: number
-  }>
-  created_at: Date
-  updated_at: Date
-}
-
-export interface IModelMachineConfiguration {
-  _id: ObjectId
-  ingredient: IModelIngredient | ObjectId | null
-  slot: number
-  measure_volume: number | null
-}
-
-export interface IModelRecipeIngredient {
-  _id: ObjectId
-  ingredient: ObjectId
-  recipe: ObjectId
-  proportion: number
-  order_index: number
-}
-
-export interface IModelOrder {
-  _id: ObjectId
-  status: OrderStatus
-  progress: number
-  recipe: IModelRecipe
-  steps: Array<{
-    _id: ObjectId
-    status: OrderStatus
-    order_index: number
-    quantity: number
-    ingredient: IModelIngredient
-  }>
-  created_at: Date
-  updated_at: Date
-}
+// ------------------------------------- File -----------------------------------------------------
 
 export interface IModelFile {
-  _id: ObjectId
+  id: string
   name: string
   path: string
   created_at: Date
   updated_at: Date
 }
+
+// ------------------------------------ Recipe ----------------------------------------------------
+
+export interface IModelRecipeStep {
+  id: string
+  ingredient_id: string
+  order_index: number
+  proportion: number
+}
+
+export interface IModelRecipeStepWithIngredient extends IModelRecipeStep {
+  ingredient: IModelIngredient
+}
+
+export interface IModelRecipeBase {
+  id: string
+  name: string
+  description: string
+  alcohol_level: number
+  alcohol_min_level: number
+  alcohol_max_level: number
+  is_available: boolean
+  default_glass_volume: number
+  created_at: Date
+  updated_at: Date
+  picture_id: string | null
+}
+
+export interface IModelRecipe extends IModelRecipeBase {
+  steps: IModelRecipeStep[]
+}
+
+export interface IModelRecipeWithPicture extends IModelRecipe {
+  picture: IModelFile | null
+}
+
+export interface IModelRecipeWithIngredient extends Omit<IModelRecipe, 'steps'> {
+  steps: IModelRecipeStepWithIngredient[]
+}
+
+export interface IModelRecipeFull extends Omit<IModelRecipe, 'steps'> {
+  steps: IModelRecipeStepWithIngredient[]
+  picture: IModelFile | null
+}
+
+// ----------------------------- MachineConfiguration ---------------------------------------------
+
+export interface IModelMachineConfigurationBase {
+  id: string
+  slot: number
+  measure_volume: number | null
+  ingredient_id: string | null
+}
+
+export interface IModelMachineConfiguration extends IModelMachineConfigurationBase {
+}
+
+export interface IModelMachineConfigurationWithIngredient extends IModelMachineConfiguration {
+  ingredient: IModelIngredient | null
+}
+
+export interface IModelMachineConfigurationFull extends IModelMachineConfiguration {
+  ingredient: IModelIngredient | null
+}
+
+// ------------------------------------- Order ----------------------------------------------------
+
+export type IModelOrderStatus = 'CREATED' | 'IN_PROGRESS' | 'DONE' | 'CANCELED' | 'FAILED'
+
+export interface IModelOrderIngredient extends IModelIngredient {}
+
+export interface IModelOrderStep {
+  id: string
+  ingredient: IModelOrderIngredient
+  order_index: number
+  quantity: number
+  status: IModelOrderStatus
+}
+
+export interface IModelOrderRecipeStep extends IModelRecipeStep {}
+
+export interface IModelOrderRecipe extends IModelRecipeFull {}
+
+export interface IModelOrder {
+  id: string
+  status: IModelOrderStatus
+  progress: number
+  recipe: IModelOrderRecipe
+  steps: IModelOrderStep[]
+  created_at: Date
+  updated_at: Date
+}
+
+// ------------------------------------ Setting ---------------------------------------------------
 
 export interface IModelSetting {
   dispenser_emptying_time: number

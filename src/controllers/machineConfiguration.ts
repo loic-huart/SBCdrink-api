@@ -2,6 +2,7 @@ import { type FastifyReply, type FastifyRequest } from 'fastify'
 import MachineConfigurationService from '../services/machineConfiguration/machineConfiguration'
 import mapErrorTypeToHttpCode from '../utils/mapErrorTypeToHttpCode'
 import { type IMachineConfiguration } from '../services/machineConfiguration/types'
+import parseBooleanQuery from '../utils/parseBooleanQuery'
 
 interface IMachineConfigurationController {
   get: (req: FastifyRequest, res: FastifyReply) => Promise<void>
@@ -22,8 +23,10 @@ class MachineConfigurationController implements IMachineConfigurationController 
   public async get (req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
       const machineConfigurationService = MachineConfigurationService.getInstance()
-      const { withIngredients } = req.query as { withIngredients: boolean }
-      const { machineConfigurations } = await machineConfigurationService.find({ withIngredients })
+      const { withIngredients } = req.query as { withIngredients?: string }
+      const { machineConfigurations } = await machineConfigurationService.find({
+        withIngredients: parseBooleanQuery(withIngredients)
+      })
       await res.status(200).send(machineConfigurations)
     } catch (error: unknown) {
       await res.status(500).send(error)

@@ -1,10 +1,17 @@
 import { type IIngredient } from '../ingredient/types'
 
-export interface IMachineConfiguration {
+export interface IBaseMachineConfiguration {
   id: string
-  ingredient: IIngredient | string | null
   slot: number
   measureVolume: number | null
+  ingredientId: string | null
+}
+
+export interface IMachineConfiguration extends IBaseMachineConfiguration {
+}
+
+export interface IMachineConfigurationWithIngredient extends IMachineConfiguration {
+  ingredient: IIngredient | null
 }
 
 export interface IPayloadFindMachineConfigurations {

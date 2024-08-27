@@ -52,16 +52,16 @@ class MachineService extends ErrorService implements IMachineService {
   public async orderToMachineSteps (order: Partial<IOrder>): Promise<IMachineStep[]> {
     if (order.steps === null || order.steps === undefined) return []
 
-    const allMachineConfigurations = await MachineConfiguration.find()
+    const allMachineConfigurations = await MachineConfiguration.findMany()
 
-    const setting = await Setting.findOne()
+    const setting = await Setting.findFirst()
     const dispenserEmptyingTime = setting?.dispenser_emptying_time ?? 1
     const dispenserFillingTime = setting?.dispenser_filling_time ?? 1
 
     const machineSteps: IMachineStep[] = []
 
     order.steps.forEach((step) => {
-      const targetMachineConfiguration = allMachineConfigurations.find((machineConfiguration) => machineConfiguration?.ingredient?._id.toString() === step?.ingredient?.id)
+      const targetMachineConfiguration = allMachineConfigurations.find((machineConfiguration) => machineConfiguration?.ingredient_id === step?.ingredient?.id)
 
       let remainingQuantity = step.quantity
       const slot = targetMachineConfiguration?.slot

@@ -1,10 +1,11 @@
-import { type IPayloadFindByIdRecipe, type IPayloadFindRecipe, type IRecipe } from './types'
+import { IRecipeFull, type IPayloadFindByIdRecipe, type IPayloadFindRecipe, type IRecipe } from './types'
 import ErrorService from '../errors/errors'
-import Recipe, { deSerializeRecipe, serializeRecipe, serializeRecipes } from '../../models/Recipe'
+import Recipe, { deSerializeRecipe, RecipeStep, serializeRecipe, serializeRecipes } from '../../models/Recipe'
 import { Slug, type Error } from '../errors/types'
 import { createPayloadValidation, findByIdPayloadValidation, updatePayloadValidation } from './validators'
 import { Ingredient } from '../../models'
 import File from '../../models/File'
+import { IModelIngredient, IModelRecipeFull } from '../../models/types'
 
 interface IRecipeService extends ErrorService {
   find: ({ isAvailable, withIngredients, withPictures }: IPayloadFindRecipe) => Promise<{ recipes: IRecipe[] }>
@@ -27,9 +28,9 @@ class RecipeService extends ErrorService implements IRecipeService {
 
   private async checkIngredientsExist (steps: IRecipe['steps']): Promise<{ error: Error | null }> {
     const ingredientNotExists = await Promise.all(steps.map(async (step) => {
-      const ingredient = await Ingredient.findById(step.ingredient)
+      const ingredient = {} as IModelIngredient
       if (ingredient == null) {
-        return step.ingredient
+        return step.ingredientId
       }
       return null
     }))
@@ -48,13 +49,24 @@ class RecipeService extends ErrorService implements IRecipeService {
     withPictures = false,
     sort
   }: IPayloadFindRecipe): Promise<{ recipes: IRecipe[] }> {
-    const recipe = await Recipe.find({
-      ...(isAvailable != null ? { is_available: isAvailable } : {})
-    }).populate(withIngredients ? 'steps.ingredient' : '')
-      .populate(withPictures ? 'picture' : '')
-      .sort({ updated_at: sort === 'desc' ? -1 : 1 })
+    const recipes = await Recipe.findMany({
+      where: isAvailable != null ? { is_available: isAvailable } : {},
+      orderBy: {
+        updated_at: sort
+      },
+      include: {
+        picture: withPictures,
+        steps: {
+          include: {
+            ingredient: withIngredients
+          }
+        }
+      }
+    })
+
     return {
-      recipes: serializeRecipes(recipe, withIngredients, withPictures)
+      // @ts-ignore
+      recipes: serializeRecipes(recipes, withIngredients, withPictures)
     }
   }
 
@@ -66,9 +78,18 @@ class RecipeService extends ErrorService implements IRecipeService {
         error: this.NewIncorrectInputError(error.details[0].message, Slug.ErrIncorrectInput)
       }
     }
-    const recipe = await Recipe.findById(id)
-      .populate(withIngredients ? 'steps.ingredient' : '')
-      .populate(withPictures ? 'picture' : '')
+    const recipe = await Recipe.findUnique({
+      where: { id },
+      include: {
+        picture: withPictures,
+        steps: {
+          include: {
+            ingredient: withIngredients
+          }
+        }
+      }
+    })
+
     if (recipe == null) {
       return {
         recipe: {} as IRecipe,
@@ -77,6 +98,7 @@ class RecipeService extends ErrorService implements IRecipeService {
     }
 
     return {
+      // @ts-ignore
       recipe: serializeRecipe(recipe, withIngredients, withPictures)
     }
   }
@@ -98,11 +120,22 @@ class RecipeService extends ErrorService implements IRecipeService {
       }
     }
 
-    const newRecipe = new Recipe(deSerializeRecipe(recipe))
-    await newRecipe.save()
+    const deSerializedRecipe = deSerializeRecipe(recipe, false, false)
+
+    const newRecipe = await Recipe.create({
+      include: {
+        steps: true
+      },
+      data: {
+        ...deSerializedRecipe,
+        steps: {
+          create: deSerializedRecipe.steps
+        }
+      }
+    })
 
     return {
-      recipe: serializeRecipe(newRecipe)
+      recipe: serializeRecipe(newRecipe, false, false)
     }
   }
 
@@ -115,7 +148,7 @@ class RecipeService extends ErrorService implements IRecipeService {
       }
     }
 
-    const findRecipe = await Recipe.findById(id)
+    const findRecipe = await Recipe.findUnique({ where: { id } })
     if (findRecipe == null) {
       return {
         recipe: {} as IRecipe,
@@ -135,46 +168,77 @@ class RecipeService extends ErrorService implements IRecipeService {
       name,
       steps,
       description,
-      picture,
+      picture_id,
       alcohol_level,
       alcohol_min_level,
-      alcohol_max_level
-    } = deSerializeRecipe(recipe)
-    findRecipe.name = name
-    findRecipe.description = description
-    findRecipe.picture = picture
-    findRecipe.alcohol_level = alcohol_level
-    findRecipe.alcohol_min_level = alcohol_min_level
-    findRecipe.alcohol_max_level = alcohol_max_level
-    findRecipe.default_glass_volume = recipe.defaultGlassVolume
-    findRecipe.steps = steps.map(step => ({
-      _id: step._id,
-      ingredient: step.ingredient,
-      proportion: step.proportion,
-      order_index: step.order_index
-    }))
+      alcohol_max_level,
+      default_glass_volume
+    } = deSerializeRecipe(recipe, false, false)
 
-    const newRecipe = await findRecipe.save()
+    const newRecipe = await Recipe.update({
+      include: {
+        steps: true
+      },
+      where: {
+        id: findRecipe.id
+      },
+      data: {
+        name,
+        description,
+        picture_id: picture_id ?? undefined,
+        alcohol_level,
+        alcohol_min_level,
+        alcohol_max_level,
+        default_glass_volume,
+        steps: {
+          update: steps.map(step => ({
+            where: { id: step.id },
+            data: {
+              ingredient_id: step.ingredient_id,
+              proportion: step.proportion,
+              order_index: step.order_index
+            }
+          }))
+        }
+      }
+    })
 
     return {
-      recipe: serializeRecipe(newRecipe)
+      recipe: serializeRecipe(newRecipe, false, false)
     }
   }
 
   public async delete (id: string): Promise<{ error?: Error }> {
-    const findRecipe = await Recipe.findById(id)
+    const findRecipe = await Recipe.findUnique({
+      where: { id },
+      include: {
+        steps: true
+      }
+    })
     if (findRecipe == null) {
       return {
         error: this.NewNotFoundError('Recipe not found', Slug.ErrRecipeNotFound)
       }
     }
 
-    const findFile = await File.findById(findRecipe.picture)
-    if (findFile !== null) {
-      await findFile.deleteOne()
+    if (findRecipe.picture_id != null) {
+      const findFile = await File.findFirst({
+        where: {
+          id: findRecipe.picture_id
+        }
+      })
+      if (findFile !== null) {
+        await File.delete({ where: { id: findRecipe.picture_id } })
+      }
     }
 
-    await findRecipe.deleteOne()
+    await RecipeStep.deleteMany({
+      where: { recipe_id: id }
+    })
+
+    await Recipe.deleteMany({
+      where: { id: findRecipe.id }
+    })
 
     return {}
   }

@@ -8,11 +8,7 @@ type Config = Record<string, string>
 enum Environment {
   apiHost = 'API_HOST',
   apiPort = 'API_PORT',
-  dbHost = 'DB_HOST',
-  dbUser = 'DB_USER',
-  dbPass = 'DB_PASS',
-  dbPort = 'DB_PORT',
-  dbName = 'DB_NAME',
+  databaseUrl = 'DATABASE_URL',
   scriptHost = 'SCRIPT_HOST',
   scriptPort = 'SCRIPT_PORT'
 }
@@ -43,11 +39,7 @@ export const apiConfig = getEnvVariables([
 ])
 
 export const dbConfig = getEnvVariables([
-  'dbHost',
-  'dbUser',
-  'dbPass',
-  'dbPort',
-  'dbName'
+  'databaseUrl'
 ])
 
 export const scriptConfig = getEnvVariables([

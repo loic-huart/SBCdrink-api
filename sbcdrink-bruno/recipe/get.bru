@@ -5,14 +5,14 @@ meta {
 }
 
 get {
-  url: {{api}}recipes?isAvailable=true&withIngredients=true&sort=desc&withPictures=true
+  url: {{api}}recipes?withIngredients=true&sort=desc&withPictures=true&isAvailable=true
   body: none
   auth: none
 }
 
 query {
-  isAvailable: true
   withIngredients: true
   sort: desc
   withPictures: true
+  isAvailable: true
 }

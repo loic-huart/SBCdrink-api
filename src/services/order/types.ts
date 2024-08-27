@@ -1,5 +1,5 @@
 import { type IIngredient } from '../ingredient/types'
-import { type IRecipe } from '../recipe/types'
+import { type IRecipeFull } from '../recipe/types'
 
 export enum OrderStatus {
   CREATED = 'CREATED',
@@ -21,7 +21,7 @@ export interface IOrder {
   id: string
   status: OrderStatus
   progress: number
-  recipe: IRecipe
+  recipe: IRecipeFull
   steps: IOrderStep[]
   createdAt: Date
   updatedAt: Date

@@ -1,24 +1,46 @@
 import { type IFile } from '../file/types'
 import { type IIngredient } from '../ingredient/types'
 
-export interface IRecipe {
+export interface IRecipeStep {
+  id: string
+  ingredientId: string
+  proportion: number
+  orderIndex: number
+}
+
+export interface IRecipeStepWithIngredient extends IRecipeStep {
+  ingredient: IIngredient
+}
+
+export interface IBaseRecipe {
   id: string
   name: string
   description: string
-  picture: IFile | string | null
   alcoholLevel: number
   alcoholMinLevel: number
   alcoholMaxLevel: number
   isAvailable: boolean
   defaultGlassVolume: number
-  steps: Array<{
-    id: string
-    ingredient: IIngredient | string
-    proportion: number
-    orderIndex: number
-  }>
   createdAt: Date
   updatedAt: Date
+  pictureId: string | null
+}
+
+export interface IRecipe extends IBaseRecipe {
+  steps: IRecipeStep[]
+}
+
+export interface IRecipeWithPicture extends IRecipe {
+  picture: IFile | null
+}
+
+export interface IRecipeWithIngredient extends Omit<IRecipe, 'steps'> {
+  steps: IRecipeStepWithIngredient[]
+}
+
+export interface IRecipeFull extends Omit<IRecipe, 'steps'> {
+  picture: IFile | null
+  steps: IRecipeStepWithIngredient[]
 }
 
 export interface IPayloadFindRecipe {

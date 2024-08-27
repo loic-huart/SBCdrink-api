@@ -11,7 +11,7 @@ const createPayloadValidation = (body: IRecipe): Joi.ValidationResult => {
     alcoholMaxLevel: Joi.number().required(),
     defaultGlassVolume: Joi.number().required(),
     steps: Joi.array().items(Joi.object({
-      ingredient: Joi.string().required(),
+      ingredientId: Joi.string().required(),
       proportion: Joi.number().required(),
       orderIndex: Joi.number().required()
     })).required()
@@ -38,7 +38,7 @@ const updatePayloadValidation = (body: IRecipe): Joi.ValidationResult => {
     defaultGlassVolume: Joi.number(),
     steps: Joi.array().items(Joi.object({
       id: Joi.string().length(24),
-      ingredient: Joi.string().required(),
+      ingredientId: Joi.string().required(),
       proportion: Joi.number().required(),
       orderIndex: Joi.number().required()
     })),

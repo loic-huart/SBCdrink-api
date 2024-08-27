@@ -26,7 +26,11 @@ class IngredientService extends ErrorService implements IIngredientService {
   }
 
   public async find ({ sort }: IPayloadFindIngredients): Promise<{ ingredients: IIngredient[] }> {
-    const ingredients = await Ingredient.find().sort({ updated_at: sort === 'desc' ? -1 : 1 })
+    const ingredients = await Ingredient.findMany({
+      orderBy: {
+        updated_at: sort
+      }
+    })
     return {
       ingredients: serializeIngredients(ingredients)
     }
@@ -40,7 +44,9 @@ class IngredientService extends ErrorService implements IIngredientService {
         error: this.NewIncorrectInputError(error.details[0].message, Slug.ErrIncorrectInput)
       }
     }
-    const ingredient = await Ingredient.findById(id)
+    const ingredient = await Ingredient.findUnique({
+      where: { id }
+    })
     if (ingredient == null) {
       return {
         ingredient: {} as IIngredient,
@@ -61,9 +67,7 @@ class IngredientService extends ErrorService implements IIngredientService {
         error: this.NewIncorrectInputError(error.details[0].message, Slug.ErrIncorrectInput)
       }
     }
-
-    const newIngredient = new Ingredient(deSerializeIngredient(ingredient))
-    await newIngredient.save()
+    const newIngredient = await Ingredient.create({ data: deSerializeIngredient(ingredient) })
 
     return {
       ingredient: serializeIngredient(newIngredient)
@@ -79,7 +83,7 @@ class IngredientService extends ErrorService implements IIngredientService {
       }
     }
 
-    const findIngredient = await Ingredient.findById(id)
+    const findIngredient = await Ingredient.findUnique({ where: { id } })
     if (findIngredient == null) {
       return {
         ingredient: {} as IIngredient,
@@ -88,12 +92,18 @@ class IngredientService extends ErrorService implements IIngredientService {
     }
 
     const { alcohol_degree, is_alcohol, name, viscosity } = deSerializeIngredient(ingredient)
-    findIngredient.name = name
-    findIngredient.is_alcohol = is_alcohol
-    findIngredient.alcohol_degree = alcohol_degree
-    findIngredient.viscosity = viscosity
 
-    const newIngredient = await findIngredient.save()
+    const newIngredient = await Ingredient.update({
+      where: {
+        id: findIngredient.id
+      },
+      data: {
+        name,
+        is_alcohol,
+        alcohol_degree,
+        viscosity
+      }
+    })
 
     return {
       ingredient: serializeIngredient(newIngredient)
@@ -101,28 +111,41 @@ class IngredientService extends ErrorService implements IIngredientService {
   }
 
   public async delete (id: string): Promise<{ error?: Error }> {
-    const findIngredient = await Ingredient.findById(id)
+    const findIngredient = await Ingredient.findUnique({ where: { id } })
     if (findIngredient == null) {
       return {
         error: this.NewNotFoundError('Ingredient not found', Slug.ErrIngredientNotFound)
       }
     }
 
-    const recipeUseIngredient = await Recipe.find({ 'steps.ingredient': findIngredient._id })
+    const recipeUseIngredient = await Recipe.findMany({
+      where: {
+        steps: {
+          some: {
+            ingredient_id: findIngredient.id
+          }
+        }
+      }
+    })
     if (recipeUseIngredient.length > 0) {
       return {
         error: this.NewForbiddenError('Ingredient is used in a recipe', Slug.ErrIngredientUsed)
       }
     }
 
-    const machineConfigurationUseIngredient = await MachineConfiguration.find({ 'ingredients.ingredient': findIngredient._id })
+    const machineConfigurationUseIngredient = await MachineConfiguration.findMany({
+      where: {
+        ingredient_id: findIngredient.id
+      }
+    })
+
     if (machineConfigurationUseIngredient.length > 0) {
       return {
         error: this.NewForbiddenError('Ingredient is used in a machineConfiguration', Slug.ErrIngredientUsed)
       }
     }
 
-    await findIngredient.deleteOne()
+    await Ingredient.delete({ where: { id: findIngredient.id } })
 
     return {}
   }

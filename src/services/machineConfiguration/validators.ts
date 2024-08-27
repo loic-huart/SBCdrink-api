@@ -4,7 +4,7 @@ import { type IMachineConfiguration } from './types'
 const updatePayloadValidation = (body: IMachineConfiguration): Joi.ValidationResult => {
   const schema = Joi.object({
     id: Joi.string().length(24).required(),
-    ingredient: Joi.string().length(24).allow(null).required(),
+    ingredientId: Joi.string().length(24).allow(null).required(),
     slot: Joi.number().required(),
     measureVolume: Joi.number().allow(null).required()
   })

@@ -1,8 +1,6 @@
-import mongoose from 'mongoose'
 import { type ISetting } from '../services/setting/types'
 import { type IModelSetting } from './types'
-
-const Schema = mongoose.Schema
+import { PrismaClient } from '@prisma/client'
 
 const serializeSetting = (setting: IModelSetting): ISetting => ({
   dispenserEmptyingTime: setting.dispenser_emptying_time,
@@ -22,18 +20,7 @@ const deSerializeSettings = (settings: ISetting[]): IModelSetting[] => {
   return settings.map(setting => deSerializeSetting(setting))
 }
 
-const settingSchema = new Schema<IModelSetting>({
-  dispenser_emptying_time: {
-    type: Number,
-    required: true
-  },
-  dispenser_filling_time: {
-    type: Number,
-    required: true
-  }
-})
-
-const Setting = mongoose.model('Setting', settingSchema)
+const Setting = new PrismaClient().setting
 
 export default Setting
 export {

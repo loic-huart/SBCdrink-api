@@ -1,20 +1,23 @@
 import Fastify, { type FastifyInstance } from 'fastify'
 import { apiConfig, checkEnvVariables } from './configs/configs'
-import dbConnect from './lib/mongoose'
+import dbConnect from './lib/mongodb'
 import routes from './routes'
 import cors from '@fastify/cors'
 import fastifyStatic from '@fastify/static'
 import path from 'path'
 import fastifyMultipart from '@fastify/multipart'
+import { type MongoClient } from 'mongodb'
 
 const { apiPort, apiHost } = apiConfig
+
+let mongoClient: MongoClient = {} as MongoClient
 
 async function run (): Promise<any> {
   // Check environment variables
   await checkEnvVariables()
 
   // Connect to database
-  await dbConnect()
+  mongoClient = await dbConnect()
 
   const app: FastifyInstance = Fastify({
     logger: true
@@ -56,3 +59,7 @@ async function run (): Promise<any> {
 }
 
 void run()
+
+export {
+  mongoClient
+}

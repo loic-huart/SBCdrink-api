@@ -1,74 +1,85 @@
-import mongoose from 'mongoose'
-import { ObjectId } from 'mongodb'
-import { type IMachineConfiguration } from '../services/machineConfiguration/types'
-import { type IModelIngredient, type IModelMachineConfiguration } from './types'
+import { type IMachineConfigurationWithIngredient, type IMachineConfiguration, type IBaseMachineConfiguration } from '../services/machineConfiguration/types'
+import { type IModelMachineConfigurationWithIngredient, type IModelMachineConfiguration, type IModelMachineConfigurationBase } from './types'
 import { deSerializeIngredient, serializeIngredient } from './Ingredient'
-import { type IIngredient } from '../services/ingredient/types'
+import { PrismaClient } from '@prisma/client'
 
-const Schema = mongoose.Schema
-
-const serializeMachineConfiguration = (machineConfiguration: IModelMachineConfiguration, withIngredients = false): IMachineConfiguration => {
-  let ingredient = null
-
-  if (machineConfiguration.ingredient !== null) {
-    if (withIngredients) {
-      ingredient = serializeIngredient(machineConfiguration.ingredient as IModelIngredient)
-    } else {
-      ingredient = (machineConfiguration.ingredient as ObjectId).toString()
-    }
+function serializeMachineConfiguration (machineConfiguration: IModelMachineConfiguration, withIngredients: false): IMachineConfiguration
+function serializeMachineConfiguration (machineConfiguration: IModelMachineConfigurationWithIngredient, withIngredients: true): IMachineConfigurationWithIngredient
+function serializeMachineConfiguration (
+  machineConfiguration: IModelMachineConfiguration | IModelMachineConfigurationWithIngredient,
+  withIngredients: boolean = false
+): IMachineConfiguration | IMachineConfigurationWithIngredient {
+  const baseMachineConfiguration: IBaseMachineConfiguration = {
+    id: machineConfiguration.id,
+    measureVolume: machineConfiguration.measure_volume,
+    slot: machineConfiguration.slot,
+    ingredientId: machineConfiguration.ingredient_id
   }
 
-  return ({
-    id: machineConfiguration._id.toString(),
-    ingredient,
-    slot: machineConfiguration.slot,
-    measureVolume: machineConfiguration.measure_volume
-  })
+  const ingredient = (machineConfiguration as IModelMachineConfigurationWithIngredient).ingredient
+
+  if (withIngredients) {
+    return {
+      ...baseMachineConfiguration,
+      ingredient: ingredient != null ? serializeIngredient(ingredient) : null
+    } as IMachineConfigurationWithIngredient
+  } else {
+    return {
+      ...baseMachineConfiguration
+    }
+  }
 }
 
-const serializeMachineConfigurations = (machineConfigurations: IModelMachineConfiguration[], withIngredients = false): IMachineConfiguration[] => {
+function serializeMachineConfigurations (machineConfigurations: IModelMachineConfiguration[], withIngredients: false): IMachineConfiguration[]
+function serializeMachineConfigurations (machineConfigurations: IModelMachineConfigurationWithIngredient[], withIngredients: true): IMachineConfigurationWithIngredient[]
+function serializeMachineConfigurations (
+  machineConfigurations: IModelMachineConfiguration[] | IModelMachineConfigurationWithIngredient[],
+  withIngredients: boolean = false
+): IMachineConfiguration[] | IMachineConfigurationWithIngredient[] {
+  // @ts-ignore
   return machineConfigurations.map(machineConfiguration => serializeMachineConfiguration(machineConfiguration, withIngredients))
 }
 
-const deSerializeMachineConfiguration = (machineConfiguration: IMachineConfiguration, withIngredients = false): IModelMachineConfiguration => {
-  let ingredient = null
-
-  if (machineConfiguration.ingredient !== null) {
-    if (withIngredients) {
-      ingredient = deSerializeIngredient(machineConfiguration.ingredient as IIngredient)
-    } else {
-      ingredient = new ObjectId(machineConfiguration.ingredient as string)
-    }
+function deSerializeMachineConfiguration (machineConfiguration: IMachineConfiguration, withIngredients: false): IModelMachineConfiguration
+function deSerializeMachineConfiguration (machineConfiguration: IMachineConfigurationWithIngredient, withIngredients: true): IModelMachineConfigurationWithIngredient
+function deSerializeMachineConfiguration (
+  machineConfiguration: IMachineConfiguration | IMachineConfigurationWithIngredient,
+  withIngredients: boolean = false
+): IModelMachineConfiguration | IModelMachineConfigurationWithIngredient {
+  const baseMachineConfiguration: IModelMachineConfigurationBase = {
+    id: machineConfiguration.id,
+    measure_volume: machineConfiguration.measureVolume,
+    slot: machineConfiguration.slot,
+    ingredient_id: machineConfiguration.ingredientId
   }
 
-  return ({
-    _id: new ObjectId(machineConfiguration.id),
-    ingredient,
-    slot: machineConfiguration.slot,
-    measure_volume: machineConfiguration.measureVolume
-  })
+  const ingredient = (machineConfiguration as IMachineConfigurationWithIngredient).ingredient
+
+  if (withIngredients) {
+    return {
+      ...baseMachineConfiguration,
+      ingredient: ingredient != null
+        ? deSerializeIngredient(ingredient)
+        : null
+    }
+  } else {
+    return {
+      ...baseMachineConfiguration
+    }
+  }
 }
 
-const deSerializeMachineConfigurations = (machineConfigurations: IMachineConfiguration[], withIngredients = false): IModelMachineConfiguration[] => {
+function deSerializeMachineConfigurations (machineConfigurations: IMachineConfiguration[], withIngredients: false): IModelMachineConfiguration[]
+function deSerializeMachineConfigurations (machineConfigurations: IMachineConfigurationWithIngredient[], withIngredients: true): IModelMachineConfigurationWithIngredient[]
+function deSerializeMachineConfigurations (
+  machineConfigurations: IMachineConfiguration[] | IMachineConfigurationWithIngredient[],
+  withIngredients: boolean = false
+): IModelMachineConfiguration[] | IModelMachineConfigurationWithIngredient[] {
+  // @ts-ignore
   return machineConfigurations.map(machineConfiguration => deSerializeMachineConfiguration(machineConfiguration, withIngredients))
 }
 
-const machineConfigurationSchema = new Schema<IModelMachineConfiguration>({
-  ingredient: {
-    type: Schema.Types.ObjectId,
-    ref: 'Ingredient'
-  },
-  slot: {
-    type: Number,
-    required: true
-  },
-  measure_volume: {
-    type: Number,
-    nullable: true
-  }
-})
-
-const MachineConfiguration = mongoose.model('MachineConfiguration', machineConfigurationSchema)
+const MachineConfiguration = new PrismaClient().machineconfiguration
 
 export default MachineConfiguration
 export {

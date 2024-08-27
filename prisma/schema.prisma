@@ -1,0 +1,152 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model File {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  created_at DateTime @default(now())
+  name       String
+  path       String
+  updated_at DateTime @updatedAt
+  recipe     Recipe[]
+}
+
+model Ingredient {
+  id                   String                @id @default(auto()) @map("_id") @db.ObjectId
+  alcohol_degree       Float
+  created_at           DateTime              @default(now())
+  is_alcohol           Boolean
+  name                 String
+  updated_at           DateTime              @updatedAt
+  viscosity            Int
+  recipeStep           RecipeStep[]
+  Machineconfiguration Machineconfiguration?
+}
+
+model Machineconfiguration {
+  id             String      @id @default(auto()) @map("_id") @db.ObjectId
+  ingredient     Ingredient? @relation(fields: [ingredient_id], references: [id])
+  ingredient_id  String?     @unique @db.ObjectId
+  measure_volume Int?
+  slot           Int
+}
+
+model Setting {
+  id                      String @id @default(auto()) @map("_id") @db.ObjectId
+  dispenser_emptying_time Int
+  dispenser_filling_time  Int
+}
+
+// ------------------------------------------ Order -----------------------------------------------
+
+type OrderRecipeStepIngredient {
+  id             String
+  alcohol_degree Float
+  created_at     DateTime
+  is_alcohol     Boolean
+  name           String
+  updated_at     DateTime
+  viscosity      Int
+}
+
+type OrderRecipeStep {
+  id            String                    @map("_id") @db.ObjectId
+  ingredient_id String
+  ingredient    OrderRecipeStepIngredient
+  order_index   Int
+  proportion    Float
+}
+
+type OrderRecipePicture {
+  id         String
+  created_at DateTime
+  name       String
+  path       String
+  updated_at DateTime
+}
+
+type OrderRecipe {
+  id                   String              @map("_id") @db.ObjectId
+  alcohol_level        Float
+  alcohol_max_level    Int
+  alcohol_min_level    Int
+  created_at           DateTime            @default(now())
+  default_glass_volume Int
+  description          String
+  is_available         Boolean
+  name                 String
+  picture_id           String?
+  picture              OrderRecipePicture?
+  steps                OrderRecipeStep[]
+  updated_at           DateTime
+}
+
+enum OrderStatus {
+  CREATED
+  IN_PROGRESS
+  DONE
+  CANCELED
+  FAILED
+}
+
+type OrderStepIngredient {
+  id             String   @map("_id") @db.ObjectId
+  alcohol_degree Float
+  created_at     DateTime @default(now())
+  is_alcohol     Boolean
+  name           String
+  updated_at     DateTime
+  viscosity      Int
+}
+
+type OrderStep {
+  id          String              @map("_id") @db.ObjectId
+  ingredient  OrderStepIngredient
+  order_index Int
+  quantity    Float
+  status      OrderStatus
+}
+
+model Order {
+  id         String      @id @default(auto()) @map("_id") @db.ObjectId
+  created_at DateTime    @default(now())
+  progress   Int
+  recipe     OrderRecipe
+  status     OrderStatus
+  steps      OrderStep[]
+  updated_at DateTime    @updatedAt
+}
+
+// ------------------------------------------ Recipe ----------------------------------------------
+
+model RecipeStep {
+  id            String     @id @default(auto()) @map("_id") @db.ObjectId
+  order_index   Int
+  proportion    Float
+  ingredient    Ingredient @relation(fields: [ingredient_id], references: [id])
+  ingredient_id String     @db.ObjectId
+
+  recipe    Recipe @relation(fields: [recipe_id], references: [id])
+  recipe_id String @db.ObjectId
+}
+
+model Recipe {
+  id                   String       @id @default(auto()) @map("_id") @db.ObjectId
+  alcohol_level        Float
+  alcohol_max_level    Int
+  alcohol_min_level    Int
+  created_at           DateTime     @default(now())
+  default_glass_volume Int
+  description          String
+  is_available         Boolean      @default(false)
+  name                 String
+  picture              File?        @relation(fields: [picture_id], references: [id])
+  picture_id           String?      @db.ObjectId
+  steps                RecipeStep[]
+  updated_at           DateTime     @updatedAt
+}

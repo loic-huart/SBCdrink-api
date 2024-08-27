@@ -1,20 +1,17 @@
-import mongoose from 'mongoose'
-import { ObjectId } from 'mongodb'
-import { type IOrderStep, type IOrder, OrderStatus } from '../services/order/types'
-import { type IModelOrder } from './types'
-import Recipe, { deSerializeRecipe, serializeRecipe } from './Recipe'
-import Ingredient, { deSerializeIngredient, serializeIngredient } from './Ingredient'
-
-const Schema = mongoose.Schema
+import { type IOrderStep, type IOrder, type OrderStatus } from '../services/order/types'
+import { type IModelOrderStatus, type IModelOrder } from './types'
+import { deSerializeRecipe, serializeRecipe } from './Recipe'
+import { deSerializeIngredient, serializeIngredient } from './Ingredient'
+import { PrismaClient } from '@prisma/client'
 
 const serializeOrder = (order: IModelOrder): IOrder => ({
-  id: order._id.toString(),
-  status: order.status,
+  id: order.id,
+  status: order.status as OrderStatus,
   progress: order.progress,
-  recipe: serializeRecipe(order.recipe),
+  recipe: serializeRecipe(order.recipe, true, true),
   steps: order.steps.map(step => ({
-    id: step._id.toString(),
-    status: step.status,
+    id: step.id,
+    status: step.status as OrderStatus,
     orderIndex: step.order_index,
     quantity: step.quantity,
     ingredient: serializeIngredient(step.ingredient)
@@ -28,13 +25,13 @@ const serializeOrders = (orders: IModelOrder[]): IOrder[] => {
 }
 
 const deSerializeOrder = (order: IOrder): IModelOrder => ({
-  _id: new ObjectId(order.id),
-  status: order.status,
+  id: order.id,
+  status: order.status as IModelOrderStatus,
   progress: order.progress,
-  recipe: deSerializeRecipe(order.recipe),
+  recipe: deSerializeRecipe(order.recipe, true, true),
   steps: order.steps.map((step: IOrderStep) => ({
-    _id: new ObjectId(step.id),
-    status: step.status,
+    id: step.id,
+    status: step.status as IModelOrderStatus,
     order_index: step.orderIndex,
     quantity: step.quantity,
     ingredient: deSerializeIngredient(step.ingredient)
@@ -47,47 +44,7 @@ const deSerializeOrders = (orders: IOrder[]): IModelOrder[] => {
   return orders.map(order => deSerializeOrder(order))
 }
 
-const orderSchema = new Schema<IModelOrder>({
-  status: {
-    type: String,
-    enum: OrderStatus,
-    required: true,
-    default: OrderStatus.CREATED
-  },
-  progress: {
-    type: Number,
-    required: true,
-    default: 0
-  },
-  recipe: Recipe.schema,
-  steps: [
-    {
-      status: {
-        type: String,
-        enum: OrderStatus,
-        required: true,
-        default: OrderStatus.CREATED
-      },
-      order_index: {
-        type: Number,
-        required: true
-      },
-      quantity: {
-        type: Number,
-        required: true
-      },
-      ingredient: Ingredient.schema
-    }
-  ]
-},
-{
-  timestamps: {
-    createdAt: 'created_at',
-    updatedAt: 'updated_at'
-  }
-})
-
-const Order = mongoose.model('Order', orderSchema)
+const Order = new PrismaClient().order
 
 export default Order
 export {

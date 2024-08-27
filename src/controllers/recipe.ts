@@ -2,6 +2,7 @@ import { type FastifyReply, type FastifyRequest } from 'fastify'
 import RecipeService from '../services/recipe/recipe'
 import mapErrorTypeToHttpCode from '../utils/mapErrorTypeToHttpCode'
 import { type IRecipe } from '../services/recipe/types'
+import parseBooleanQuery from '../utils/parseBooleanQuery'
 
 interface IRecipeController {
   get: (req: FastifyRequest, res: FastifyReply) => Promise<void>
@@ -26,11 +27,11 @@ class RecipeController implements IRecipeController {
         withIngredients,
         withPictures,
         sort
-      } = req.query as { isAvailable: boolean, withIngredients: boolean, sort: 'desc' | 'asc', withPictures: boolean }
+      } = req.query as { isAvailable: string, withIngredients: string, sort: 'desc' | 'asc', withPictures: string }
       const { recipes } = await recipeService.find({
-        isAvailable,
-        withIngredients,
-        withPictures,
+        isAvailable: parseBooleanQuery(isAvailable),
+        withIngredients: parseBooleanQuery(withIngredients),
+        withPictures: parseBooleanQuery(withPictures),
         sort
       })
       await res.status(200).send(recipes)
@@ -43,11 +44,15 @@ class RecipeController implements IRecipeController {
     try {
       const recipeService = RecipeService.getInstance()
       const { id } = req.params as { id: string }
-      const { withIngredients, withPictures } = req.query as { withIngredients: boolean, withPictures: boolean }
+      const { withIngredients, withPictures } = req.query as { withIngredients: string, withPictures: string }
       const {
         recipe,
         error
-      } = await recipeService.findById({ id, withIngredients, withPictures })
+      } = await recipeService.findById({
+        id,
+        withIngredients: parseBooleanQuery(withIngredients),
+        withPictures: parseBooleanQuery(withPictures)
+      })
       if (error != null) {
         const httpCode = mapErrorTypeToHttpCode(error.errorType)
         await res.status(httpCode).send(error)
