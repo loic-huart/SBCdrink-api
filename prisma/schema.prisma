@@ -55,7 +55,7 @@ type OrderRecipeStepIngredient {
 }
 
 type OrderRecipeStep {
-  id            String                    @map("_id") @db.ObjectId
+  id            String 
   ingredient_id String
   ingredient    OrderRecipeStepIngredient
   order_index   Int
@@ -71,7 +71,7 @@ type OrderRecipePicture {
 }
 
 type OrderRecipe {
-  id                   String              @map("_id") @db.ObjectId
+  id                   String              
   alcohol_level        Float
   alcohol_max_level    Int
   alcohol_min_level    Int
@@ -104,18 +104,21 @@ type OrderStepIngredient {
   viscosity      Int
 }
 
-type OrderStep {
-  id          String              @map("_id") @db.ObjectId
+model OrderStep {
+  id          String              @id @default(auto()) @map("_id") @db.ObjectId
   ingredient  OrderStepIngredient
   order_index Int
   quantity    Float
   status      OrderStatus
+
+  order       Order               @relation(fields: [order_id], references: [id])
+  order_id    String              @db.ObjectId
 }
 
 model Order {
   id         String      @id @default(auto()) @map("_id") @db.ObjectId
   created_at DateTime    @default(now())
-  progress   Int
+  progress   Int         @default(0)
   recipe     OrderRecipe
   status     OrderStatus
   steps      OrderStep[]
