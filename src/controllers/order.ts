@@ -1,7 +1,7 @@
 import { type FastifyReply, type FastifyRequest } from 'fastify'
 import OrderService from '../services/order/order'
 import mapErrorTypeToHttpCode from '../utils/mapErrorTypeToHttpCode'
-import { type IOrder } from '../services/order/types'
+import { type IPayloadCreateOrder } from '../services/order/types'
 
 interface IOrderController {
   get: (req: FastifyRequest, res: FastifyReply) => Promise<void>
@@ -34,7 +34,7 @@ class OrderController implements IOrderController {
       const {
         order,
         error
-      } = await orderService.create(req.body as IOrder)
+      } = await orderService.create(req.body as IPayloadCreateOrder)
       if (error != null) {
         const httpCode = mapErrorTypeToHttpCode(error.errorType)
         await res.status(httpCode).send(error)

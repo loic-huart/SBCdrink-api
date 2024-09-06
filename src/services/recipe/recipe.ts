@@ -49,6 +49,9 @@ class RecipeService extends ErrorService implements IRecipeService {
     withPictures = false,
     sort
   }: IPayloadFindRecipe): Promise<{ recipes: IRecipe[] }> {
+
+    console.log('ICI2', withIngredients, withPictures)
+
     const recipes = await Recipe.findMany({
       where: isAvailable != null ? { is_available: isAvailable } : {},
       orderBy: {
@@ -63,6 +66,8 @@ class RecipeService extends ErrorService implements IRecipeService {
         }
       }
     })
+
+    console.log('ICI', recipes)
 
     return {
       // @ts-ignore

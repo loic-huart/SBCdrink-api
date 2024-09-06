@@ -30,3 +30,14 @@ export interface IOrder {
 export interface IOrderMakeCocktail {
   steps: IOrderStep[]
 }
+
+interface IPayloadCreateOrderStep {
+  ingredient: string
+  orderIndex: number
+  quantity: number
+}
+
+export interface IPayloadCreateOrder {
+  recipe: string
+  steps: IPayloadCreateOrderStep[]
+}

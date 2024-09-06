@@ -3,96 +3,100 @@
     "_id": {
       "$oid": "663201f0f1745a1a5e20da6e"
     },
-    "ingredient_id": null,
-    "slot": 1,
-    "measure_volume": 35
+    "ingredient_id": {
+      "$oid": "660f1a3ff880d9c7b199ef4b"
+    },
+    "measure_volume": 35,
+    "slot": 1
   },
   {
     "_id": {
       "$oid": "66320208f1745a1a5e20da70"
     },
-    "ingredient_id": null,
-    "slot": 2,
-    "measure_volume": 35
-  },
-  {
-    "_id": {
-      "$oid": "6632020ff1745a1a5e20da72"
+    "ingredient_id": {
+      "$oid": "660f1a4bf880d9c7b199ef4e"
     },
-    "ingredient_id": null,
-    "slot": 3,
-    "measure_volume": 35
-  },
-  {
-    "_id": {
-      "$oid": "66320215f1745a1a5e20da74"
-    },
-    "ingredient_id": null,
-    "slot": 4,
-    "measure_volume": 35
-  },
-  {
-    "_id": {
-      "$oid": "6632021cf1745a1a5e20da76"
-    },
-    "ingredient_id": null,
-    "slot": 5,
-    "measure_volume": 35
-  },
-  {
-    "_id": {
-      "$oid": "66320222f1745a1a5e20da78"
-    },
-    "ingredient_id": null,
-    "slot": 6,
-    "measure_volume": 35
-  },
-  {
-    "_id": {
-      "$oid": "66320228f1745a1a5e20da7a"
-    },
-    "ingredient_id": null,
-    "slot": 7,
-    "measure_volume": 35
-  },
-  {
-    "_id": {
-      "$oid": "6632022ef1745a1a5e20da7c"
-    },
-    "ingredient_id": null,
-    "slot": 8,
-    "measure_volume": 35
-  },
-  {
-    "_id": {
-      "$oid": "66320234f1745a1a5e20da7e"
-    },
-    "ingredient_id": null,
-    "slot": 9,
-    "measure_volume": 35
-  },
-  {
-    "_id": {
-      "$oid": "6632023af1745a1a5e20da80"
-    },
-    "ingredient_id": null,
-    "slot": 10,
-    "measure_volume": 35
-  },
-  {
-    "_id": {
-      "$oid": "66320240f1745a1a5e20da82"
-    },
-    "ingredient_id": null,
-    "slot": 11,
-    "measure_volume": 35
+    "measure_volume": 35,
+    "slot": 2
   },
   {
     "_id": {
       "$oid": "66320249f1745a1a5e20da84"
     },
     "ingredient_id": null,
-    "slot": 12,
-    "measure_volume": 35
+    "measure_volume": 35,
+    "slot": 12
+  },
+  {
+    "_id": {
+      "$oid": "6632020ff1745a1a5e20da72"
+    },
+    "ingredient_id": null,
+    "measure_volume": 35,
+    "slot": 3
+  },
+  {
+    "_id": {
+      "$oid": "66320215f1745a1a5e20da74"
+    },
+    "ingredient_id": null,
+    "measure_volume": 35,
+    "slot": 4
+  },
+  {
+    "_id": {
+      "$oid": "66320222f1745a1a5e20da78"
+    },
+    "ingredient_id": null,
+    "measure_volume": 35,
+    "slot": 6
+  },
+  {
+    "_id": {
+      "$oid": "66320234f1745a1a5e20da7e"
+    },
+    "ingredient_id": null,
+    "measure_volume": 35,
+    "slot": 9
+  },
+  {
+    "_id": {
+      "$oid": "6632021cf1745a1a5e20da76"
+    },
+    "ingredient_id": null,
+    "measure_volume": 35,
+    "slot": 5
+  },
+  {
+    "_id": {
+      "$oid": "66320228f1745a1a5e20da7a"
+    },
+    "ingredient_id": null,
+    "measure_volume": 35,
+    "slot": 7
+  },
+  {
+    "_id": {
+      "$oid": "6632022ef1745a1a5e20da7c"
+    },
+    "ingredient_id": null,
+    "measure_volume": 35,
+    "slot": 8
+  },
+  {
+    "_id": {
+      "$oid": "6632023af1745a1a5e20da80"
+    },
+    "ingredient_id": null,
+    "measure_volume": 35,
+    "slot": 10
+  },
+  {
+    "_id": {
+      "$oid": "66320240f1745a1a5e20da82"
+    },
+    "ingredient_id": null,
+    "measure_volume": 35,
+    "slot": 11
   }
 ]

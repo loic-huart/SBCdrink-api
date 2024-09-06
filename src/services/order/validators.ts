@@ -1,7 +1,7 @@
 import Joi from 'joi'
-import { type IOrder } from './types'
+import { type IPayloadCreateOrder } from './types'
 
-const createPayloadValidation = (body: IOrder): Joi.ValidationResult => {
+const createPayloadValidation = (body: IPayloadCreateOrder): Joi.ValidationResult => {
   const schema = Joi.object({
     recipe: Joi.string().required(),
     steps: Joi.array().items(Joi.object({

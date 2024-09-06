@@ -1,0 +1,54 @@
+[
+  {
+    "_id": {
+      "$oid": "66db62b9c7a2fcb56268fda3"
+    },
+    "ingredient": {
+      "_id": {
+        "$oid": "660f1a3ff880d9c7b199ef4b"
+      },
+      "alcohol_degree": 37.5,
+      "created_at": {
+        "$date": "2024-04-02T21:52:12.198Z"
+      },
+      "is_alcohol": true,
+      "name": "Gin",
+      "updated_at": {
+        "$date": "2024-04-02T21:52:12.198Z"
+      },
+      "viscosity": 1
+    },
+    "order_id": {
+      "$oid": "66db62b9c7a2fcb56268fda2"
+    },
+    "order_index": 2,
+    "quantity": 11,
+    "status": "CREATED"
+  },
+  {
+    "_id": {
+      "$oid": "66db62b9c7a2fcb56268fda4"
+    },
+    "ingredient": {
+      "_id": {
+        "$oid": "660f1a4bf880d9c7b199ef4e"
+      },
+      "alcohol_degree": 0,
+      "created_at": {
+        "$date": "2024-03-04T21:52:12.198Z"
+      },
+      "is_alcohol": false,
+      "name": "Limonade",
+      "updated_at": {
+        "$date": "2024-03-04T21:52:12.198Z"
+      },
+      "viscosity": 1
+    },
+    "order_id": {
+      "$oid": "66db62b9c7a2fcb56268fda2"
+    },
+    "order_index": 1,
+    "quantity": 22,
+    "status": "CREATED"
+  }
+]

@@ -1,0 +1,83 @@
+[
+  {
+    "_id": {
+      "$oid": "66db62b9c7a2fcb56268fda2"
+    },
+    "created_at": {
+      "$date": "2024-09-06T20:14:49.604Z"
+    },
+    "progress": 0,
+    "recipe": {
+      "alcohol_level": 33.33,
+      "alcohol_max_level": 50,
+      "alcohol_min_level": 20,
+      "created_at": {
+        "$date": "2024-04-04T21:41:20.899Z"
+      },
+      "default_glass_volume": 33,
+      "description": "Gin... et Tonic",
+      "id": "660f1e80f880d9c7b199ef78",
+      "is_available": true,
+      "name": "Gin tonic",
+      "picture": {
+        "created_at": {
+          "$date": "2024-05-08T20:49:02.670Z"
+        },
+        "id": "663be53ee01fcfdce81b1ab6",
+        "name": "663be53ee01fcfdce81b1ab6",
+        "path": "/uploads/663be53ee01fcfdce81b1ab6.webp",
+        "updated_at": {
+          "$date": "2024-05-08T20:49:02.670Z"
+        }
+      },
+      "picture_id": "663be53ee01fcfdce81b1ab6",
+      "steps": [
+        {
+          "id": "660f1e80f880d9c7b199ef79",
+          "ingredient": {
+            "alcohol_degree": 37.5,
+            "created_at": {
+              "$date": "2024-04-02T21:52:12.198Z"
+            },
+            "id": "660f1a3ff880d9c7b199ef4b",
+            "is_alcohol": true,
+            "name": "Gin",
+            "updated_at": {
+              "$date": "2024-04-02T21:52:12.198Z"
+            },
+            "viscosity": 1
+          },
+          "ingredient_id": "660f1a3ff880d9c7b199ef4b",
+          "order_index": 2,
+          "proportion": 100
+        },
+        {
+          "id": "660f1e80f880d9c7b199ef7a",
+          "ingredient": {
+            "alcohol_degree": 0,
+            "created_at": {
+              "$date": "2024-03-04T21:52:12.198Z"
+            },
+            "id": "660f1a4bf880d9c7b199ef4e",
+            "is_alcohol": false,
+            "name": "Limonade",
+            "updated_at": {
+              "$date": "2024-03-04T21:52:12.198Z"
+            },
+            "viscosity": 1
+          },
+          "ingredient_id": "660f1a4bf880d9c7b199ef4e",
+          "order_index": 1,
+          "proportion": 100
+        }
+      ],
+      "updated_at": {
+        "$date": "2024-04-04T21:41:20.900Z"
+      }
+    },
+    "status": "DONE",
+    "updated_at": {
+      "$date": "2024-09-06T20:14:49.604Z"
+    }
+  }
+]

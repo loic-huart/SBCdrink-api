@@ -1,4 +1,4 @@
-import { OrderStatus, type IOrder } from './types'
+import { type IPayloadCreateOrder, OrderStatus, type IOrder } from './types'
 import ErrorService from '../errors/errors'
 import Order, { deSerializeOrder, serializeOrder, serializeOrders } from '../../models/Order'
 import { Slug, type Error } from '../errors/types'
@@ -6,13 +6,13 @@ import { createPayloadValidation } from './validators'
 import Recipe, { serializeRecipe } from '../../models/Recipe'
 import { Ingredient, MachineConfiguration } from '../../models'
 import { serializeIngredient } from '../../models/Ingredient'
-import { type IModelOrder, type IModelIngredient, type IModelRecipe, IModelRecipeFull } from '../../models/types'
+import { type IModelOrder } from '../../models/types'
 import MachineService from '../machine/machine'
 import { mongoClient } from '../..'
 
 interface IOrderService extends ErrorService {
   find: () => Promise<{ orders: IOrder[] }>
-  create: (order: IOrder) => Promise<{ order: IOrder, error?: Error }>
+  create: (order: IPayloadCreateOrder) => Promise<{ order: IOrder, error?: Error }>
 }
 
 class OrderService extends ErrorService implements IOrderService {
@@ -64,13 +64,17 @@ class OrderService extends ErrorService implements IOrderService {
   }
 
   public async find (): Promise<{ orders: IOrder[] }> {
-    const orders = await Order.findMany()
+    const orders = await Order.findMany({
+      include: {
+        steps: true
+      }
+    })
     return {
       orders: serializeOrders(orders)
     }
   }
 
-  public async create (order: IOrder): Promise<{ order: IOrder, error?: Error }> {
+  public async create (order: IPayloadCreateOrder): Promise<{ order: IOrder, error?: Error }> {
     const orderInStatusCreated = await Order.findFirst({ where: { status: OrderStatus.CREATED } })
     if (orderInStatusCreated != null) {
       return {
@@ -88,7 +92,7 @@ class OrderService extends ErrorService implements IOrderService {
     }
 
     const recipe = await Recipe.findUnique({
-      where: { id: order.recipe.id },
+      where: { id: order.recipe },
       include: {
         picture: true,
         steps: {
@@ -109,7 +113,7 @@ class OrderService extends ErrorService implements IOrderService {
     let ingredientError = null
     const steps = []
     for (const step of order.steps) {
-      const ingredient = await Ingredient.findFirst({ where: { id: step.ingredient.id } })
+      const ingredient = await Ingredient.findFirst({ where: { id: step.ingredient } })
       if (ingredient == null) {
         ingredientError = {
           order: {} as IOrder,
@@ -118,7 +122,7 @@ class OrderService extends ErrorService implements IOrderService {
         break
       }
 
-      const machineConfiguration = await MachineConfiguration.findFirst({ where: { ingredient_id: step.ingredient.id } })
+      const machineConfiguration = await MachineConfiguration.findFirst({ where: { ingredient_id: step.ingredient } })
       console.log('Machine configuration:', machineConfiguration)
       if (machineConfiguration == null) {
         ingredientError = {
@@ -130,6 +134,7 @@ class OrderService extends ErrorService implements IOrderService {
 
       steps.push({
         ...step,
+        status: OrderStatus.CREATED,
         ingredient: serializeIngredient(ingredient)
       })
     }
@@ -137,13 +142,27 @@ class OrderService extends ErrorService implements IOrderService {
       return ingredientError
     }
 
-    const populatedNewOrder = {
+    const populatedNewOrder: IOrder = {
       ...order,
       recipe: serializeRecipe(recipe, true, true),
-      steps
-    }
+      steps,
+      progress: 0,
+      status: OrderStatus.CREATED
+    } as IOrder
 
-    const newOrder = await Order.create({ data: deSerializeOrder(populatedNewOrder) })
+    const deSerializedOrder = deSerializeOrder(populatedNewOrder)
+
+    const newOrder = await Order.create({
+      include: {
+        steps: true
+      },
+      data: {
+        ...deSerializedOrder,
+        steps: {
+          create: deSerializedOrder.steps
+        }
+      }
+    })
 
     return {
       order: serializeOrder(newOrder)
