@@ -99,7 +99,7 @@ class MachineConfigurationService extends ErrorService implements IMachineConfig
           })
 
           // get toutes les recipes availables
-          const recipeAvailables = await Recipe.findMany({
+          const recipeAvailables: Array<{ id: string }> = await Recipe.findMany({
             where: {
               is_available: true
             },
