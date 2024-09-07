@@ -32,16 +32,29 @@ class OrderService extends ErrorService implements IOrderService {
   }
 
   public watch (): void {
-    const collectionOrder = mongoClient.db().collection('order')
+    const collectionOrder = mongoClient.db().collection('Order')
     const watchOrder = collectionOrder.watch()
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     watchOrder.on('change', async (change): Promise<void> => {
+      console.log('ICI', change)
+
       switch (change.operationType) {
         case 'insert': {
           if (change.fullDocument == null) break
 
           const machineService = MachineService.getInstance()
-          const order = serializeOrder(change.fullDocument as IModelOrder)
+
+          const findOrder = await Order.findUnique({
+            where: { id: change.fullDocument._id.toString() },
+            include: {
+              steps: true
+            }
+          })
+          if (findOrder == null) {
+            console.info('Watch order', change.fullDocument.id, 'not found')
+            break
+          }
+          const order = serializeOrder(findOrder)
 
           if (order.status !== OrderStatus.CREATED) break
 
