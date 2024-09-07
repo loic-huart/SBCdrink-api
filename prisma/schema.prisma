@@ -34,6 +34,7 @@ model Machineconfiguration {
   ingredient_id  String?     @unique @db.ObjectId
   measure_volume Int?
   slot           Int
+  position       Int?
 }
 
 model Setting {

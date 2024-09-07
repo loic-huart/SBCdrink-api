@@ -13,7 +13,8 @@ function serializeMachineConfiguration (
     id: machineConfiguration.id,
     measureVolume: machineConfiguration.measure_volume,
     slot: machineConfiguration.slot,
-    ingredientId: machineConfiguration.ingredient_id
+    ingredientId: machineConfiguration.ingredient_id,
+    position: machineConfiguration.position
   }
 
   const ingredient = (machineConfiguration as IModelMachineConfigurationWithIngredient).ingredient
@@ -50,7 +51,8 @@ function deSerializeMachineConfiguration (
     id: machineConfiguration.id,
     measure_volume: machineConfiguration.measureVolume,
     slot: machineConfiguration.slot,
-    ingredient_id: machineConfiguration.ingredientId
+    ingredient_id: machineConfiguration.ingredientId,
+    position: machineConfiguration.position
   }
 
   const ingredient = (machineConfiguration as IMachineConfigurationWithIngredient).ingredient

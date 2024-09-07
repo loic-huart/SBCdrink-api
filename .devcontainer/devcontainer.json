@@ -12,7 +12,8 @@
         "kavod-io.vscode-jest-test-adapter",
         "github.copilot",
         "dbaeumer.vscode-eslint",
-        "eamodio.gitlens"
+        "eamodio.gitlens",
+        "prisma.prisma"
       ],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "zsh",

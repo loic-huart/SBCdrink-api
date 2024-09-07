@@ -7,7 +7,8 @@
       "$oid": "660f1a3ff880d9c7b199ef4b"
     },
     "measure_volume": 35,
-    "slot": 1
+    "slot": 1,
+    "position": 0
   },
   {
     "_id": {
@@ -17,7 +18,8 @@
       "$oid": "660f1a4bf880d9c7b199ef4e"
     },
     "measure_volume": 35,
-    "slot": 2
+    "slot": 2,
+    "position": 0
   },
   {
     "_id": {
@@ -25,7 +27,8 @@
     },
     "ingredient_id": null,
     "measure_volume": 35,
-    "slot": 12
+    "slot": 12,
+    "position": 0
   },
   {
     "_id": {
@@ -33,7 +36,8 @@
     },
     "ingredient_id": null,
     "measure_volume": 35,
-    "slot": 3
+    "slot": 3,
+    "position": 0
   },
   {
     "_id": {
@@ -41,7 +45,8 @@
     },
     "ingredient_id": null,
     "measure_volume": 35,
-    "slot": 4
+    "slot": 4,
+    "position": 0
   },
   {
     "_id": {
@@ -49,7 +54,8 @@
     },
     "ingredient_id": null,
     "measure_volume": 35,
-    "slot": 6
+    "slot": 6,
+    "position": 0
   },
   {
     "_id": {
@@ -57,7 +63,8 @@
     },
     "ingredient_id": null,
     "measure_volume": 35,
-    "slot": 9
+    "slot": 9,
+    "position": 0
   },
   {
     "_id": {
@@ -65,7 +72,8 @@
     },
     "ingredient_id": null,
     "measure_volume": 35,
-    "slot": 5
+    "slot": 5,
+    "position": 0
   },
   {
     "_id": {
@@ -73,7 +81,8 @@
     },
     "ingredient_id": null,
     "measure_volume": 35,
-    "slot": 7
+    "slot": 7,
+    "position": 0
   },
   {
     "_id": {
@@ -81,7 +90,8 @@
     },
     "ingredient_id": null,
     "measure_volume": 35,
-    "slot": 8
+    "slot": 8,
+    "position": 0
   },
   {
     "_id": {
@@ -89,7 +99,8 @@
     },
     "ingredient_id": null,
     "measure_volume": 35,
-    "slot": 10
+    "slot": 10,
+    "position": 0
   },
   {
     "_id": {
@@ -97,6 +108,7 @@
     },
     "ingredient_id": null,
     "measure_volume": 35,
-    "slot": 11
+    "slot": 11,
+    "position": 0
   }
 ]

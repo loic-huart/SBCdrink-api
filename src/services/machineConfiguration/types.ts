@@ -5,6 +5,7 @@ export interface IBaseMachineConfiguration {
   slot: number
   measureVolume: number | null
   ingredientId: string | null
+  position: number | null
 }
 
 export interface IMachineConfiguration extends IBaseMachineConfiguration {

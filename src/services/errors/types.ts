@@ -10,6 +10,8 @@ enum Slug {
 
   ErrIncorrectInput = 'INVALID_INPUT',
 
+  ErrMachineStepsNotFound = 'MACHINE_STEPS_NOT_FOUND',
+
   ErrInvalidEmail = 'INVALID_EMAIL',
   ErrInvalidPassword = 'INVALID_PASSWORD',
   ErrInvalidCredentials = 'INVALID_CREDENTIALS',

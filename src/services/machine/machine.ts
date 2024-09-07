@@ -9,12 +9,12 @@ import { directMakeCocktailPayloadValidation } from './validators'
 import { type IOrder, type IOrderMakeCocktail } from '../order/types'
 import { MachineConfiguration } from '../../models'
 import Setting from '../../models/Setting'
-import { IModelMachineConfiguration } from '../../models/types'
+import { type IModelMachineConfiguration } from '../../models/types'
 const PROTO_PATH = path.join(__dirname, '/protos/machine.proto')
 
 interface IMachineService extends ErrorService {
   makeCocktail: (order: IOrderMakeCocktail) => Promise<{ response: boolean, error?: Error }>
-  orderToMachineSteps: (order: IOrder) => Promise<IMachineStep[]>
+  orderToMachineSteps: (order: IOrder) => Promise<{ response: IMachineStep[], error?: Error }>
 }
 
 class MachineService extends ErrorService implements IMachineService {
@@ -50,8 +50,13 @@ class MachineService extends ErrorService implements IMachineService {
     return MachineService.instance
   }
 
-  public async orderToMachineSteps (order: Partial<IOrder>): Promise<IMachineStep[]> {
-    if (order.steps === null || order.steps === undefined) return []
+  public async orderToMachineSteps (order: Partial<IOrder>): Promise<{ response: IMachineStep[], error?: Error }> {
+    if (order.steps === null || order.steps === undefined) {
+      return {
+        response: [],
+        error: this.NewNotFoundError('Machine step not found', Slug.ErrMachineStepsNotFound)
+      }
+    }
 
     const allMachineConfigurations: IModelMachineConfiguration[] = await MachineConfiguration.findMany()
 
@@ -61,12 +66,22 @@ class MachineService extends ErrorService implements IMachineService {
 
     const machineSteps: IMachineStep[] = []
 
-    order.steps.forEach((step) => {
+    for (const step of order.steps) {
       const targetMachineConfiguration = allMachineConfigurations.find((machineConfiguration) => machineConfiguration?.ingredient_id === step?.ingredient?.id)
+      if (targetMachineConfiguration == null) {
+        return {
+          response: [],
+          error: this.NewNotFoundError('Ingredient is not available', Slug.ErrIngredientIsNotAvailable)
+        }
+      }
 
       let remainingQuantity = step.quantity
       const slot = targetMachineConfiguration?.slot
+      // TODO: a la creation d'une order, et ici (pour le directMakeCocktail),
+      // verifier que le machineConfiguration qui contient l'ingredient, a un measure_volume et une position de definie
+      // sinon retourné une erreur
       const measure_volume = targetMachineConfiguration?.measure_volume ?? 0
+      const position = targetMachineConfiguration?.position ?? 0
 
       let index = 0
       while (remainingQuantity > 0) {
@@ -76,16 +91,16 @@ class MachineService extends ErrorService implements IMachineService {
           stepId: `${step.id}-${index}`,
           slot: slot ?? 0,
           pressed: pressed * dispenserEmptyingTime * step.ingredient.viscosity,
-          delayAfter: (remainingQuantity - measure_volume > 0 ? (dispenserFillingTime * measure_volume) : 0.5)
-          // TODO: passer les position des step dans la collection setting ou machineconfiguration, et envoyer la position du slot dans le machineStep
+          delayAfter: (remainingQuantity - measure_volume > 0 ? (dispenserFillingTime * measure_volume) : 0.5),
+          position
           // TODO: add dans le front, dans settings, la possibilité des deffinir la position des slots,
           // et de faire bouger la chariot a un slot defini, pour reglé plus facilement la machine
         })
         remainingQuantity -= measure_volume
       }
-    })
+    }
 
-    return machineSteps
+    return { response: machineSteps }
   }
 
   public async makeCocktail (orderMakeCocktail: IOrderMakeCocktail): Promise<{ response: boolean, error?: Error }> {
@@ -97,7 +112,14 @@ class MachineService extends ErrorService implements IMachineService {
       }
     }
 
-    const machineSteps = await this.orderToMachineSteps(orderMakeCocktail)
+    const { response: machineSteps, error: orderToMachineStepsError } = await this.orderToMachineSteps(orderMakeCocktail)
+    if (orderToMachineStepsError != null) {
+      return {
+        response: false,
+        error: orderToMachineStepsError
+      }
+    }
+
     console.info('Call machine script with steps:', machineSteps)
 
     const response = await new Promise<{ response: boolean, error?: Error | undefined }>((resolve) => {

@@ -6,7 +6,8 @@ const updatePayloadValidation = (body: IMachineConfiguration): Joi.ValidationRes
     id: Joi.string().length(24).required(),
     ingredientId: Joi.string().length(24).allow(null).required(),
     slot: Joi.number().required(),
-    measureVolume: Joi.number().allow(null).required()
+    measureVolume: Joi.number().allow(null).required(),
+    position: Joi.number().allow(null).required()
   })
   return schema.validate(body)
 }

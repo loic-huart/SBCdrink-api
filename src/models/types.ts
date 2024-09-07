@@ -71,6 +71,7 @@ export interface IModelMachineConfigurationBase {
   slot: number
   measure_volume: number | null
   ingredient_id: string | null
+  position: number | null
 }
 
 export interface IModelMachineConfiguration extends IModelMachineConfigurationBase {

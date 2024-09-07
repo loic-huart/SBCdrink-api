@@ -3,6 +3,7 @@ export interface IMachineStep {
   slot: number
   pressed: number
   delayAfter: number
+  position: number
 }
 
 export interface IMachine {
