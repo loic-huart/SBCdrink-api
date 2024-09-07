@@ -36,8 +36,6 @@ class OrderService extends ErrorService implements IOrderService {
     const watchOrder = collectionOrder.watch()
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     watchOrder.on('change', async (change): Promise<void> => {
-      console.log('ICI', change)
-
       switch (change.operationType) {
         case 'insert': {
           if (change.fullDocument == null) break

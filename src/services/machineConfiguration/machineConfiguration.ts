@@ -29,7 +29,7 @@ class MachineConfigurationService extends ErrorService implements IMachineConfig
   }
 
   public watch (): void {
-    const collectionMachineConfiguration = mongoClient.db().collection('machineConfiguration')
+    const collectionMachineConfiguration = mongoClient.db().collection('Machineconfiguration')
     const watchMachineConfiguration = collectionMachineConfiguration.watch(
       [],
       { fullDocument: 'updateLookup' }
@@ -41,14 +41,10 @@ class MachineConfigurationService extends ErrorService implements IMachineConfig
       // iniquement parcourit les recipe qui continnent l'ancien ingredient et le nouveau
       // CONTRE TODO: la version 6 n'est pas suporté sur raspberry
 
-      console.log('CHANGE', change)
-
       switch (change.operationType) {
-        case 'update': {
+        case 'replace': {
           if (change?.documentKey?._id == null) break
-          const machineChangeId = change?.documentKey?._id
-
-          // console.info('Watch machineConfiguration', machineChangeId, 'updated')
+          const machineChangeId = change?.documentKey?._id?.toString()
 
           const machineConfiguration: IModelMachineConfiguration[] = await MachineConfiguration.findMany()
 
@@ -56,6 +52,7 @@ class MachineConfigurationService extends ErrorService implements IMachineConfig
             .filter(mc => (mc.measure_volume != null) && (mc.ingredient_id != null))
             .map(mc => (mc.ingredient_id) as unknown as string)
 
+          // get toutes les recipes qui contiennent uniquement des ingredients disponible
           const recipesToUpdate: IModelRecipeWithIngredient[] = await Recipe.findMany({
             where: {
               steps: {
@@ -77,7 +74,7 @@ class MachineConfigurationService extends ErrorService implements IMachineConfig
 
           // set toutes les recipes qui contiennent les ingredients a available
           const recipeIdsToUpdate = recipesToUpdate.map(recipe => recipe.id)
-          const recipeAvailable = await Recipe.updateMany({
+          await Recipe.updateMany({
             where: {
               id: {
                 in: recipeIdsToUpdate
@@ -90,7 +87,7 @@ class MachineConfigurationService extends ErrorService implements IMachineConfig
 
           // set toutes les recipes qui ne contiennent pas les ingredients a not available
           const recipeIdsToExclude = recipesToUpdate.map(recipe => recipe.id)
-          const recipeNotAvailable = await Recipe.updateMany({
+          await Recipe.updateMany({
             where: {
               id: {
                 notIn: recipeIdsToExclude
@@ -101,11 +98,19 @@ class MachineConfigurationService extends ErrorService implements IMachineConfig
             }
           })
 
-          // @ts-ignore
-          const recipeUpdated = [...recipeAvailable, ...recipeNotAvailable].map(recipeUp => recipeUp.id).join(',')
+          // get toutes les recipes availables
+          const recipeAvailables = await Recipe.findMany({
+            where: {
+              is_available: true
+            },
+            select: {
+              id: true
+            }
+          })
+
+          const recipeUpdated = recipeAvailables.map(re => re.id).join(',')
 
           console.info('Watch machineConfiguration', machineChangeId, 'updated recipe', recipeUpdated)
-
           break
         }
         default:
