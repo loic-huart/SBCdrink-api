@@ -1,6 +1,7 @@
-const parseBooleanQuery = (value?: string): boolean => {
+const parseBooleanQuery = (value?: string): boolean | undefined => {
   if (value === 'true') return true
-  return false
+  if (value === 'false') return false
+  return undefined
 }
 
 export default parseBooleanQuery

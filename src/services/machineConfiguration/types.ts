@@ -15,5 +15,5 @@ export interface IMachineConfigurationWithIngredient extends IMachineConfigurati
 }
 
 export interface IPayloadFindMachineConfigurations {
-  withIngredients: boolean
+  withIngredients?: boolean
 }
