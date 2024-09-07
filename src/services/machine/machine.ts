@@ -9,6 +9,7 @@ import { directMakeCocktailPayloadValidation } from './validators'
 import { type IOrder, type IOrderMakeCocktail } from '../order/types'
 import { MachineConfiguration } from '../../models'
 import Setting from '../../models/Setting'
+import { IModelMachineConfiguration } from '../../models/types'
 const PROTO_PATH = path.join(__dirname, '/protos/machine.proto')
 
 interface IMachineService extends ErrorService {
@@ -52,7 +53,7 @@ class MachineService extends ErrorService implements IMachineService {
   public async orderToMachineSteps (order: Partial<IOrder>): Promise<IMachineStep[]> {
     if (order.steps === null || order.steps === undefined) return []
 
-    const allMachineConfigurations = await MachineConfiguration.findMany()
+    const allMachineConfigurations: IModelMachineConfiguration[] = await MachineConfiguration.findMany()
 
     const setting = await Setting.findFirst()
     const dispenserEmptyingTime = setting?.dispenser_emptying_time ?? 1

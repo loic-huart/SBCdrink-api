@@ -5,6 +5,7 @@ import { Slug, type Error } from '../errors/types'
 import { updatePayloadValidation } from './validators'
 import { mongoClient } from '../..'
 import { Recipe } from '../../models'
+import { type IModelMachineConfiguration, type IModelRecipeWithIngredient } from '../../models/types'
 
 interface IMachineConfigurationService extends ErrorService {
   find: ({ withIngredients }: IPayloadFindMachineConfigurations) => Promise<{ machineConfigurations: IMachineConfiguration[] }>
@@ -49,13 +50,13 @@ class MachineConfigurationService extends ErrorService implements IMachineConfig
 
           // console.info('Watch machineConfiguration', machineChangeId, 'updated')
 
-          const machineConfiguration = await MachineConfiguration.findMany()
+          const machineConfiguration: IModelMachineConfiguration[] = await MachineConfiguration.findMany()
 
           const ingredientsAllowed = machineConfiguration
             .filter(mc => (mc.measure_volume != null) && (mc.ingredient_id != null))
-            .map(mc => (mc.ingredient_id) as string)
+            .map(mc => (mc.ingredient_id) as unknown as string)
 
-          const recipesToUpdate = await Recipe.findMany({
+          const recipesToUpdate: IModelRecipeWithIngredient[] = await Recipe.findMany({
             where: {
               steps: {
                 every: {
