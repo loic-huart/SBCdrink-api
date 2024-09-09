@@ -5,6 +5,7 @@ COPY package.json yarn.lock ./
 RUN yarn install
 RUN yarn add sharp --ignore-engines
 COPY . .
+RUN npx prisma generate
 RUN yarn build
 
 FROM node:20-alpine as dependencies
