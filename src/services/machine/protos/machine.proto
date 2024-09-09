@@ -11,6 +11,8 @@ service Machine {
 // La demande d'action
 message MakeCocktailRequest {
   string steps = 1;
+  int32 dispenser_emptying_time = 2;
+  int32 dispenser_filling_time = 3;
 }
 
 // La réponse après l'action

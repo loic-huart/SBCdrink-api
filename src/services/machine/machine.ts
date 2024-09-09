@@ -89,7 +89,6 @@ class MachineService extends ErrorService implements IMachineService {
         const pressed = Math.min(remainingQuantity, measure_volume)
         machineSteps.push({
           stepId: `${step.id}-${index}`,
-          slot: slot ?? 0,
           pressed: pressed * dispenserEmptyingTime * step.ingredient.viscosity,
           delayAfter: (remainingQuantity - measure_volume > 0 ? (dispenserFillingTime * measure_volume) : 0.5),
           position
