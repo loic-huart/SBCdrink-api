@@ -4,22 +4,22 @@
       "$oid": "663201f0f1745a1a5e20da6e"
     },
     "ingredient_id": {
-      "$oid": "660f1a3ff880d9c7b199ef4b"
+      "$oid": "660f1a69f880d9c7b199ef58"
     },
     "measure_volume": 35,
     "slot": 1,
-    "position": 0
+    "position": 650
   },
   {
     "_id": {
       "$oid": "66320208f1745a1a5e20da70"
     },
     "ingredient_id": {
-      "$oid": "660f1a4bf880d9c7b199ef4e"
+      "$oid": "660f1a24f880d9c7b199ef48"
     },
     "measure_volume": 35,
     "slot": 2,
-    "position": 0
+    "position": 1180
   },
   {
     "_id": {
@@ -34,10 +34,12 @@
     "_id": {
       "$oid": "6632020ff1745a1a5e20da72"
     },
-    "ingredient_id": null,
+    "ingredient_id": {
+      "$oid": "660f19eaf880d9c7b199ef3c"
+    },
     "measure_volume": 35,
     "slot": 3,
-    "position": 0
+    "position": 1700
   },
   {
     "_id": {

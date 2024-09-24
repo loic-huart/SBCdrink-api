@@ -132,7 +132,7 @@
       "$oid": "660f1a24f880d9c7b199ef48"
     },
     "viscosity": 1,
-    "name": "Jus d''orange",
+    "name": "Jus d'orange",
     "is_alcohol": false,
     "alcohol_degree": 0,
     "created_at": {
@@ -215,6 +215,22 @@
     "name": "Whisky",
     "is_alcohol": true,
     "alcohol_degree": 40,
+    "created_at": {
+      "$date": "2024-04-04T21:52:12.198Z"
+    },
+    "updated_at": {
+      "$date": "2024-04-04T21:52:12.198Z"
+    },
+    "__v": 0
+  },
+  {
+    "_id": {
+      "$oid": "660f1a69f880d9c7b199ef58"
+    },
+    "viscosity": 1,
+    "name": "Liqueur de bananes",
+    "is_alcohol": true,
+    "alcohol_degree": 17,
     "created_at": {
       "$date": "2024-04-04T21:52:12.198Z"
     },
