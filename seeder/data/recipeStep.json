@@ -250,7 +250,7 @@
     "ingredient_id": {
       "$oid": "660f1a24f880d9c7b199ef48"
     },
-    "proportion": 66,
+    "proportion": 100,
     "order_index": 3,
     "_id": {
       "$oid": "660f210cf880d9c7b199ef9e"
