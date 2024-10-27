@@ -1,11 +1,10 @@
-import { IRecipeFull, type IPayloadFindByIdRecipe, type IPayloadFindRecipe, type IRecipe } from './types'
+import { type IPayloadFindByIdRecipe, type IPayloadFindRecipe, type IRecipe } from './types'
 import ErrorService from '../errors/errors'
 import Recipe, { deSerializeRecipe, RecipeStep, serializeRecipe, serializeRecipes } from '../../models/Recipe'
 import { Slug, type Error } from '../errors/types'
 import { createPayloadValidation, findByIdPayloadValidation, updatePayloadValidation } from './validators'
-import { Ingredient } from '../../models'
 import File from '../../models/File'
-import { IModelIngredient, IModelRecipeFull } from '../../models/types'
+import { type IModelIngredient } from '../../models/types'
 
 interface IRecipeService extends ErrorService {
   find: ({ isAvailable, withIngredients, withPictures }: IPayloadFindRecipe) => Promise<{ recipes: IRecipe[] }>
@@ -165,6 +164,8 @@ class RecipeService extends ErrorService implements IRecipeService {
       }
     }
 
+    const deserealize = deSerializeRecipe(recipe, false, false)
+
     const {
       name,
       steps,
@@ -174,7 +175,7 @@ class RecipeService extends ErrorService implements IRecipeService {
       alcohol_min_level,
       alcohol_max_level,
       default_glass_volume
-    } = deSerializeRecipe(recipe, false, false)
+    } = deserealize
 
     const newRecipe = await Recipe.update({
       include: {
@@ -192,7 +193,12 @@ class RecipeService extends ErrorService implements IRecipeService {
         alcohol_max_level,
         default_glass_volume,
         steps: {
-          update: steps.map(step => ({
+          create: steps.filter(step => step.id === undefined).map(step => ({
+            ingredient_id: step.ingredient_id,
+            proportion: step.proportion,
+            order_index: step.order_index
+          })),
+          update: steps.filter(step => step.id).map(step => ({
             where: { id: step.id },
             data: {
               ingredient_id: step.ingredient_id,
