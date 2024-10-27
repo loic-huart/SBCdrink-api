@@ -152,7 +152,7 @@ class MachineConfigurationService extends ErrorService implements IMachineConfig
       }
     }
 
-    const { ingredient_id, measure_volume, slot } = deSerializeMachineConfiguration(machineConfiguration, false)
+    const { ingredient_id, measure_volume, slot, position } = deSerializeMachineConfiguration(machineConfiguration, false)
 
     const newMachineConfiguration = await MachineConfiguration.update({
       where: {
@@ -161,7 +161,8 @@ class MachineConfigurationService extends ErrorService implements IMachineConfig
       data: {
         ingredient_id,
         measure_volume,
-        slot
+        slot,
+        position
       }
     })
 
