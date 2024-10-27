@@ -75,7 +75,7 @@ class MachineService extends ErrorService implements IMachineService {
         }
       }
 
-      let remainingQuantity = step.quantity
+      let remainingQuantity = step.quantity * 10
       // TODO: a la creation d'une order, et ici (pour le directMakeCocktail),
       // verifier que le machineConfiguration qui contient l'ingredient, a un measure_volume et une position de definie
       // sinon retourné une erreur
