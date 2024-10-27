@@ -39,8 +39,8 @@ model Machineconfiguration {
 
 model Setting {
   id                      String @id @default(auto()) @map("_id") @db.ObjectId
-  dispenser_emptying_time Int
-  dispenser_filling_time  Int
+  dispenser_emptying_time Float
+  dispenser_filling_time  Float
 }
 
 // ------------------------------------------ Order -----------------------------------------------
